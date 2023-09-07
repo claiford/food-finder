@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import './App.css';
 
+import { Button } from '@mui/material';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+
 import axios from 'axios';
 
 function App() {
@@ -16,6 +19,8 @@ function App() {
   return (
     <div className="App">
       <h1>React Frontend</h1>
+      <Button variant="text">Text</Button>
+      <AccessTimeFilledIcon />
     </div>
   );
 }
