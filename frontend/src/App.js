@@ -9,7 +9,7 @@ import axios from 'axios';
 function App() {
   const getData = async () => {
     const res = await axios.get('http://localhost:3000/');
-    console.log(res);
+    console.log(res.data[0].data);
   }
 
   useEffect(() => {

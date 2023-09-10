@@ -1,12 +1,13 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const mongoose = require('mongoose');
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
 // const logger = require('morgan');
 
 require('dotenv').config();
 // connect to the database with AFTER the config vars are processed
-// require('./config/database');
+require('./config/database');
 
 // Router import
 
@@ -37,9 +38,22 @@ app.use(express.urlencoded({ extended: false }));
 //   res.render('error');
 // });
 
-app.get('/', function (req, res) {
-    res.send("ok")
+///// TEST DB-CONNECTION
+
+const TestSchema = new mongoose.Schema({});
+const Test = mongoose.model('Test', TestSchema)
+
+app.get('/', async function (req, res) {
+    try {
+        const testData = await Test.find({});
+        console.log(testData);
+        res.json(testData);
+    } catch (err) {
+        console.log(err);
+    }
 })
+
+///// TEST DB-CONNECTION
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
