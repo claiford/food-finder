@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
 // const logger = require('morgan');
@@ -10,17 +11,19 @@ require('dotenv').config();
 require('./config/database');
 
 // Router import
+const groupsRouter = require('./routes/groups');
 
 const app = express();
 
 // app.use(logger('dev'));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
+app.use('/group', groupsRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -58,4 +61,3 @@ app.get('/', async function (req, res) {
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
-
