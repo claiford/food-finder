@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
-import ClientSignUp from "../components/ClientSignUp";
+import CustomerSignUp from "../components/CustomerSignUp";
 import MerchantSignUp from "../components/MerchantSignUp";
 
 const Main = () => {
   const [activeButton, setActiveButton] = useState(null)
   const [showClientForm, setShowClientForm] = useState(false);
   const [showMerchantForm, setShowMerchantForm] = useState(false);
-  const [clientInfo, setClientInfo] = useState({
+  const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
     password: "",
@@ -27,7 +27,7 @@ const Main = () => {
     },
   };
 
-  const handleClientBtn = () => {
+  const handleCustomerBtn = () => {
     setActiveButton("Client")
     setShowClientForm(true);
     setShowMerchantForm(false);
@@ -53,7 +53,7 @@ const Main = () => {
       <Grid>
         <Grid item xs={4}>
           <Button
-            onClick={handleClientBtn}
+            onClick={handleCustomerBtn}
             sx={activeButton === "Client" ? buttonStyles : {}}
           >
             Client
@@ -67,7 +67,7 @@ const Main = () => {
         </Grid>
       </Grid>
       {showClientForm && activeButton === "Client" && (
-        <ClientSignUp clientInfo={clientInfo} setClientInfo={setClientInfo} />
+        <CustomerSignUp customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} />
       )}
       {showMerchantForm && activeButton === "Merchant" && (
         <MerchantSignUp
