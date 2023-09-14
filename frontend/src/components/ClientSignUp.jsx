@@ -22,13 +22,13 @@ const ClientSignUp = ({ clientInfo, setClientInfo }) => {
     // API call
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/signup`,
+        `${process.env.REACT_APP_BACKEND_URL}/customer/signup`,
         clientInfo
       );
       // console.log("Sign up response: ", response);
       if (response.status === 200) {
-        setShowSuccessBar(true);
         setSuccess(response.data.message || "Sign up successful.");
+        setShowSuccessBar(true);
         // Reset form fields
         setClientInfo({
           name: "",
@@ -42,9 +42,11 @@ const ClientSignUp = ({ clientInfo, setClientInfo }) => {
       }
     } catch (err) {
       console.log(err);
-      setShowErrorMessage(true);
     }
+
     setTimeout(() => {
+      setError(null);
+      setSuccess(null);
       setShowErrorMessage(false);
       setShowSuccessBar(false);
     }, 3000);
@@ -90,14 +92,12 @@ const ClientSignUp = ({ clientInfo, setClientInfo }) => {
         >
           Sign up as Client
         </Button>
-        {/* <Typography sx={{ color: "red" }}> */}
+        </form>
         {showErrorMessage && (
           <Alert severity="error">
             <span>{error}</span>
           </Alert>
         )}
-        {/* </Typography> */}
-      </form>
       {showSuccessBar && (
         <Alert severity="success">
           <span>{success}</span>
