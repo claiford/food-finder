@@ -35,6 +35,7 @@ function App() {
       <h1>App Name</h1>
       <Routes>
         <Route path="/" element={<Main />}/>
+        <Route path="/session" element={<h2>sessioning</h2>} />
         <Route path="/*" element={<h1>404: Page Not Found</h1>} />
       </Routes>
     </Box>
