@@ -7,8 +7,8 @@ const MerchantSignUp = () => {
       <form>
         <TextField
           sx={{ height: 40 }}
-          label="Full Name"
-          type="name"
+          label="Name"
+          type="text"
           fullWidth
           margin="normal"
         />

@@ -10,6 +10,16 @@ const Main = () => {
   const [isClientClicked, setIsClientClicked] = useState(true);
   const [showClientForm, setShowClientForm] = useState(false);
   const [showMerchantForm, setShowMerchantForm] = useState(false);
+  const [clientInfo, setClientInfo] = useState({
+    "name": "",
+    "email": "",
+    "password": "",
+  });
+  // const [merchantInfo, setMerchantInfo] = useState({
+  //   "name": "",
+  //   "email": "",
+  //   "password": "",
+  // });
 
   const handleClientBtn = () => {
     setIsClientClicked(true);
@@ -27,7 +37,7 @@ const Main = () => {
     <Box
       sx={{
         width: 300,
-        height: 300,
+        height: "70%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -44,7 +54,7 @@ const Main = () => {
           </Button>
         </Grid>
       </Grid>
-      {showClientForm && isClientClicked && <ClientSignUp />}
+      {showClientForm && isClientClicked && <ClientSignUp clientInfo={clientInfo} setClientInfo={setClientInfo}/>}
       {showMerchantForm && !isClientClicked && <MerchantSignUp />}
     </Box>
   );
