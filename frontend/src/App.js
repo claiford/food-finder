@@ -5,6 +5,10 @@ import Main from "./pages/Main";
 import axios from "axios";
 import { Box } from "@mui/material";
 
+const { io } = require("socket.io-client");
+console.log(process.env.REACT_APP_BACKEND_URL)
+const socket = io.connect(process.env.REACT_APP_BACKEND_URL)
+
 function App() {
   const getData = async () => {
     const res = await axios.get(process.env.REACT_APP_BACKEND_URL);
