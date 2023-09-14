@@ -4,6 +4,7 @@ import Main from "./pages/Main";
 
 import axios from "axios";
 import { Box } from "@mui/material";
+import { Routes, Route } from 'react-router-dom'
 
 const { io } = require("socket.io-client");
 console.log(process.env.REACT_APP_BACKEND_URL)
@@ -32,7 +33,10 @@ function App() {
       }}
     >
       <h1>App Name</h1>
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />}/>
+        <Route path="/*" element={<h1>404: Page Not Found</h1>} />
+      </Routes>
     </Box>
   );
 }
