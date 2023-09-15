@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
 // const logger = require('morgan');
+const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
@@ -47,29 +48,27 @@ app.use(express.urlencoded({ extended: false }));
 // });
 
 ///// TEST DB-CONNECTION
-const TestSchema = new mongoose.Schema({});
-const Test = mongoose.model('Test', TestSchema)
+// const TestSchema = new mongoose.Schema({});
+// const Test = mongoose.model('Test', TestSchema)
 
-app.get('/', async function (req, res) {
-    try {
-        const testData = await Test.find({});
-        console.log(testData);
-        res.json(testData);
-    } catch (err) {
-        console.log(err);
-    }
-})
+// app.get('/', async function (req, res) {
+//     try {
+//         const testData = await Test.find({});
+//         console.log(testData);
+//         res.json(testData);
+//     } catch (err) {
+//         console.log(err);
+//     }
+// })
 ///// TEST DB-CONNECTION
 
-///// TEST SOCKET
-io.on('connection', socket => {
-    console.log(`User connected: ${socket.id}`);
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
+app.get('/', function(req, res) {
+    res.send("backend running")
 })
-///// TEST SOCKET
+
+///// SOCKET
+io.on('connection', socketManager.onConnect)
+///// SOCKET
 
 httpServer.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
