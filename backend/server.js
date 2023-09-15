@@ -66,6 +66,9 @@ app.get('/', function(req, res) {
     res.send("backend running")
 })
 
+const sessionsController = require('./controllers/sessions')
+app.get('/newsession', sessionsController.create)
+
 ///// SOCKET
 io.on('connection', socketManager.onConnect)
 ///// SOCKET
