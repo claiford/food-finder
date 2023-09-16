@@ -1,24 +1,40 @@
-// Main page consists of Merchant and Client button
-// When 'Client' button is clicked, default fields (username and password) to Login
-// Otherwise, user clicks 'Sign up' button and fields for signup shows (name, email, password)
 import React, { useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
-import ClientSignUp from "../components/ClientSignUp";
+import CustomerSignUp from "../components/CustomerSignUp";
 import MerchantSignUp from "../components/MerchantSignUp";
 
 const Main = () => {
-  const [isClientClicked, setIsClientClicked] = useState(true);
+  const [activeButton, setActiveButton] = useState(null)
   const [showClientForm, setShowClientForm] = useState(false);
   const [showMerchantForm, setShowMerchantForm] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [merchantInfo, setMerchantInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const handleClientBtn = () => {
-    setIsClientClicked(true);
+  const buttonStyles = {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: "25px",
+    ":active": {
+      color: "white", 
+    },
+  };
+
+  const handleCustomerBtn = () => {
+    setActiveButton("Client")
     setShowClientForm(true);
     setShowMerchantForm(false);
   };
 
   const handleMerchantBtn = () => {
-    setIsClientClicked(false);
+    setActiveButton("Merchant")
     setShowClientForm(false);
     setShowMerchantForm(true);
   };
@@ -27,7 +43,7 @@ const Main = () => {
     <Box
       sx={{
         width: 300,
-        height: 300,
+        height: "70%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -36,16 +52,29 @@ const Main = () => {
     >
       <Grid>
         <Grid item xs={4}>
-          <Button variant="outlined" onClick={handleClientBtn}>
+          <Button
+            onClick={handleCustomerBtn}
+            sx={activeButton === "Client" ? buttonStyles : {}}
+          >
             Client
           </Button>
-          <Button variant="outlined" onClick={handleMerchantBtn}>
+          <Button
+            onClick={handleMerchantBtn}
+            sx={activeButton === "Merchant" ? buttonStyles : {}}
+          >
             Merchant
           </Button>
         </Grid>
       </Grid>
-      {showClientForm && isClientClicked && <ClientSignUp />}
-      {showMerchantForm && !isClientClicked && <MerchantSignUp />}
+      {showClientForm && activeButton === "Client" && (
+        <CustomerSignUp customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} />
+      )}
+      {showMerchantForm && activeButton === "Merchant" && (
+        <MerchantSignUp
+          merchantInfo={merchantInfo}
+          setMerchantInfo={setMerchantInfo}
+        />
+      )}
     </Box>
   );
 };

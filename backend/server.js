@@ -1,31 +1,42 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const passport = require("passport")
+
+const http = require('http');
+const { Server } = require("socket.io");
 
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-// const logger = require('morgan');
+const socketManager = require('./listeners/socketsManager.js');
 
-require('dotenv').config();
-// connect to the database with AFTER the config vars are processed
-require('./config/database');
-
-// Router import
+require('dotenv').config(); // process config vars => procces.env.VAR
+require('./config/database'); // connect to the database with AFTER the config vars are processed
 const groupsRouter = require('./routes/groups');
 
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: process.env.FRONTEND_URL,
+    }
+});
 
-// app.use(logger('dev'));
+// Router import
+const authRouter = require("./routes/authRouter");
+
 app.use(express.json());
 app.use(cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
 }));
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
+app.use("/", authRouter);
+
 app.use('/group', groupsRouter);
 
 // catch 404 and forward to error handler
@@ -44,23 +55,21 @@ app.use('/group', groupsRouter);
 //   res.render('error');
 // });
 
-///// TEST DB-CONNECTION
 
-const TestSchema = new mongoose.Schema({});
-const Test = mongoose.model('Test', TestSchema)
 
-app.get('/', async function (req, res) {
-    try {
-        const testData = await Test.find({});
-        console.log(testData);
-        res.json(testData);
-    } catch (err) {
-        console.log(err);
-    }
+
+
+app.get('/', function(req, res) {
+    res.send("backend running")
 })
 
-///// TEST DB-CONNECTION
+const sessionsController = require('./controllers/sessions')
+app.get('/newsession', sessionsController.create)
 
-app.listen(process.env.PORT, () => {
+///// SOCKET
+io.on('connection', socketManager.onConnect)
+///// SOCKET
+
+httpServer.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
