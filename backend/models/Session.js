@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
 
-const PhotoSchema = new mongoose.Schema({
-    image: {
-        type: String,
-    }
-})
-
 const CandidateSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -20,16 +14,15 @@ const CandidateSchema = new mongoose.Schema({
         type: Number,
     },
     location: {
-        lat: Number,
-        lng: Number
+        lat: { type: Number },
+        lng: { type: Number }
     },
     // todo: update this attribute to reflect time set by user, calculated using opening hours attribute from API
     is_open: {
         type: Boolean,
     },
-
     // todo: have to retrieve from place photos API using photo ref
-    // photos: [PhotoSchema]
+    photos: [{ type: String }]
 
     // todo: setup review schema if needed
     // reviews: {

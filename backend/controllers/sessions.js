@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const PLACE_NEARBYSEARCH_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 const PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json";
-const PLACE_PHOTOS_URL = "https://maps.googleapis.com/maps/api/place/photo";
+const PLACE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo";
 
 module.exports = {
     index,
@@ -31,10 +31,10 @@ async function create(req, res) {
 
         const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&keyword=${keyword}&type=${type}&key=${key}`;
         const resNearbySearch = await axios.get(queryNearbySearch);
-
+        const nearbySearch = resNearbySearch.data.results
 
         const candidates = []
-        for (const place of resNearbySearch.data.results) {
+        for (const place of nearbySearch) {
             // PERFORM PLACE DETAILS QUERY
             const queryPlaceDetails = PLACE_DETAILS_URL + `?place_id=${place.place_id}&key=${key}`;
             const resPlaceDetails = await axios.get(queryPlaceDetails);
@@ -48,6 +48,16 @@ async function create(req, res) {
                 // todo: update this to calculate based on user specified time
                 // note: not all place details contain opening_hours attribute, set to null for unknown
                 is_open: placeDetails.opening_hours?.open_now ?? null,
+                photos: [],
+            }
+            
+            if (placeDetails.photos) {
+                for (const photo of placeDetails.photos) {
+                    const queryPlacePhoto = PLACE_PHOTO_URL + `?photo_reference=${photo.photo_reference}&maxheight=200&key=${key}`;
+                    resPlacePhoto = await axios.get(queryPlacePhoto);
+                    const photoUrl = resPlacePhoto.request.res.responseUrl
+                    candidate.photos.push(photoUrl);
+                }
             }
             candidates.push(candidate);
         }
