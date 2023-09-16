@@ -11,7 +11,7 @@ const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
-const groupsRouter = require('./routes/groups');
+const groupsRouter = require('./routes/groupsRouter.js');
 
 const app = express();
 const httpServer = http.createServer(app);
