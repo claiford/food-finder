@@ -4,6 +4,7 @@ import Main from "./pages/Main";
 
 import axios from "axios";
 import { Box } from "@mui/material";
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   const getData = async () => {
@@ -28,7 +29,10 @@ function App() {
       }}
     >
       <h1>App Name</h1>
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />}/>
+        <Route path="/*" element={<h1>404: Page Not Found</h1>} />
+      </Routes>
     </Box>
   );
 }
