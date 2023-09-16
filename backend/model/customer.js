@@ -10,7 +10,7 @@ const customerSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // Ensures email addresses are unique
+    unique: true, 
   },
   password: {
     type: String,
@@ -19,7 +19,7 @@ const customerSchema = new Schema({
   groups_id: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Group', // Reference to the Group model (if needed)
+      ref: 'Group', // Reference to the Group model
     },
   ],
 });
