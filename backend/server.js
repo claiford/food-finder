@@ -1,33 +1,43 @@
-const express = require('express');
-const cors = require('cors');
-const passport = require("passport")
+const express = require("express");
+const cors = require("cors");
+const passport = require("passport");
+const session = require('express-session');
+// const LocalStrategy = require('passport-local');
 
-const http = require('http');
+const http = require("http");
 const { Server } = require("socket.io");
 
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-const socketManager = require('./listeners/socketsManager.js');
+const socketManager = require("./listeners/socketsManager.js");
 
-require('dotenv').config(); // process config vars => procces.env.VAR
-require('./config/database'); // connect to the database with AFTER the config vars are processed
-const groupsRouter = require('./routes/groupsRouter.js');
+require("dotenv").config(); // process config vars => procces.env.VAR
+require("./config/database"); // connect to the database with AFTER the config vars are processed
+const groupsRouter = require("./routes/groupsRouter.js");
 
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
-    cors: {
-        origin: process.env.FRONTEND_URL,
-    }
+  cors: {
+    origin: process.env.FRONTEND_URL,
+  },
 });
 
 // Router import
 const authRouter = require("./routes/authRouter");
 
 app.use(express.json());
-app.use(cors({
+app.use(
+  cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
+  })
+);
+// Configure express-session middleware
+app.use(session({
+  secret: 'your-secret-key', // Replace with a secret key for session encryption
+  resave: false,
+  saveUninitialized: false,
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -37,7 +47,7 @@ app.use(passport.initialize());
 // Routers
 app.use("/", authRouter);
 
-app.use('/group', groupsRouter);
+app.use("/group", groupsRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -55,21 +65,17 @@ app.use('/group', groupsRouter);
 //   res.render('error');
 // });
 
+app.get("/", function (req, res) {
+  res.send("backend running");
+});
 
-
-
-
-app.get('/', function(req, res) {
-    res.send("backend running")
-})
-
-const sessionsController = require('./controllers/sessions')
-app.get('/newsession', sessionsController.create)
+const sessionsController = require("./controllers/sessions");
+app.get("/newsession", sessionsController.create);
 
 ///// SOCKET
-io.on('connection', socketManager.onConnect)
+io.on("connection", socketManager.onConnect);
 ///// SOCKET
 
 httpServer.listen(process.env.PORT, () => {
-    console.log(`Server is listening on port ${process.env.PORT}`);
+  console.log(`Server is listening on port ${process.env.PORT}`);
 });

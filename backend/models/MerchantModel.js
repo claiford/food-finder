@@ -14,6 +14,12 @@ const merchantSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your password is required"],
   },
+  store_id: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Store",
+    },
+  ],
   createdAt: {
     type: Date,
     default: new Date(),

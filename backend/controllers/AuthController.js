@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 module.exports = {
   createCustomer: CustomerSignUp,
   createMerchant: MerchantSignUp,
-}
+  customerLogin: CustomerLogin,
+};
 
 async function CustomerSignUp(req, res) {
   try {
@@ -26,14 +27,17 @@ async function CustomerSignUp(req, res) {
       password: hashedPassword,
     });
     await newCustomer.save();
-    res.status(200).json({ message: "Customer's account created successfully. Please log in to proceed." });
+    res.status(200).json({
+      message:
+        "Customer's account created successfully. Please log in to proceed.",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error." });
   }
 }
 
-async function MerchantSignUp (req, res) {
+async function MerchantSignUp(req, res) {
   try {
     const { name, email, password } = req.body;
 
@@ -52,7 +56,48 @@ async function MerchantSignUp (req, res) {
       password: hashedPassword,
     });
     await newMerchant.save();
-    res.status(200).json({ message: "Merchant's account created successfully. Please log in to proceed." });
+    res.status(200).json({
+      message:
+        "Merchant's account created successfully. Please log in to proceed.",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+async function CustomerLogin(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    // Check if email exists in db
+    const existingUser = await Customer.findOne({ email });
+    if (!existingUser) {
+      return res.status(401).json({
+        message: "Authentication failed",
+      });
+    }
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+    // Store user data in the session
+    req.session.user = {
+      id: existingUser._id,
+      email: existingUser.email,
+    };
+
+    res.status(200).json({
+      message: "Login successful",
+      customer: {
+        id: existingUser._id,
+        email: existingUser.email,
+      },
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error." });
