@@ -2,13 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const passport = require("passport")
 
+const http = require('http');
+const { Server } = require("socket.io");
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
+const socketManager = require('./listeners/socketsManager.js');
 
-require('dotenv').config();
-// connect to the database with AFTER the config vars are processed
-require('./config/database');
+require('dotenv').config(); // process config vars => procces.env.VAR
+require('./config/database'); // connect to the database with AFTER the config vars are processed
+
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: process.env.FRONTEND_URL,
+    }
+});
 
 // Router import
 const authRouter = require("./routes/authRouter");
@@ -47,7 +56,18 @@ app.use("/", authRouter);
 
 
 
-app.listen(process.env.PORT, () => {
+app.get('/', function(req, res) {
+    res.send("backend running")
+})
+
+const sessionsController = require('./controllers/sessions')
+app.get('/newsession', sessionsController.create)
+
+///// SOCKET
+io.on('connection', socketManager.onConnect)
+///// SOCKET
+
+httpServer.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
 
