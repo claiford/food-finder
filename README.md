@@ -2,16 +2,21 @@
 Restaurant finder app
 
 ## Routes
-| HTTP method | Endpoint    | Operation              | Controller Action | Payload |
-|-------------|-------------|------------------------|-------------------|---------|
-| GET         | /groups     | Retrieve user's groups | index             | -       |
-| GET         | /groups/:id | Retrieve group details | show              | -       |
-| POST        | /groups     | Create new group       | create            | yes     |
-| PUT         | /groups/:id | Update group details   | update            | yes     |
-| DELETE      | /groups/:id | Delete group           | delete            | no      |
+| HTTP method | Endpoint                      | Operation                   | Router         | Controller           | Controller Action | Payload |
+|-------------|-------------------------------|-----------------------------|----------------|----------------------|-------------------|---------|
+| GET         | /customer/home                | Retrieve user's groups      | customerRouter | customerController   | index             | no      |
+| GET         | /customer/group/:groupid      | Retrieve group details      | customerRouter | groupsController     | show              | no      |
+| POST        | /customer/group/new           | Create new group            | customerRouter | groupsController     | create            | yes     |
+| PUT         | /customer/group/:groupid      | Update group details        | customerRouter | groupsController     | update            | yes     |
+| DELETE      | /customer/group/:groupid      | Delete group                | customerRouter | groupsController     | delete            | no      |
+| GET         | /merchant/home                | Retrieve merchant's stores  | index          | merchantController   | index             | no      |
+| GET         | /merchant/store/:storeid      | Retrieve store details      | merchantRouter | storeController      | show              | no      |
+| POST        | /merchant/store/new           | Create new store            | merchantRouter | storeController      | create            | no      |
+| PUT         | /merchant/store/:storeid      | Update store details        | merchantRouter | storeController      | update            | -       |
+| DELETE      | /merchant/store/:storeid      | Delete store                | merchantRouter | storeController      | delete            | -       |
 
 * <u>update</u> action 
-  * change group name    
+  * change group name
   * add/remove group member (other0)
   * leave group (self)
 

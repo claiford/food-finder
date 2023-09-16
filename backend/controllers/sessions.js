@@ -7,6 +7,7 @@ const PLACE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo";
 
 module.exports = {
     index,
+    getOngoing,
     create,
 }
 
@@ -20,9 +21,20 @@ async function index(req, res) {
     }
 }
 
+async function getOngoing(req, res) {
+    try {
+        // pending: "find" to be updated to query using group ID
+        const ongoingSession = await Session.find({ongoing: true})
+        res.json(ongoingSession[0].candidates);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function create(req, res) {
     const key = process.env.GMAPS_API_KEY;
     try {
+        console.log("CREATING SESSION...")
         // PERFORM NEARBY SEARCH QUERY
         const location = "1.387420%2C103.906998";
         const radius = "1000";
@@ -67,6 +79,7 @@ async function create(req, res) {
             candidates: candidates,
         })
 
+        console.log("SESSION CREATED")
         res.json(newSession);
     } catch (err) {
         console.log(err);

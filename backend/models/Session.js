@@ -39,6 +39,10 @@ const SessionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    ongoing: {
+        type: Boolean,
+        default: true,
+    },
     candidates: [CandidateSchema],
     chosen: {
         name: {

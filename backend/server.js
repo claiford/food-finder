@@ -64,7 +64,8 @@ app.get('/', function(req, res) {
 })
 
 const sessionsController = require('./controllers/sessions')
-app.get('/newsession', sessionsController.create)
+app.get('/session/ongoing', sessionsController.getOngoing)
+app.post('/session/new', sessionsController.create)
 
 ///// SOCKET
 io.on('connection', socketManager.onConnect)
