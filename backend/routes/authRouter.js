@@ -1,12 +1,11 @@
 const router = require("express").Router();
-const { CustomerSignUp } = require("../controllers/AuthController");
-const { MerchantSignUp } = require("../controllers/AuthController");
+const AuthController = require("../controllers/AuthController");
 
 // router.get("/", function(req, res) {
 //     res.send("login page")
 // })
-router.post("/customer/signup", CustomerSignUp);
-router.post("/merchant/signup", MerchantSignUp);
+router.post("/customer/signup", AuthController.createCustomer);
+router.post("/merchant/signup", AuthController.createMerchant);
 // router.post(
 //   "/login",
 //   passport.authenticate("local", {

@@ -4,6 +4,7 @@ import NewSession from "./pages/NewSession";
 
 import { Box } from "@mui/material";
 import { Routes, Route } from 'react-router-dom'
+import Home from "./pages/Home";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />}/>
         <Route path="/session" element={<NewSession />} />
+        <Route path="/home" element={<Home />}/>
         <Route path="/*" element={<h1>404: Page Not Found</h1>} />
       </Routes>
     </Box>

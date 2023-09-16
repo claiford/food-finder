@@ -4,12 +4,14 @@ const passport = require("passport")
 
 const http = require('http');
 const { Server } = require("socket.io");
+
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
 const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
+const groupsRouter = require('./routes/groupsRouter.js');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use(cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
-}))
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 // app.use(cookieParser());
@@ -35,6 +37,7 @@ app.use(passport.initialize());
 // Routers
 app.use("/", authRouter);
 
+app.use('/group', groupsRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -70,4 +73,3 @@ io.on('connection', socketManager.onConnect)
 httpServer.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
-
