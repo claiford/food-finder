@@ -2,42 +2,49 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button } from "@mui/material";
 
-const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
+const CustomerLogin = ({ customerInfo, setCustomerInfo, setIsAuthenticated }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "", 
+  });
 
   const handleInputChange = (e, key) => {
-    const updatedCustomerInfo = { ...customerInfo, [key]: e.target.value };
-    setCustomerInfo(updatedCustomerInfo);
+    const updatedCustomerInfo = { ...loginInfo, [key]: e.target.value };
+    setLoginInfo(updatedCustomerInfo)
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (!customerInfo.name || !customerInfo.email || !customerInfo.password) {
+    if (!loginInfo.email || !loginInfo.password) {
       setError("All fields are required");
       setShowErrorMessage(true);
     }
     // API call
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/customer/signup`,
-        customerInfo
+        `${process.env.REACT_APP_BACKEND_URL}/customer/login`,
+        loginInfo
       );
-      // console.log("Sign up response: ", response);
+      console.log("response", response);
+      console.log("customerID:", response.data.customer.id);
       if (response.status === 200) {
-        setSuccess(response.data.message || "Sign up successful.");
+        setSuccess(response.data.message || "Sign in successful.");
         setShowSuccessBar(true);
+        // setIsAuthenticated(true);
+        // Store customer ID in localstorage
+        localStorage.setItem('token', JSON.stringify(response.data.customer.id))
         // Reset form fields
-        setCustomerInfo({
-          name: "",
+        setLoginInfo({
           email: "",
           password: "",
         });
       } else {
         const data = response.data;
-        setError(data.message || "Sign up failed.");
+        setError(data.message || "Sign in failed.");
         setShowErrorMessage(true);
       }
     } catch (err) {
@@ -54,24 +61,15 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
 
   return (
     <Container maxWidth="xs">
-      <form onSubmit={handleSubmitForm }
+      <form onSubmit={handleSubmitForm}
       autocomplete="off">
-        <TextField
-          sx={{ height: 40 }}
-          label="Name"
-          type="text"
-          fullWidth
-          margin="normal"
-          value={customerInfo.name}
-          onChange={(e) => handleInputChange(e, "name")}
-        />
         <TextField
           sx={{ height: 40 }}
           label="Email"
           type="email"
           fullWidth
           margin="normal"
-          value={customerInfo.email}
+          value={loginInfo.email}
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
@@ -80,7 +78,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           type="password"
           fullWidth
           margin="normal"
-          value={customerInfo.password}
+          value={loginInfo.password}
           onChange={(e) => handleInputChange(e, "password")}
         />
         <Button
@@ -91,7 +89,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           size="large"
           sx={{ marginTop: "1rem", marginBottom: "2rem" }}
         >
-          Sign up as Customer
+          Login as Customer
         </Button>
         </form>
         {showErrorMessage && (
@@ -108,4 +106,4 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
   );
 };
 
-export default CustomerSignUp;
+export default CustomerLogin;

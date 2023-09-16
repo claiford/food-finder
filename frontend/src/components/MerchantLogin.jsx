@@ -2,35 +2,35 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button } from "@mui/material";
 
-const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
+const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
 
   const handleInputChange = (e, key) => {
-    const updatedCustomerInfo = { ...customerInfo, [key]: e.target.value };
-    setCustomerInfo(updatedCustomerInfo);
+    const updatedCustomerInfo = { ...merchantInfo, [key]: e.target.value };
+    setMerchantInfo(updatedCustomerInfo);
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (!customerInfo.name || !customerInfo.email || !customerInfo.password) {
-      setError("All fields are required");
-      setShowErrorMessage(true);
-    }
+    // if (!customerInfo.name || !customerInfo.email || !customerInfo.password) {
+    //   setError("All fields are required");
+    //   setShowErrorMessage(true);
+    // }
     // API call
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/customer/signup`,
-        customerInfo
+        `${process.env.REACT_APP_BACKEND_URL}/merchant/signup`,
+        merchantInfo
       );
       // console.log("Sign up response: ", response);
       if (response.status === 200) {
         setSuccess(response.data.message || "Sign up successful.");
         setShowSuccessBar(true);
         // Reset form fields
-        setCustomerInfo({
+        setMerchantInfo({
           name: "",
           email: "",
           password: "",
@@ -54,25 +54,15 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
 
   return (
     <Container maxWidth="xs">
-      <form onSubmit={handleSubmitForm }
-      autocomplete="off">
-        <TextField
-          sx={{ height: 40 }}
-          label="Name"
-          type="text"
-          fullWidth
-          margin="normal"
-          value={customerInfo.name}
-          onChange={(e) => handleInputChange(e, "name")}
-        />
+      <form onSubmit={handleSubmitForm}>
         <TextField
           sx={{ height: 40 }}
           label="Email"
           type="email"
           fullWidth
           margin="normal"
-          value={customerInfo.email}
-          onChange={(e) => handleInputChange(e, "email")}
+        //   value={customerInfo.email}
+        //   onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
           sx={{ height: 40 }}
@@ -80,8 +70,8 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           type="password"
           fullWidth
           margin="normal"
-          value={customerInfo.password}
-          onChange={(e) => handleInputChange(e, "password")}
+        //   value={customerInfo.password}
+        //   onChange={(e) => handleInputChange(e, "password")}
         />
         <Button
           variant="contained"
@@ -91,7 +81,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           size="large"
           sx={{ marginTop: "1rem", marginBottom: "2rem" }}
         >
-          Sign up as Customer
+          Login as Customer
         </Button>
         </form>
         {showErrorMessage && (
@@ -108,4 +98,4 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
   );
 };
 
-export default CustomerSignUp;
+export default MerchantLogin;

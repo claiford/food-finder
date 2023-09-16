@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import { Box, Button, Grid } from "@mui/material";
 import CustomerSignUp from "../components/CustomerSignUp";
 import MerchantSignUp from "../components/MerchantSignUp";
+import CustomerLogin from "../components/CustomerLogin";
 
 const Main = () => {
-  const [activeButton, setActiveButton] = useState(null)
-  const [showClientForm, setShowClientForm] = useState(false);
-  const [showMerchantForm, setShowMerchantForm] = useState(false);
+  const [activeButton, setActiveButton] = useState("Customer");
+  const [showCustomerLoginForm, setShowCustomerLoginForm] = useState(true);
+  const [showMerchantLoginForm, setShowMerchantLoginForm] = useState(false);
+  const [showCustomerSignUpForm, setShowCustomerSignUpForm] = useState(false);
+  const [showMerchantSignUpForm, setShowMerchantSignUpForm] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -18,27 +22,41 @@ const Main = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const buttonStyles = {
     color: "black",
     fontWeight: "bold",
     fontSize: "25px",
     ":active": {
-      color: "white", 
+      color: "white",
     },
   };
 
   const handleCustomerBtn = () => {
-    setActiveButton("Client")
-    setShowClientForm(true);
-    setShowMerchantForm(false);
+    setActiveButton("Customer");
+    setShowCustomerLoginForm(true);
+    setShowMerchantLoginForm(false);
+    setShowCustomerSignUpForm(false);
   };
 
   const handleMerchantBtn = () => {
-    setActiveButton("Merchant")
-    setShowClientForm(false);
-    setShowMerchantForm(true);
+    setActiveButton("Merchant");
+    setShowCustomerLoginForm(false);
+    setShowMerchantLoginForm(true);
   };
 
+  const handleCustomerSignUpBtn = () => {
+    setActiveButton("Customer");
+    setShowCustomerLoginForm(false);
+    setShowCustomerSignUpForm(true);
+  };
+
+  const handleGoBack = () => {
+    navigate("/");
+    setShowCustomerSignUpForm(false);
+    setShowCustomerLoginForm(true);
+  };
   return (
     <Box
       sx={{
@@ -51,12 +69,12 @@ const Main = () => {
       }}
     >
       <Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Button
             onClick={handleCustomerBtn}
-            sx={activeButton === "Client" ? buttonStyles : {}}
+            sx={activeButton === "Customer" ? buttonStyles : {}}
           >
-            Client
+            Customer
           </Button>
           <Button
             onClick={handleMerchantBtn}
@@ -65,15 +83,42 @@ const Main = () => {
             Merchant
           </Button>
         </Grid>
+        <Grid item xs={6}>
+          {showCustomerLoginForm && activeButton === "Customer" && (
+            <>
+              <span>
+                <CustomerLogin />
+                Not registered?
+                <Button variant="text" onClick={handleCustomerSignUpBtn}>
+                  Sign up here.
+                </Button>
+              </span>
+            </>
+          )}
+          {showCustomerSignUpForm && activeButton === "Customer" && (
+            <>
+              <CustomerSignUp
+                customerInfo={customerInfo}
+                setCustomerInfo={setCustomerInfo}
+              />
+              <Button variant="text" onClick={handleGoBack}>
+                Back to login
+              </Button>
+            </>
+          )}
+        </Grid>
+        <Outlet />
       </Grid>
-      {showClientForm && activeButton === "Client" && (
-        <CustomerSignUp customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} />
-      )}
-      {showMerchantForm && activeButton === "Merchant" && (
-        <MerchantSignUp
-          merchantInfo={merchantInfo}
-          setMerchantInfo={setMerchantInfo}
-        />
+      {showMerchantLoginForm && activeButton === "Merchant" && (
+        <>
+          <MerchantSignUp
+            merchantInfo={merchantInfo}
+            setMerchantInfo={setMerchantInfo}
+          />
+          <Button variant="text" onClick={handleGoBack}>
+            Back to login
+          </Button>
+        </>
       )}
     </Box>
   );
