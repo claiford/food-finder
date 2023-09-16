@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const passport = require("passport")
+
 const http = require('http');
 const { Server } = require("socket.io");
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-// const logger = require('morgan');
 const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
@@ -19,17 +19,22 @@ const io = new Server(httpServer, {
     }
 });
 
-// app.use(logger('dev'));
+// Router import
+const authRouter = require("./routes/authRouter");
+
 app.use(express.json());
 app.use(cors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
 }))
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
+app.use("/", authRouter);
+
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -47,20 +52,9 @@ app.use(express.urlencoded({ extended: false }));
 //   res.render('error');
 // });
 
-///// TEST DB-CONNECTION
-// const TestSchema = new mongoose.Schema({});
-// const Test = mongoose.model('Test', TestSchema)
 
-// app.get('/', async function (req, res) {
-//     try {
-//         const testData = await Test.find({});
-//         console.log(testData);
-//         res.json(testData);
-//     } catch (err) {
-//         console.log(err);
-//     }
-// })
-///// TEST DB-CONNECTION
+
+
 
 app.get('/', function(req, res) {
     res.send("backend running")
