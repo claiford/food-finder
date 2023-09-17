@@ -54,13 +54,14 @@ async function create(req, res) {
             const candidate = {
                 name: placeDetails.name,
                 place_id: placeDetails.place_id,
-                rating: placeDetails.rating,
-                user_ratings_total: placeDetails.user_ratings_total,
+                rating: placeDetails.rating ?? null,
+                user_ratings_total: placeDetails.user_ratings_total ?? null,
                 location: placeDetails.geometry.location,
                 // todo: update this to calculate based on user specified time
                 // note: not all place details contain opening_hours attribute, set to null for unknown
                 is_open: placeDetails.opening_hours?.open_now ?? null,
                 photos: [],
+                votes: 0,
             }
             
             if (placeDetails.photos) {
@@ -76,7 +77,9 @@ async function create(req, res) {
 
         const newSession = await Session.create({
             group: "Test Group " + new Date(Date.now()).toLocaleTimeString(),
+            status: "incomplete",
             candidates: candidates,
+            num_voters: 1,
         })
 
         console.log("SESSION CREATED")

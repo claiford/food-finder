@@ -2,7 +2,7 @@ import "./App.css";
 import Main from "./pages/Main";
 import Group from "./pages/Group";
 import NewSession from "./pages/NewSession";
-import OngoingSession from "./pages/OngoingSession";
+// import OngoingSession from "./pages/SessionIncomplete";
 
 import { Box } from "@mui/material";
 import { Routes, Route } from 'react-router-dom'

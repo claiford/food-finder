@@ -17,7 +17,7 @@ const NewSession = () => {
             setOpen(true)
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`)
             setOpen(false);
-            navigate("/tempsession")
+            navigate("/customer/group/groupid")
         } catch (err) {
             console.log(err)
         }

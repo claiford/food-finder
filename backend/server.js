@@ -64,6 +64,7 @@ app.get('/', function(req, res) {
 })
 
 const sessionsController = require('./controllers/sessions')
+app.get('/sessions', sessionsController.index)
 app.get('/session/ongoing', sessionsController.getOngoing)
 app.post('/session/new', sessionsController.create)
 
