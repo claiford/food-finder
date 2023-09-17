@@ -5,11 +5,10 @@ import NewSession from "./pages/NewSession";
 // import OngoingSession from "./pages/SessionIncomplete";
 
 import { Box } from "@mui/material";
-import { Routes, Route } from 'react-router-dom'
-import Home from "./pages/Home";
+import { Routes, Route } from "react-router-dom";
+import CustomerHome from "./pages/CustomerHome";
 
 function App() {
-
   return (
     <Box
       sx={{
@@ -24,11 +23,10 @@ function App() {
     >
       {/* <h1>App Name</h1> */}
       <Routes>
-        <Route path="/" element={<Main />}/>
+        <Route path="/" element={<Main />} />
         <Route path="/customer/group/groupid" element={<Group />} />
         <Route path="/customer/session/new" element={<NewSession />} />
-        {/* <Route path="/customer/session/ongoing" element={<OngoingSession />} /> */}
-        <Route path="/home" element={<Home />}/>
+        <Route path="/customer/home" element={<CustomerHome />} />
         <Route path="/*" element={<h1>404: Page Not Found</h1>} />
       </Routes>
     </Box>

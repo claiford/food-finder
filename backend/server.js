@@ -11,7 +11,7 @@ const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
-const groupsRouter = require('./routes/groupsRouter.js');
+const customerRouter = require('./routes/CustomerRouter.js');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -37,7 +37,7 @@ app.use(passport.initialize());
 // Routers
 app.use("/", authRouter);
 
-app.use('/group', groupsRouter);
+app.use('/customer', customerRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
