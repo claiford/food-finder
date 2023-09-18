@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Tabs, Tab } from '@mui/material';
+import { Box, Button, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
@@ -14,10 +14,20 @@ const Group = () => {
     // ongoingSession
     // => incomplete : ongoing session in decision process
     // => complete   : ongoing session reached decision
-    const [ongoingSession, setOngoingSession] = useState({});
+    const [ongoingSession, setOngoingSession] = useState(null);
     const [archivedSessions, setArchivedSessions] = useState([])
     const [tabValue, setTabValue] = useState(0);
 
+    /////////////////
+    // NAVIGATION
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
+    /////////////////
+    /////////////////
+
+    /////////////////
+    // DATA RETRIEVAL
     const getSessions = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
@@ -29,7 +39,11 @@ const Group = () => {
             console.log(err)
         }
     }
+    /////////////////
+    /////////////////
 
+    /////////////////
+    // HANDLERS
     // for ongoingSession, status: "incomplete" ==> "complete"
     const handleComplete = async () => {
         try {
@@ -46,28 +60,42 @@ const Group = () => {
         }
     }
 
+    const handleArchive = async () => {
+        try {
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-archive`)
+            console.log("handling archive");
+            setOngoingSession(null);
+            // setOngoingSession({(prev) => {
+            //     return ({
+            //         ...prev,
+            //         "status": "archived",
+            //     })
+            // })}
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    /////////////////
+    /////////////////
+
     useEffect(() => {
         getSessions();
     }, [])
 
-    const handleChange = (event, newValue) => {
-        setTabValue(newValue);
-    };
-
     return (
-        <>
-            <h1>Group page</h1>
+        <Box className="group-page" sx={{ width: '400px', textAlign:'center' }}>
+            <h1>Group name</h1>
 
-            <Tabs value={tabValue} onChange={handleChange} aria-label="icon tabs example">
-                <Tab icon={<AlbumRoundedIcon />} aria-label="phone" />
-                <Tab icon={<HistoryRoundedIcon />} aria-label="favorite" />
-                <Tab icon={<AccountCircleRoundedIcon />} aria-label="person" />
+            <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth" aria-label="icon tabs">
+                <Tab icon={<AlbumRoundedIcon />} aria-label="current" />
+                <Tab icon={<HistoryRoundedIcon />} aria-label="archive" />
+                <Tab icon={<AccountCircleRoundedIcon />} aria-label="members" />
             </Tabs>
 
             {/* Display current session */}
             {tabValue === 0 &&
                 <>
-                    <h2>Ongoing Session</h2>
+                    <h2>Current Session</h2>
                     {ongoingSession ? (
                         <>
                             {ongoingSession.status === "incomplete" &&
@@ -79,6 +107,7 @@ const Group = () => {
                             {ongoingSession.status === "complete" &&
                                 <SessionComplete
                                     ongoingSession={ongoingSession}
+                                    handleArchive={handleArchive}
                                 />
                             }
                         </>
@@ -90,7 +119,7 @@ const Group = () => {
                 </>
             }
 
-            {/* Display previous sessions */}
+            {/* Display archive sessions */}
             {tabValue === 1 &&
                 <>
                     <h2>Previous sessions</h2>
@@ -104,7 +133,7 @@ const Group = () => {
                 </>
             }
 
-        </>
+        </Box>
 
     )
 };

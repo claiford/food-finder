@@ -56,7 +56,7 @@ const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
 
     return (
         <>
-            <Button onClick={handleJoinOngoing}>
+            <Button variant="contained" onClick={handleJoinOngoing}>
                 Join Ongoing Session
             </Button>
             <Modal

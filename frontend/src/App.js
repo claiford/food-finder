@@ -10,15 +10,15 @@ import CustomerHome from "./pages/CustomerHome";
 
 function App() {
   return (
-    <Box
+    <Box className='app-container'
       sx={{
-        p: "20px",
         display: "flex",
         height: "100vh",
         width: "100vw",
         flexDirection: "column",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
+        // border: 2px solid black
       }}
     >
       {/* <h1>App Name</h1> */}

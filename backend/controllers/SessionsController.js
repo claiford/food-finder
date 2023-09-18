@@ -10,6 +10,7 @@ module.exports = {
     getOngoing,
     create,
     handleComplete,
+    handleArchive,
 }
 
 async function index(req, res) {
@@ -94,6 +95,18 @@ async function handleComplete(req, res) {
     try {
         console.log("updating session");
         const update = { status: "complete" };
+        await Session.findOneAndUpdate( { _id: req.params.sessionid }, update )
+        console.log("session updated");
+        res.send('session updated');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function handleArchive(req, res) {
+    try {
+        console.log("updating session");
+        const update = { status: "archived" };
         await Session.findOneAndUpdate( { _id: req.params.sessionid }, update )
         console.log("session updated");
         res.send('session updated');
