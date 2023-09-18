@@ -34,6 +34,11 @@ const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
         socket.disconnect();
     };
 
+    const handleCompleteSwiping = () => {
+        handleLeaveOngoing();
+        handleComplete();
+    }
+
     useEffect(() => {
         function onConnect() {
             console.log(`connected as ${socket.id}`)
@@ -67,7 +72,7 @@ const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
             >
                 <Box sx={modalStyle}>
                     <h4>New Session - {socket.id}</h4>
-                    <Swiper candidates={ongoingSession.candidates} handleComplete={handleComplete}/>
+                    <Swiper candidates={ongoingSession.candidates} handleCompleteSwiping={handleCompleteSwiping} />
                 </Box>
             </Modal>
         </>

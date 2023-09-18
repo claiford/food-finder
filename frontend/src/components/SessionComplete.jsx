@@ -23,8 +23,11 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
                 <Typography variant="body2" color="text.secondary">
                     Open now: {ongoingSession.candidates[1].is_open === null ? "-" : ongoingSession.candidates[1].is_open ? "Yes" : "No"}
                 </Typography>
+                <Button variant="contained" onClick={handleArchive} sx={{ mt: 4 }}>
+                    Archive
+                </Button>
             </Box>
-            <Button variant="contained" onClick={handleArchive}>Archive</Button>
+
         </>
     )
 }

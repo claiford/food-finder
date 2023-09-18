@@ -6,7 +6,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import cryface from '../assets/cry-face.png'
 import { grey } from '@mui/material/colors';
 
-const Swiper = ({ candidates, handleComplete }) => {
+const Swiper = ({ candidates, handleCompleteSwiping }) => {
 	const [activeStep, setActiveStep] = useState(0);
 	const [votes, setVotes] = useState(Object.fromEntries(candidates.map((c) => [c.place_id, 0])));
 
@@ -103,7 +103,7 @@ const Swiper = ({ candidates, handleComplete }) => {
 		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80%' }}>
 			{activeStep === candidates.length ? (
 				<>
-					<Button onClick={handleComplete}>Complete</Button>
+					<Button onClick={handleCompleteSwiping}>Complete</Button>
 				</>
 			) : (
 				<>

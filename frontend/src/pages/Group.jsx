@@ -4,6 +4,7 @@ import { Box, Button, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
+import SessionArchive from '../components/SessionArchive';
 
 import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
@@ -33,8 +34,8 @@ const Group = () => {
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
             const sessions = res.data;
 
-            setOngoingSession(sessions.find((s) => s.status !== "archived"));
-            setArchivedSessions(sessions.filter((e) => e.status === "archived"));
+            setOngoingSession(sessions.find((s) => s.status !== "archive"));
+            setArchivedSessions(sessions.filter((e) => e.status === "archive"));
         } catch (err) {
             console.log(err)
         }
@@ -49,12 +50,7 @@ const Group = () => {
         try {
             await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-complete`)
             console.log("handling complete");
-            setOngoingSession((prev) => {
-                return ({
-                    ...prev,
-                    "status": "complete",
-                })
-            })
+            getSessions();
         } catch (err) {
             console.log(err)
         }
@@ -64,13 +60,7 @@ const Group = () => {
         try {
             await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-archive`)
             console.log("handling archive");
-            setOngoingSession(null);
-            // setOngoingSession({(prev) => {
-            //     return ({
-            //         ...prev,
-            //         "status": "archived",
-            //     })
-            // })}
+            getSessions();
         } catch (err) {
             console.log(err)
         }
@@ -121,8 +111,9 @@ const Group = () => {
 
             {/* Display archive sessions */}
             {tabValue === 1 &&
-                <>
-                    <h2>Previous sessions</h2>
+                <>  
+                    <h2>Previous Sessions</h2>
+                    <SessionArchive archivedSessions={archivedSessions}/>
                 </>
             }
 

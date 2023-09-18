@@ -19,7 +19,13 @@ const CandidateSchema = new mongoose.Schema({
         },
         lng: {
             type: Number,
-        }
+        },
+    },
+    distance: {
+        type: Number,
+    },
+    duration: {
+        type: Number,
     },
     // todo: update this attribute to reflect time set by user, calculated using opening hours attribute from API
     is_open: {
