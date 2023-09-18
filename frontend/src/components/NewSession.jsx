@@ -1,23 +1,51 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Snackbar, Alert } from '@mui/material';
+import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
 
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    bgcolor: 'background.paper',
+    borderRadius: 3,
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+
 const NewSession = () => {
-    const [open, setOpen] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [newSession, setNewSession] = useState({})
     const navigate = useNavigate();
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleModalClose = () => {
+        setAlertOpen(false);
+        navigate("/customer/group/groupid")
     }
 
     const createNewSession = async (e) => {
         e.preventDefault()
         try {
-            setOpen(true)
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`)
-            setOpen(false);
-            navigate("/customer/group/groupid")
+            setLoading(true);
+            // setTimeout(() => {
+            //     setAlertOpen(true);
+            //     setLoading(false);
+            // }, 2000)
+            const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`)
+            console.log("POST RES", res);
+            setNewSession(res.data)
+            setAlertOpen(true);
+            setLoading(false);
         } catch (err) {
             console.log(err)
         }
@@ -25,24 +53,42 @@ const NewSession = () => {
 
     return (
         <>
-            <Snackbar open={open} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    This is a success message!
-                </Alert>
-            </Snackbar>
-            <h1>Make New Session</h1>
+            <Modal open={alertOpen} onClose={handleModalClose}>
+                <Box sx={modalStyle}>
+                    <CheckCircleOutlineRoundedIcon color="success" />
+                    <Typography variant='h6'>
+                        New Session Generated
+                    </Typography>
+                    <IconButton onClick={handleModalClose} color="primary">
+                        <ArrowBackRoundedIcon />
+                    </IconButton>
+                </Box>
+            </Modal>
+            <h1>Create Session</h1>
             <form onSubmit={createNewSession}>
-                <TextField />
                 <Button
                     variant="contained"
                     color="primary"
                     type="submit"
                     fullWidth
                     size="large"
-                    sx={{ marginTop: "1rem", marginBottom: "2rem" }}
+                    disabled={loading}
                 >
                     Create
+                    {loading && (
+                        <CircularProgress
+                            size={24}
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                marginTop: '-12px',
+                                marginLeft: '-12px',
+                            }}
+                        />
+                    )}
                 </Button>
+
             </form>
         </>
 

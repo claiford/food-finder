@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, MobileStepper, Card, CardMedia, CardContent, Typography, ImageList, ImageListItem } from '@mui/material'
-import Carousel from 'react-material-ui-carousel'
+import { Box, Button, MobileStepper, Card, CardContent, Typography, ImageList, ImageListItem } from '@mui/material'
+// import Carousel from 'react-material-ui-carousel'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import cryface from '../assets/cry-face.png'
-import { grey } from '@mui/material/colors';
 
 const Swiper = ({ candidates, handleCompleteSwiping }) => {
 	const [activeStep, setActiveStep] = useState(0);
@@ -58,7 +57,7 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 									<img
 										src={photoURL}
 										// srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-										// alt={item.title}
+										alt={`${candidate.name}-${i}`}
 										loading="lazy"
 									/>
 								</ImageListItem>
@@ -78,7 +77,7 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 						<Typography variant="h6">
 							no photos found
 						</Typography>
-						<img src={cryface} width='50%' />
+						<img src={cryface} alt="none found" width='50%' />
 					</Box>
 				)}
 				<CardContent>
