@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
-import SessionIncomplete from './SessionIncomplete';
-import SessionComplete from './SessionComplete';
+import SessionIncomplete from '../components/SessionIncomplete';
+import SessionComplete from '../components/SessionComplete';
 
+import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
+import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 const Group = () => {
     const navigate = useNavigate();
@@ -13,6 +16,7 @@ const Group = () => {
     // => complete   : ongoing session reached decision
     const [ongoingSession, setOngoingSession] = useState({});
     const [archivedSessions, setArchivedSessions] = useState([])
+    const [tabValue, setTabValue] = useState(0);
 
     const getSessions = async () => {
         try {
@@ -34,7 +38,7 @@ const Group = () => {
             setOngoingSession((prev) => {
                 return ({
                     ...prev,
-                    "status": "complete",  
+                    "status": "complete",
                 })
             })
         } catch (err) {
@@ -46,37 +50,60 @@ const Group = () => {
         getSessions();
     }, [])
 
+    const handleChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
 
     return (
         <>
             <h1>Group page</h1>
 
-            {/* Display group members */}
-            <h2>Members</h2>
+            <Tabs value={tabValue} onChange={handleChange} aria-label="icon tabs example">
+                <Tab icon={<AlbumRoundedIcon />} aria-label="phone" />
+                <Tab icon={<HistoryRoundedIcon />} aria-label="favorite" />
+                <Tab icon={<AccountCircleRoundedIcon />} aria-label="person" />
+            </Tabs>
 
             {/* Display current session */}
-            {ongoingSession ? (
+            {tabValue === 0 &&
                 <>
-                    {ongoingSession.status === "incomplete" &&
-                        <SessionIncomplete
-                            ongoingSession={ongoingSession}
-                            handleComplete={handleComplete}
-                        />
-                    }
-                    {ongoingSession.status === "complete" &&
-                        <SessionComplete
-                            ongoingSession={ongoingSession}
-                        />
-                    }
+                    <h2>Ongoing Session</h2>
+                    {ongoingSession ? (
+                        <>
+                            {ongoingSession.status === "incomplete" &&
+                                <SessionIncomplete
+                                    ongoingSession={ongoingSession}
+                                    handleComplete={handleComplete}
+                                />
+                            }
+                            {ongoingSession.status === "complete" &&
+                                <SessionComplete
+                                    ongoingSession={ongoingSession}
+                                />
+                            }
+                        </>
+                    ) : (
+                        <Button onClick={() => navigate("/customer/session/new")}>
+                            Start New Session
+                        </Button>
+                    )}
                 </>
-            ) : (
-                <Button onClick={() => navigate("/customer/session/new")}>
-                    Start New Session
-                </Button>
-            )}
+            }
 
             {/* Display previous sessions */}
-            <h2>Previous sessions</h2>
+            {tabValue === 1 &&
+                <>
+                    <h2>Previous sessions</h2>
+                </>
+            }
+
+            {/* Display group members */}
+            {tabValue === 2 &&
+                <>
+                    <h2>Members</h2>
+                </>
+            }
+
         </>
 
     )

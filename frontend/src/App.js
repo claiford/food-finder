@@ -1,7 +1,7 @@
 import "./App.css";
 import Main from "./pages/Main";
 import Group from "./pages/Group";
-import NewSession from "./pages/NewSession";
+import NewSession from "./components/NewSession";
 // import OngoingSession from "./pages/SessionIncomplete";
 
 import { Box } from "@mui/material";
