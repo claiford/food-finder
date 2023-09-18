@@ -9,17 +9,18 @@ const modalStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '80%',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: 3,
     boxShadow: 24,
     p: 4,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
 };
 
-const SessionIncomplete = ({ ongoingSession }) => {
+const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
     const [showSwiper, setShowSwiper] = useState(false)
     const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -31,10 +32,6 @@ const SessionIncomplete = ({ ongoingSession }) => {
     const handleLeaveOngoing = () => {
         setShowSwiper(false);
         socket.disconnect();
-    };
-
-    const handleComplete = () => {
-        handleLeaveOngoing()
     };
 
     useEffect(() => {
@@ -70,7 +67,7 @@ const SessionIncomplete = ({ ongoingSession }) => {
             >
                 <Box sx={modalStyle}>
                     <h4>New Session - {socket.id}</h4>
-                    <Swiper candidates={ongoingSession.candidates} />
+                    <Swiper candidates={ongoingSession.candidates} handleComplete={handleComplete}/>
                 </Box>
             </Modal>
         </>

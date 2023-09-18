@@ -11,16 +11,32 @@ const Group = () => {
     // ongoingSession
     // => incomplete : ongoing session in decision process
     // => complete   : ongoing session reached decision
-    const [ongoingSession, setOngoingSession] = useState("");
+    const [ongoingSession, setOngoingSession] = useState({});
     const [archivedSessions, setArchivedSessions] = useState([])
 
     const getSessions = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/sessions`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
             const sessions = res.data;
 
             setOngoingSession(sessions.find((s) => s.status !== "archived"));
             setArchivedSessions(sessions.filter((e) => e.status === "archived"));
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // for ongoingSession, status: "incomplete" ==> "complete"
+    const handleComplete = async () => {
+        try {
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-complete`)
+            console.log("handling complete");
+            setOngoingSession((prev) => {
+                return ({
+                    ...prev,
+                    "status": "complete",  
+                })
+            })
         } catch (err) {
             console.log(err)
         }
@@ -44,6 +60,7 @@ const Group = () => {
                     {ongoingSession.status === "incomplete" &&
                         <SessionIncomplete
                             ongoingSession={ongoingSession}
+                            handleComplete={handleComplete}
                         />
                     }
                     {ongoingSession.status === "complete" &&

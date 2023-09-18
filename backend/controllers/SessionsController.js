@@ -9,6 +9,7 @@ module.exports = {
     index,
     getOngoing,
     create,
+    handleComplete,
 }
 
 async function index(req, res) {
@@ -84,6 +85,18 @@ async function create(req, res) {
 
         console.log("SESSION CREATED")
         res.json(newSession);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function handleComplete(req, res) {
+    try {
+        console.log("updating session");
+        const update = { status: "complete" };
+        await Session.findOneAndUpdate( { _id: req.params.sessionid }, update )
+        console.log("session updated");
+        res.send('session updated');
     } catch (err) {
         console.log(err);
     }
