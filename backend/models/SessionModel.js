@@ -62,6 +62,10 @@ const SessionSchema = new mongoose.Schema({
     num_voters: {
         type: Number,
     },
+    num_voted: {
+        type: Number,
+        default: 0,
+    },
     chosen: CandidateSchema
 },
 {

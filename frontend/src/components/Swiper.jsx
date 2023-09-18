@@ -103,7 +103,7 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80%' }}>
 			{activeStep === candidates.length ? (
 				<>
-					<Button onClick={handleCompleteSwiping}>Complete</Button>
+					<Button onClick={() => handleCompleteSwiping(votes)}>Complete</Button>
 				</>
 			) : (
 				<>

@@ -46,9 +46,9 @@ const Group = () => {
     /////////////////
     // HANDLERS
     // for ongoingSession, status: "incomplete" ==> "complete"
-    const handleComplete = async () => {
+    const handleVoting = async (votes) => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-complete`)
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, {votes: votes})
             console.log("handling complete");
             getSessions();
         } catch (err) {
@@ -91,7 +91,7 @@ const Group = () => {
                             {ongoingSession.status === "incomplete" &&
                                 <SessionIncomplete
                                     ongoingSession={ongoingSession}
-                                    handleComplete={handleComplete}
+                                    handleVoting={handleVoting}
                                 />
                             }
                             {ongoingSession.status === "complete" &&
@@ -102,7 +102,7 @@ const Group = () => {
                             }
                         </>
                     ) : (
-                        <Button onClick={() => navigate("/customer/session/new")}>
+                        <Button variant="contained" onClick={() => navigate("/customer/session/new")}>
                             Start New Session
                         </Button>
                     )}

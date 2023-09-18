@@ -61,7 +61,7 @@ app.get('/', function(req, res) {
 const sessionsController = require('./controllers/SessionsController')
 app.get('/customer/group/groupid', sessionsController.index)
 app.post('/session/new', sessionsController.create)
-app.put('/session/:sessionid/handle-complete', sessionsController.handleComplete)
+app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
 app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 
 ///// SOCKET

@@ -20,7 +20,7 @@ const modalStyle = {
     alignItems: 'center',
 };
 
-const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
+const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
     const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -34,9 +34,9 @@ const SessionIncomplete = ({ ongoingSession, handleComplete }) => {
         socket.disconnect();
     };
 
-    const handleCompleteSwiping = () => {
+    const handleCompleteSwiping = (votes) => {
         handleLeaveOngoing();
-        handleComplete();
+        handleVoting(votes);
     }
 
     useEffect(() => {

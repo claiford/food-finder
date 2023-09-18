@@ -10,7 +10,7 @@ module.exports = {
     index,
     getOngoing,
     create,
-    handleComplete,
+    handleVoting,
     handleArchive,
 }
 
@@ -117,11 +117,31 @@ async function create(req, res) {
     }
 }
 
-async function handleComplete(req, res) {
+async function handleVoting(req, res) {
     try {
         console.log("updating session");
         const update = { status: "complete" };
-        await Session.findOneAndUpdate({ _id: req.params.sessionid }, update)
+        const session = await Session.findById(req.params.sessionid)
+        for (const [place_id, vote] of Object.entries(req.body.votes)) {
+            session.candidates.find((c) => c.place_id === place_id).votes += vote;
+        }
+        session.num_voted += 1;
+
+        if (session.num_voted === session.num_voters) {
+            session.status = "complete";
+            console.log(session.candidates)
+            session.chosen = session.candidates.reduce((a, b) => {
+                if (a.votes === b.votes) {
+                    if (a.distance <= b.distance) return a
+                    if (a.distance > b.distance) return b
+                } else {
+                    if (a.votes > b.votes) return a
+                    if (a.votes < b.votes) return b
+                }
+            })
+        }
+
+        await session.save()
         console.log("session updated");
         res.send('session updated');
     } catch (err) {
@@ -132,8 +152,7 @@ async function handleComplete(req, res) {
 async function handleArchive(req, res) {
     try {
         console.log("updating session");
-        const update = { status: "archive" };
-        await Session.findOneAndUpdate({ _id: req.params.sessionid }, update)
+        await Session.findOneAndUpdate({ _id: req.params.sessionid }, { status: "archive" })
         console.log("session updated");
         res.send('session updated');
     } catch (err) {
