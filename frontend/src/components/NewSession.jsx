@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
+import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography, MenuItem, FormControl } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
@@ -32,7 +32,7 @@ const NewSession = () => {
         distance: null,
         budget: null,
     })
-    const [newSession, setNewSession] = useState({})
+    const [postResponse, setPostResponse] = useState({})
     const navigate = useNavigate();
 
     const handleInputChange = (e, key) => {
@@ -67,7 +67,7 @@ const NewSession = () => {
 
     const handleModalClose = () => {
         setAlertOpen(false);
-        // navigate("/customer/group/groupid")
+        navigate("/customer/group/groupid")
     }
 
     const handleSubmitForm = async (e) => {
@@ -75,13 +75,9 @@ const NewSession = () => {
         if (form.location && form.distance && form.budget) {
             try {
                 setLoading(true);
-                // setTimeout(() => {
-                //     setAlertOpen(true);
-                //     setLoading(false);
-                // }, 2000)
-                // const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`)
-                // console.log("POST RES", res);
-                // setNewSession(res.data)
+                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`, form)
+                console.log("POST RES", res);
+                setPostResponse(res.data)
                 setAlertOpen(true);
                 setLoading(false);
             } catch (err) {

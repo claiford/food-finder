@@ -38,13 +38,23 @@ async function create(req, res) {
     const key = process.env.GMAPS_API_KEY;
     try {
         console.log("CREATING SESSION...")
+
+        // GET ORIGIN LAT & LNG FOR NEARBY SEARCH
+        const queryOriginDetails = PLACE_DETAILS_URL + `?place_id=${req.body.location}&key=${key}`;
+        const resOriginDetails = await axios.get(queryOriginDetails);
+        const originDetails = resOriginDetails.data.result;
+        const originLat = originDetails.geometry.location.lat;
+        const originLng = originDetails.geometry.location.lng;
+
         // PERFORM NEARBY SEARCH QUERY
-        const location = "1.387420%2C103.906998";
-        const radius = "1000";
-        const keyword = "food";
+        const location = `${originLat}%2C${originLng}`;
+        const radius = req.body.distance * 1000;
+        const maxprice = req.body.budget;
+        // pending: ignore keyword (cuisine) selection for now
+        // const keyword = "mexican";
         const type = "restaurant";
 
-        const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&keyword=${keyword}&type=${type}&key=${key}`;
+        const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&maxprice=${maxprice}&type=${type}&key=${key}`;
         const resNearbySearch = await axios.get(queryNearbySearch);
         const nearbySearch = resNearbySearch.data.results
 
