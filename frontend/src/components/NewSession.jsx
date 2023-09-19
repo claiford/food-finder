@@ -4,7 +4,8 @@ import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
-import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 const modalStyle = {
@@ -12,7 +13,7 @@ const modalStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '80%',
+    width: '50%',
     bgcolor: 'background.paper',
     borderRadius: 3,
     boxShadow: 24,
@@ -34,6 +35,15 @@ const NewSession = () => {
     })
     const [postResponse, setPostResponse] = useState({})
     const navigate = useNavigate();
+
+    const handleSuccessClose = () => {
+        setAlertOpen(false);
+        navigate("/customer/group/groupid")
+    }
+
+    const handleErrorClose = () => {
+        setAlertOpen(false);
+    }
 
     const handleInputChange = (e, key) => {
         if (key === "location") {
@@ -65,28 +75,29 @@ const NewSession = () => {
         }
     }
 
-    const handleModalClose = () => {
-        setAlertOpen(false);
-        navigate("/customer/group/groupid")
-    }
-
     const handleSubmitForm = async (e) => {
         e.preventDefault()
         if (form.location && form.distance && form.budget) {
             try {
                 setLoading(true);
                 const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`, form)
-                console.log("POST RES", res);
-                setPostResponse(res.data)
+                setPostResponse({
+                    status: res.status,
+                    data: res.data
+                })
                 setAlertOpen(true);
                 setLoading(false);
             } catch (err) {
-                console.log(err)
+                console.log("ERROR RES",)
+                setPostResponse({
+                    status: err.response.status
+                })
+                setAlertOpen(true);
+                setLoading(false);
             }
         } else {
             for (const field of Object.keys(form)) {
                 if (form[field] === null) {
-                    console.log("FIELD CHECK", field)
                     setFormError((prevFormError) => {
                         return {
                             ...prevFormError,
@@ -122,15 +133,27 @@ const NewSession = () => {
 
     return (
         <>
-            <Modal open={alertOpen} onClose={handleModalClose}>
+            <Modal open={alertOpen} onClose={postResponse.status === 200 ? handleSuccessClose : handleErrorClose}>
                 <Box sx={modalStyle}>
-                    <CheckCircleOutlineRoundedIcon color="success" />
-                    <Typography variant='h6'>
-                        New Session Generated
-                    </Typography>
-                    <IconButton onClick={handleModalClose} color="primary">
-                        <ArrowBackRoundedIcon />
-                    </IconButton>
+                    {postResponse.status === 200 &&
+                        <>
+                            <CheckCircleRoundedIcon color="success" />
+                            <Typography variant='h6'>
+                                New Session Generated
+                            </Typography>
+                            <IconButton onClick={handleSuccessClose} color="primary">
+                                <ArrowBackRoundedIcon />
+                            </IconButton>
+                        </>
+                    }
+                    {postResponse.status === 500 &&
+                        <>
+                            <CancelRoundedIcon color="error" />
+                            <Typography variant='h6'>
+                                Server Error. Please Try Again.
+                            </Typography>
+                        </>
+                    }
                 </Box>
             </Modal>
             <h1>Create Session</h1>
@@ -140,6 +163,7 @@ const NewSession = () => {
                         sx={{ my: 2 }}
                         inputRef={autocompleteRef}
                         label="Location"
+                        disabled={loading}
                         error={formError.location ? true : false}
                         helperText={formError.location ? "Please select a valid location." : ""}
                         onChange={(e) => handleInputChange(e, "location")}
@@ -148,11 +172,13 @@ const NewSession = () => {
                         select
                         sx={{ my: 2 }}
                         label="Distance"
-                        margin="normal"
+                        defaultValue={""}
+                        disabled={loading}
                         error={formError.distance ? true : false}
                         helperText={formError.distance ? "Please select an option." : ""}
                         onChange={(e) => handleInputChange(e, "distance")}
                     >
+                        <MenuItem value={""} disabled></MenuItem>
                         <MenuItem value={1}>{"< 1km"}</MenuItem>
                         <MenuItem value={2}>{"< 2km"}</MenuItem>
                         <MenuItem value={3}>{"< 3km"}</MenuItem>
@@ -161,11 +187,13 @@ const NewSession = () => {
                         select
                         sx={{ my: 2 }}
                         label="Budget"
-                        margin="normal"
+                        defaultValue={""}
+                        disabled={loading}
                         error={formError.budget ? true : false}
                         helperText={formError.budget ? "Please select an option." : ""}
                         onChange={(e) => handleInputChange(e, "budget")}
                     >
+                        <MenuItem value={""} disabled></MenuItem>
                         <MenuItem value={4}>Any</MenuItem>
                         <MenuItem value={1}>$</MenuItem>
                         <MenuItem value={2}>$$</MenuItem>
