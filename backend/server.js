@@ -11,7 +11,7 @@ const socketManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
-const customerRouter = require('./routes/CustomerRouter.js');
+const CustomerRouter = require('./routes/CustomerRouter.js');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -22,7 +22,7 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const authRouter = require("./routes/authRouter");
+const authRouter = require("./routes/AuthRouter.js");
 
 app.use(express.json());
 app.use(cors({
@@ -37,7 +37,9 @@ app.use(passport.initialize());
 // Routers
 app.use("/", authRouter);
 
-app.use('/customer', customerRouter);
+app.use('/customer', CustomerRouter);
+
+// app.use('/customer/api/customers', CustomerRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -63,7 +65,8 @@ app.get('/', function(req, res) {
     res.send("backend running")
 })
 
-const sessionsController = require('./controllers/SessionsController.js')
+const sessionsController = require('./controllers/SessionsController.js');
+const CustomerModel = require('./models/CustomerModel.js');
 app.get('/newsession', sessionsController.create)
 
 ///// SOCKET
