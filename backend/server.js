@@ -11,7 +11,7 @@ const socketsManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
-const customerRouter = require('./routes/CustomerRouter.js');
+const CustomerRouter = require('./routes/CustomerRouter.js');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -22,7 +22,7 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const authRouter = require("./routes/authRouter");
+const authRouter = require("./routes/AuthRouter.js");
 
 app.use(express.json());
 app.use(cors({
@@ -58,7 +58,7 @@ app.get('/', function(req, res) {
     res.send("backend running")
 })
 
-const sessionsController = require('./controllers/SessionsController')
+const sessionsController = require('./controllers/SessionsController');
 app.get('/customer/group/groupid', sessionsController.index)
 app.post('/session/new', sessionsController.create)
 app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
