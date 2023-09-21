@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-const socketManager = require('./listeners/socketsManager.js');
+const socketsManager = require('./listeners/socketsManager.js');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
@@ -36,10 +36,7 @@ app.use(passport.initialize());
 
 // Routers
 app.use("/", authRouter);
-
-app.use('/customer', CustomerRouter);
-
-// app.use('/customer/api/customers', CustomerRouter);
+app.use('/customer', customerRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -57,20 +54,18 @@ app.use('/customer', CustomerRouter);
 //   res.render('error');
 // });
 
-
-
-
-
 app.get('/', function(req, res) {
     res.send("backend running")
 })
 
-const sessionsController = require('./controllers/SessionsController.js');
-const CustomerModel = require('./models/CustomerModel.js');
-app.get('/newsession', sessionsController.create)
+const sessionsController = require('./controllers/SessionsController');
+app.get('/customer/group/groupid', sessionsController.index)
+app.post('/session/new', sessionsController.create)
+app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
+app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 
 ///// SOCKET
-io.on('connection', socketManager.onConnect)
+io.on('connection', socketsManager.onConnect)
 ///// SOCKET
 
 httpServer.listen(process.env.PORT, () => {

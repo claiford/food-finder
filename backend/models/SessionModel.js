@@ -14,15 +14,29 @@ const CandidateSchema = new mongoose.Schema({
         type: Number,
     },
     location: {
-        lat: { type: Number },
-        lng: { type: Number }
+        lat: {
+            type: Number,
+        },
+        lng: {
+            type: Number,
+        },
+    },
+    distance: {
+        type: Number,
+    },
+    duration: {
+        type: Number,
     },
     // todo: update this attribute to reflect time set by user, calculated using opening hours attribute from API
     is_open: {
         type: Boolean,
     },
-    // todo: have to retrieve from place photos API using photo ref
-    photos: [{ type: String }]
+    photos: [{
+        type: String,
+    }],
+    votes: {
+        type: Number,
+    }
 
     // todo: setup review schema if needed
     // reviews: {
@@ -39,21 +53,20 @@ const SessionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        default: "incomplete",
+    },
     candidates: [CandidateSchema],
-    chosen: {
-        name: {
-            type: String,
-            default: null
-        },
-        place_id: {
-            type: String,
-            default: null
-        },
-        db_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
-        }
-    }
+    // num_voters need to be updated if users added/removed from group
+    num_voters: {
+        type: Number,
+    },
+    num_voted: {
+        type: Number,
+        default: 0,
+    },
+    chosen: CandidateSchema
 },
 {
     timestamps: true
