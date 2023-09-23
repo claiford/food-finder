@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography, MenuItem, FormControl } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
@@ -35,6 +35,7 @@ const NewSession = () => {
     })
     const [postResponse, setPostResponse] = useState({})
     const navigate = useNavigate();
+    const { group_id } = useParams();
 
     const handleSuccessClose = () => {
         setAlertOpen(false);
@@ -80,7 +81,7 @@ const NewSession = () => {
         if (form.location && form.distance && form.budget) {
             try {
                 setLoading(true);
-                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/new`, form)
+                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/session/new`, form)
                 setPostResponse({
                     status: res.status,
                     data: res.data

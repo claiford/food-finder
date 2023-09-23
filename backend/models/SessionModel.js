@@ -45,14 +45,14 @@ const CandidateSchema = new mongoose.Schema({
 })
 
 const SessionSchema = new mongoose.Schema({
-    // group: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    // },
     group: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+    // group: {
+    //     type: String,
+    //     required: true,
+    // },
     status: {
         type: String,
         default: "incomplete",

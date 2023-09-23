@@ -1,5 +1,6 @@
 const Session = require('../models/SessionModel');
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 const PLACE_NEARBYSEARCH_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 const PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json";
@@ -8,7 +9,6 @@ const ROUTES_COMPUTEROUTES_URL = "https://routes.googleapis.com/directions/v2:co
 
 module.exports = {
     index,
-    getOngoing,
     create,
     handleVoting,
     handleArchive,
@@ -19,16 +19,6 @@ async function index(req, res) {
         // pending: "find" to be updated to query using group ID
         const sessions = await Session.find({ group: req.params.group_id });
         res.json(sessions);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function getOngoing(req, res) {
-    try {
-        // pending: "find" to be updated to query using group ID
-        const ongoingSession = await Session.find({ ongoing: true })
-        res.json(ongoingSession[0].candidates);
     } catch (err) {
         console.log(err);
     }
@@ -114,7 +104,7 @@ async function create(req, res) {
         }
 
         const newSession = await Session.create({
-            group: "Test Group " + new Date(Date.now()).toLocaleTimeString(),
+            group: req.params.group_id,
             status: "incomplete",
             candidates: candidates,
             num_voters: 1,

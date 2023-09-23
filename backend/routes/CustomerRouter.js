@@ -8,10 +8,13 @@ router.get('/new', groupsController.new);
 
 router.post('/', groupsController.create);
 
-// router.get('/customer/group/groupid/', groupsController.index)
+// GET /customer/group/:group_id
+router.get('/group/:group_id', groupsController.show)
 
 // GET /customer/group/:group_id/sessions
 router.get('/group/:group_id/sessions', sessionsController.index)
 
+// POST /customer/group/:group_id/sessions/new
+router.post('/group/:group_id/session/new', sessionsController.create)
 
 module.exports = router;

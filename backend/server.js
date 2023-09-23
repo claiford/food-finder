@@ -59,7 +59,6 @@ app.get('/', function(req, res) {
 })
 
 const sessionsController = require('./controllers/SessionsController');
-app.post('/session/new', sessionsController.create)
 app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
 app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 

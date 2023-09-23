@@ -9,14 +9,16 @@ import SessionArchive from '../components/SessionArchive';
 import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import GroupMembers from '../components/GroupMembers';
 
 const Group = () => {
     const navigate = useNavigate();
     // ongoingSession
     // => incomplete : ongoing session in decision process
     // => complete   : ongoing session reached decision
+    const [group, setGroup] = useState({});
     const [ongoingSession, setOngoingSession] = useState(null);
-    const [archivedSessions, setArchivedSessions] = useState([])
+    const [archivedSessions, setArchivedSessions] = useState([]);
     const [tabValue, setTabValue] = useState(0);
 
     /////////////////
@@ -38,7 +40,8 @@ const Group = () => {
     const getGroup = async () => {
         try {
             console.log("getting group info")
-            // const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}`);
+            setGroup(res.data);
         } catch (err) {
             console.log(err);
         }
@@ -90,7 +93,7 @@ const Group = () => {
 
     return (
         <Box className="group-page" sx={{ width: '400px', textAlign:'center' }}>
-            <h1>Group name</h1>
+            <h1>{group.groupName}</h1>
 
             <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth" aria-label="icon tabs">
                 <Tab icon={<AlbumRoundedIcon />} aria-label="current" />
@@ -118,7 +121,7 @@ const Group = () => {
                             }
                         </>
                     ) : (
-                        <Button variant="contained" onClick={() => navigate("/customer/session/new")}>
+                        <Button variant="contained" onClick={() => navigate(`/customer/group/${group_id}/session/new`)}>
                             Start New Session
                         </Button>
                     )}
@@ -137,6 +140,7 @@ const Group = () => {
             {tabValue === 2 &&
                 <>
                     <h2>Members</h2>
+                    <GroupMembers members={group.memberIds}/>
                 </>
             }
 
