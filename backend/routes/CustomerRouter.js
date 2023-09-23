@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const groupsCtrl = require('../controllers/GroupsController');
+const groupsController = require('../controllers/GroupsController');
+const sessionsController = require('../controllers/SessionsController');
 
+router.get('/new', groupsController.new);
 
+router.post('/', groupsController.create);
 
-router.get('/new', groupsCtrl.new);
+// router.get('/customer/group/groupid/', groupsController.index)
 
-router.post('/', groupsCtrl.create);
+// GET /customer/group/:group_id/sessions
+router.get('/group/:group_id/sessions', sessionsController.index)
+
 
 module.exports = router;

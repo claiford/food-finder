@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Tabs, Tab } from '@mui/material';
 import axios from 'axios';
 import SessionIncomplete from '../components/SessionIncomplete';
@@ -20,6 +20,12 @@ const Group = () => {
     const [tabValue, setTabValue] = useState(0);
 
     /////////////////
+    // PARAMS
+    const { group_id } = useParams();
+    /////////////////
+    /////////////////
+
+    /////////////////
     // NAVIGATION
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -29,9 +35,18 @@ const Group = () => {
 
     /////////////////
     // DATA RETRIEVAL
+    const getGroup = async () => {
+        try {
+            console.log("getting group info")
+            // const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const getSessions = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/groupid`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`); 
             const sessions = res.data;
 
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
@@ -69,6 +84,7 @@ const Group = () => {
     /////////////////
 
     useEffect(() => {
+        getGroup()
         getSessions();
     }, [])
 

@@ -17,7 +17,7 @@ module.exports = {
 async function index(req, res) {
     try {
         // pending: "find" to be updated to query using group ID
-        const sessions = await Session.find({});
+        const sessions = await Session.find({ group: req.params.group_id });
         res.json(sessions);
     } catch (err) {
         console.log(err);

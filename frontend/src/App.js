@@ -24,7 +24,7 @@ function App() {
       {/* <h1>App Name</h1> */}
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/customer/group/groupid" element={<Group />} />
+        <Route path="/customer/group/:group_id" element={<Group />} />
         <Route path="/customer/session/new" element={<NewSession />} />
         <Route path="/customer/home" element={<CustomerHome />} />
         <Route path="/*" element={<h1>404: Page Not Found</h1>} />
