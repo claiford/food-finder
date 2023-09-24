@@ -1,6 +1,4 @@
-// Import necessary dependencies and models
 const Group = require('../models/GroupModel');
-const Customer = require('../models/CustomerModel');
 
 module.exports = {
     create,

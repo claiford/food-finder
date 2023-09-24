@@ -38,8 +38,8 @@ const Group = () => {
     /////////////////
     // DATA RETRIEVAL
     const getGroup = async () => {
+        console.log("getting group")
         try {
-            console.log("getting group info")
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}`);
             setGroup(res.data);
         } catch (err) {
