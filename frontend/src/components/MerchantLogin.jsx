@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Alert, Container, TextField, Button } from "@mui/material";
 import styles from "../App.module.css";
 
@@ -8,6 +9,7 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
 
   const handleInputChange = (e, key) => {
     const updatedMerchantInfo = { ...merchantInfo, [key]: e.target.value };
@@ -53,11 +55,14 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
     }, 3000);
   };
 
+  const handleSignUpBtn = () => {
+    navigate("/merchant/signup");
+  };
   return (
     <Container maxWidth="xs">
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Email"
           type="email"
           fullWidth
@@ -66,7 +71,7 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ height: 40}}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Password"
           type="password"
           fullWidth
@@ -79,11 +84,25 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
           type="submit"
           fullWidth
           size="large"
-          className={styles.primaryButton}
+          sx={{
+            color: "#242424",
+            backgroundColor: "#c0ec6b",
+            fontWeight: "bold",
+            marginTop: "1rem",
+          }}
+          // className={styles.primaryButton}
         >
           Login as Merchant
         </Button>
         </form>
+        <Button
+        sx={{
+          color: "#c0ec6b",
+        }}
+        onClick={handleSignUpBtn}
+      >
+        Not registered? Sign up here
+      </Button>
         {showErrorMessage && (
           <Alert severity="error">
             <span>{error}</span>

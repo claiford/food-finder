@@ -52,14 +52,11 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
     }, 3000);
   };
 
-  // const handleCustomerSignUpBtn = () => {
-  //   setActiveButton(CURRENT_USER.CUSTOMER);
-  // };
   return (
     <Container maxWidth="xs">
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Name"
           type="text"
           fullWidth
@@ -68,7 +65,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "name")}
         />
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Email"
           type="email"
           fullWidth
@@ -77,7 +74,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Password"
           type="password"
           fullWidth
@@ -87,21 +84,25 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
         />
         <Button
           variant="contained"
-          color="primary"
           type="submit"
           fullWidth
           size="large"
-          sx={{ marginTop: "1rem", marginBottom: "2rem" }}
+          sx={{
+            color: "#242424",
+            backgroundColor: "#c0ec6b",
+            fontWeight: "bold",
+            marginTop: "1rem",
+          }}
         >
           Sign up as Customer
         </Button>
       </form>
-      <div>
+      {/* <div>
         Not registered?
         <Button variant="text" >
           Sign up here.
         </Button>
-      </div>
+      </div> */}
       {showErrorMessage && (
         <Alert severity="error">
           <span>{error}</span>

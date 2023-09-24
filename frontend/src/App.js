@@ -80,7 +80,7 @@ function App() {
             <Route path="/customer/home" element={<CustomerHome />} />
           </>
         ) : (
-          <Route path="/*" element={<h1>404: Page Not Found</h1>} />
+          <Route path="/" element={<Main  />} />
         )}
       </Routes>
     </div>

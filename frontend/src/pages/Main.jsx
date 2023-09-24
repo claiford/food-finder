@@ -1,26 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-} from "@mui/material";
+import { Button, Grid, Card, CardMedia, CardActions } from "@mui/material";
 import CustomerSignUp from "../components/CustomerSignUp";
 import MerchantSignUp from "../components/MerchantSignUp";
 import CustomerLogin from "../components/CustomerLogin";
 import styles from "./Main.module.css";
 import Logo from "../assets/platepals-logo.png";
 
+export const CURRENT_USER = {
+  CUSTOMER: "Customer",
+  MERCHANT: "Merchant",
+}; 
 const Main = () => {
-  const CURRENT_USER = {
-    CUSTOMER: "Customer",
-    MERCHANT: "Merchant",
-  };
   const [activeButton, setActiveButton] = useState(null);
   const [showCustomerLoginForm, setShowCustomerLoginForm] = useState(true);
   const [showMerchantLoginForm, setShowMerchantLoginForm] = useState(false);
@@ -60,10 +51,11 @@ const Main = () => {
     setActiveButton(CURRENT_USER.MERCHANT);
   };
 
-  const handleCustomerSignUpBtn = () => {
-    setActiveButton(CURRENT_USER.CUSTOMER);
-    setShowCustomerLoginForm(false);
-    setShowCustomerSignUpForm(true);
+  const handleSignUpBtn = () => {
+    if(activeButton === CURRENT_USER.CUSTOMER) {
+      navigate("/customer/signup")
+      setShowCustomerSignUpForm(true);
+    }
   };
 
   const handleMerchantSignUpBtn = () => {
@@ -115,7 +107,7 @@ const Main = () => {
       </Card>
       <Grid>
         <Grid item xs={6}>
-          <Outlet />
+          <Outlet activeButton={activeButton} />
         </Grid>
       </Grid>
     </div>

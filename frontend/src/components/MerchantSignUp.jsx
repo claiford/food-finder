@@ -54,7 +54,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
     <Container maxWidth="xs">
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Name"
           type="text"
           fullWidth
@@ -63,7 +63,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           onChange={(e) => handleInputChange(e, "name")}
         />
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Email"
           type="email"
           fullWidth
@@ -72,7 +72,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ height: 40 }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
           label="Password"
           type="password"
           fullWidth
@@ -86,7 +86,12 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           type="submit"
           fullWidth
           size="large"
-          sx={{ marginTop: "1rem", marginBottom: "2rem" }}
+          sx={{
+            color: "#242424",
+            backgroundColor: "#c0ec6b",
+            fontWeight: "bold",
+            marginTop: "1rem",
+          }}
         >
           Sign up as Merchant
         </Button>
