@@ -9,6 +9,7 @@ import MerchantSignUp from "./components/MerchantSignUp";
 import { useState, useEffect } from "react";
 import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
+import axios from "axios";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,6 +24,11 @@ function App() {
     password: "",
   });
 
+  // const getCustomerById = () => {
+  //   const data = axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/:id`);
+
+
+  // }
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setIsAuthenticated(true);
@@ -77,7 +83,7 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/session" element={<NewSession />} />
-            <Route path="/customer/home" element={<CustomerHome />} />
+            <Route path="/customer/home" element={<CustomerHome customerInfo={customerInfo}/>} />
           </>
         ) : (
           <Route path="/" element={<Main  />} />
