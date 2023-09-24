@@ -106,6 +106,7 @@ async function create(req, res) {
         const newSession = await Session.create({
             group: req.params.group_id,
             status: "incomplete",
+            origin: originDetails.name,
             candidates: candidates,
             num_voters: 1,
         })

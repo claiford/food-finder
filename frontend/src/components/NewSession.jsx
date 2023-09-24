@@ -1,31 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, TextField, Button, IconButton, Modal, CircularProgress, Typography, MenuItem, FormControl } from '@mui/material';
+import { TextField, Button, IconButton, CircularProgress, MenuItem, FormControl, Alert } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '50%',
-    bgcolor: 'background.paper',
-    borderRadius: 3,
-    boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-};
-
 const NewSession = () => {
-    const [alertOpen, setAlertOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formError, setFormError] = useState({})
     const [form, setForm] = useState({
@@ -37,13 +18,8 @@ const NewSession = () => {
     const navigate = useNavigate();
     const { group_id } = useParams();
 
-    const handleSuccessClose = () => {
-        setAlertOpen(false);
-        navigate("/customer/group/groupid")
-    }
-
-    const handleErrorClose = () => {
-        setAlertOpen(false);
+    const handleBack = () => {
+        navigate(`/customer/group/${group_id}`)
     }
 
     const handleInputChange = (e, key) => {
@@ -86,14 +62,11 @@ const NewSession = () => {
                     status: res.status,
                     data: res.data
                 })
-                setAlertOpen(true);
-                setLoading(false);
             } catch (err) {
                 console.log("ERROR RES",)
                 setPostResponse({
                     status: err.response.status
                 })
-                setAlertOpen(true);
                 setLoading(false);
             }
         } else {
@@ -134,29 +107,6 @@ const NewSession = () => {
 
     return (
         <>
-            <Modal open={alertOpen} onClose={postResponse.status === 200 ? handleSuccessClose : handleErrorClose}>
-                <Box sx={modalStyle}>
-                    {postResponse.status === 200 &&
-                        <>
-                            <CheckCircleRoundedIcon color="success" />
-                            <Typography variant='h6'>
-                                New Session Generated
-                            </Typography>
-                            <IconButton onClick={handleSuccessClose} color="primary">
-                                <ArrowBackRoundedIcon />
-                            </IconButton>
-                        </>
-                    }
-                    {postResponse.status === 500 &&
-                        <>
-                            <CancelRoundedIcon color="error" />
-                            <Typography variant='h6'>
-                                Server Error. Please Try Again.
-                            </Typography>
-                        </>
-                    }
-                </Box>
-            </Modal>
             <h1>Create Session</h1>
             <form onSubmit={handleSubmitForm}>
                 <FormControl>
@@ -225,8 +175,20 @@ const NewSession = () => {
                     </Button>
                 </FormControl>
             </form>
+            {postResponse.status === 200 &&
+                <>
+                    <Alert severity="success">New Session Generated</Alert>
+                    <IconButton onClick={handleBack} color="primary">
+                        <ArrowBackRoundedIcon />
+                    </IconButton>
+                </>
+            }
+            {postResponse.status === 500 &&
+                <>
+                    <Alert severity="error">Server error, please try again.</Alert>
+                </>
+            }
         </>
-
     )
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Box, Modal } from '@mui/material';
+import { Button, Box, Modal, Typography } from '@mui/material';
 import { socket } from '../socket';
 
 import Swiper from './Swiper';
@@ -22,16 +22,16 @@ const modalStyle = {
 
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
-    const [isConnected, setIsConnected] = useState(socket.connected);
+    // const [isConnected, setIsConnected] = useState(socket.connected);
 
     const handleJoinOngoing = () => {
         setShowSwiper(true);
-        socket.connect();
+        // socket.connect();
     };
 
     const handleLeaveOngoing = () => {
         setShowSwiper(false);
-        socket.disconnect();
+        // socket.disconnect();
     };
 
     const handleCompleteSwiping = (votes) => {
@@ -39,31 +39,50 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
         handleVoting(votes);
     }
 
-    useEffect(() => {
-        function onConnect() {
-            console.log(`connected as ${socket.id}`)
-            setIsConnected(true);
-        }
+    // useEffect(() => {
+    //     function onConnect() {
+    //         console.log(`connected as ${socket.id}`)
+    //         setIsConnected(true);
+    //     }
 
-        function onDisconnect() {
-            console.log(`disconnecting as ${socket.id}`)
-            setIsConnected(false);
-        }
+    //     function onDisconnect() {
+    //         console.log(`disconnecting as ${socket.id}`)
+    //         setIsConnected(false);
+    //     }
 
-        socket.on('connect', onConnect);
-        socket.on('disconnect', onDisconnect);
+    //     socket.on('connect', onConnect);
+    //     socket.on('disconnect', onDisconnect);
 
-        return () => {
-            socket.off('connect', onConnect);
-            socket.off('disconnect', onDisconnect);
-        };
-    }, [])
+    //     return () => {
+    //         socket.off('connect', onConnect);
+    //         socket.off('disconnect', onDisconnect);
+    //     };
+    // }, [])
 
     return (
         <>
-            <Button variant="contained" onClick={handleJoinOngoing}>
-                Join Ongoing Session
-            </Button>
+            <Box sx={{
+                borderRadius: 3,
+                m: 2,
+                p: 3,
+                backgroundColor: "white.main",
+            }}>
+                <Button
+                    variant="contained"
+                    color="black"
+                    onClick={handleJoinOngoing}
+                    sx={{ color: 'lime.main' }}
+                >
+                    Join
+                </Button>
+                <Box sx={{
+                    mt: 2,
+                }}>
+                    <Typography variant="header2" component="div">
+                        {ongoingSession.origin}
+                    </Typography>
+                </Box>
+            </Box>
             <Modal
                 open={showSwiper}
                 onClose={handleLeaveOngoing}
@@ -71,7 +90,7 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={modalStyle}>
-                    <h4>New Session - {socket.id}</h4>
+                    {/* <h4>New Session - {socket.id}</h4> */}
                     <Swiper candidates={ongoingSession.candidates} handleCompleteSwiping={handleCompleteSwiping} />
                 </Box>
             </Modal>

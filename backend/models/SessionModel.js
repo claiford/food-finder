@@ -57,6 +57,9 @@ const SessionSchema = new mongoose.Schema({
         type: String,
         default: "incomplete",
     },
+    origin: {
+        type: String,
+    },
     candidates: [CandidateSchema],
     // num_voters need to be updated if users added/removed from group
     num_voters: {

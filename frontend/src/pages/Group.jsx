@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Tabs, Tab } from '@mui/material';
+import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
@@ -10,6 +10,21 @@ import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import GroupMembers from '../components/GroupMembers';
+
+const TabHeader = ({text}) => {
+    return (
+        <Typography
+            variant="header2"
+            component="div"
+            sx={{
+                color: "white.main",
+                m: 3,
+            }}
+        >   
+            {text}
+        </Typography>
+    )
+}
 
 const Group = () => {
     const navigate = useNavigate();
@@ -49,7 +64,7 @@ const Group = () => {
 
     const getSessions = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`); 
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`);
             const sessions = res.data;
 
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
@@ -66,7 +81,7 @@ const Group = () => {
     // for ongoingSession, status: "incomplete" ==> "complete"
     const handleVoting = async (votes) => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, {votes: votes})
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { votes: votes })
             console.log("handling complete");
             getSessions();
         } catch (err) {
@@ -92,19 +107,36 @@ const Group = () => {
     }, [])
 
     return (
-        <Box className="group-page" sx={{ width: '400px', textAlign:'center' }}>
-            <h1>{group.groupName}</h1>
+        <Box className="group-page" sx={{ width: '400px', textAlign: 'center' }}>
+            <Typography
+                variant="header1"
+                component="div"
+                sx={{
+                    m: 3,
+                }}
+            >
+                {group.groupName}
+            </Typography>
 
-            <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth" aria-label="icon tabs">
-                <Tab icon={<AlbumRoundedIcon />} aria-label="current" />
-                <Tab icon={<HistoryRoundedIcon />} aria-label="archive" />
-                <Tab icon={<AccountCircleRoundedIcon />} aria-label="members" />
+            <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                variant="fullWidth"
+                TabIndicatorProps={{
+                    sx: {
+                        bgcolor: 'lime.main',
+                    },
+                }}
+            >
+                <Tab icon={<AlbumRoundedIcon color="lime" />} aria-label="current" />
+                <Tab icon={<HistoryRoundedIcon color="lime" />} aria-label="archive" />
+                <Tab icon={<AccountCircleRoundedIcon color="lime" />} aria-label="members" />
             </Tabs>
 
             {/* Display current session */}
             {tabValue === 0 &&
                 <>
-                    <h2>Current Session</h2>
+                    <TabHeader text="Current"></TabHeader>
                     {ongoingSession ? (
                         <>
                             {ongoingSession.status === "incomplete" &&
@@ -121,7 +153,7 @@ const Group = () => {
                             }
                         </>
                     ) : (
-                        <Button variant="contained" onClick={() => navigate(`/customer/group/${group_id}/session/new`)}>
+                        <Button variant="contained" color="lime" onClick={() => navigate(`/customer/group/${group_id}/session/new`)}>
                             Start New Session
                         </Button>
                     )}
@@ -130,17 +162,17 @@ const Group = () => {
 
             {/* Display archive sessions */}
             {tabValue === 1 &&
-                <>  
-                    <h2>Previous Sessions</h2>
-                    <SessionArchive archivedSessions={archivedSessions}/>
+                <>
+                    <TabHeader text="Archive"></TabHeader>
+                    <SessionArchive archivedSessions={archivedSessions} />
                 </>
             }
 
             {/* Display group members */}
             {tabValue === 2 &&
                 <>
-                    <h2>Members</h2>
-                    <GroupMembers members={group.memberIds}/>
+                    <TabHeader text="Members"></TabHeader>
+                    <GroupMembers members={group.memberIds} />
                 </>
             }
 
