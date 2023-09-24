@@ -4,6 +4,7 @@ const AuthController = require("../controllers/AuthController");
 router.post("/customer/signup", AuthController.createCustomer);
 router.post("/merchant/signup", AuthController.createMerchant);
 router.post("/customer/login", AuthController.customerLogin);
+router.get("/logout", AuthController.Logout)
 // Profile route
 router.get("/customer/home", (req, res) => {
   // Check if the user is authenticated based on the session

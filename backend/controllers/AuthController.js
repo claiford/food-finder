@@ -6,6 +6,7 @@ module.exports = {
   createCustomer: CustomerSignUp,
   createMerchant: MerchantSignUp,
   customerLogin: CustomerLogin,
+  Logout,
 };
 
 async function CustomerSignUp(req, res) {
@@ -102,4 +103,10 @@ async function CustomerLogin(req, res) {
     console.log(err);
     res.status(500).json({ message: "Internal server error." });
   }
+}
+
+async function Logout(req, res) {
+  req.logout();
+  res.send("Goodbye.")
+
 }
