@@ -53,10 +53,11 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <form onSubmit={handleSubmitForm}>
+    <Container maxWidth="xs" sx={{ height: "300px"}}>
+      <form onSubmit={handleSubmitForm}
+      >
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{ backgroundColor: "white", borderRadius: "8px", marginTop: "0px" }}
           label="Name"
           type="text"
           fullWidth
@@ -65,7 +66,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "name")}
         />
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{ backgroundColor: "white", borderRadius: "8px", marginTop: "0px"  }}
           label="Email"
           type="email"
           fullWidth
@@ -74,7 +75,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{ backgroundColor: "white", borderRadius: "8px",  marginTop: "0px" }}
           label="Password"
           type="password"
           fullWidth
@@ -91,18 +92,12 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
             color: "#242424",
             backgroundColor: "#c0ec6b",
             fontWeight: "bold",
-            marginTop: "1rem",
+            marginTop: "5px",
           }}
         >
           Sign up as Customer
         </Button>
       </form>
-      {/* <div>
-        Not registered?
-        <Button variant="text" >
-          Sign up here.
-        </Button>
-      </div> */}
       {showErrorMessage && (
         <Alert severity="error">
           <span>{error}</span>

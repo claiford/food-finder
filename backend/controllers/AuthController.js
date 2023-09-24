@@ -43,7 +43,7 @@ async function MerchantSignUp(req, res) {
     const { name, email, password } = req.body;
 
     // Check if the email already exists in db
-    const existingUser = await Merchant.findOne({ email });
+    const existingUser = await Merchant.findOne({ email });d
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists." });
     }

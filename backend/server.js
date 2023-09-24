@@ -9,11 +9,11 @@ const { Server } = require("socket.io");
 
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-const socketManager = require("./listeners/socketsManager.js");
+const socketsManager = require('./listeners/socketsManager');
 
-require("dotenv").config(); // process config vars => procces.env.VAR
-require("./config/database"); // connect to the database with AFTER the config vars are processed
-const customerRouter = require("./routes/CustomerRouter.js");
+require('dotenv').config(); // process config vars => procces.env.VAR
+require('./config/database'); // connect to the database with AFTER the config vars are processed
+const CustomerRouter = require('./routes/CustomerRouter');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -24,7 +24,7 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const authRouter = require("./routes/authRouter");
+const authRouter = require("./routes/AuthRouter");
 
 app.use(express.json());
 app.use(
@@ -46,8 +46,7 @@ app.use(passport.initialize());
 
 // Routers
 app.use("/", authRouter);
-
-app.use('/customer', customerRouter);
+app.use('/customer', CustomerRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -65,22 +64,15 @@ app.use('/customer', customerRouter);
 //   res.render('error');
 // });
 
-app.get("/", function (req, res) {
-  res.send("backend running");
-});
 
-
-
-
-app.get('/', function(req, res) {
-    res.send("backend running")
-})
-
-const sessionsController = require('./controllers/SessionsController.js')
-app.get('/newsession', sessionsController.create)
+const sessionsController = require('./controllers/SessionsController');
+app.get('/customer/group/groupid', sessionsController.index)
+app.post('/session/new', sessionsController.create)
+app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
+app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 
 ///// SOCKET
-io.on("connection", socketManager.onConnect);
+io.on('connection', socketsManager.onConnect)
 ///// SOCKET
 
 httpServer.listen(process.env.PORT, () => {

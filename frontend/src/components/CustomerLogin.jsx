@@ -17,7 +17,6 @@ const CustomerLogin = ({
     email: "",
     password: "",
   });
-  // const [showCustomerSignUpForm, setShowCustomerSignUpForm] = useState(false);
   const navigate = useNavigate();
   const handleInputChange = (e, key) => {
     const updatedCustomerInfo = { ...loginInfo, [key]: e.target.value };
@@ -75,10 +74,22 @@ const CustomerLogin = ({
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Email"
           type="email"
           fullWidth
@@ -87,7 +98,11 @@ const CustomerLogin = ({
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Password"
           type="password"
           fullWidth
@@ -104,7 +119,7 @@ const CustomerLogin = ({
             color: "#242424",
             backgroundColor: "#c0ec6b",
             fontWeight: "bold",
-            marginTop: "1rem",
+            marginTop: "5px",
           }}
           // className={styles.primaryButton}
         >

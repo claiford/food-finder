@@ -59,10 +59,22 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
     navigate("/merchant/signup");
   };
   return (
-    <Container maxWidth="xs">
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Email"
           type="email"
           fullWidth
@@ -71,7 +83,11 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Password"
           type="password"
           fullWidth
@@ -88,14 +104,14 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
             color: "#242424",
             backgroundColor: "#c0ec6b",
             fontWeight: "bold",
-            marginTop: "1rem",
+            marginTop: "5px",
           }}
           // className={styles.primaryButton}
         >
           Login as Merchant
         </Button>
-        </form>
-        <Button
+      </form>
+      <Button
         sx={{
           color: "#c0ec6b",
         }}
@@ -103,11 +119,11 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
       >
         Not registered? Sign up here
       </Button>
-        {showErrorMessage && (
-          <Alert severity="error">
-            <span>{error}</span>
-          </Alert>
-        )}
+      {showErrorMessage && (
+        <Alert severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
       {showSuccessBar && (
         <Alert severity="success">
           <span>{success}</span>

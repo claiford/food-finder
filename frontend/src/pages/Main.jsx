@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
 import { Button, Grid, Card, CardMedia, CardActions } from "@mui/material";
-import CustomerSignUp from "../components/CustomerSignUp";
-import MerchantSignUp from "../components/MerchantSignUp";
-import CustomerLogin from "../components/CustomerLogin";
 import styles from "./Main.module.css";
 import Logo from "../assets/platepals-logo.png";
 
 export const CURRENT_USER = {
   CUSTOMER: "Customer",
   MERCHANT: "Merchant",
-}; 
+};
 const Main = () => {
   const [activeButton, setActiveButton] = useState(null);
-  const [showCustomerLoginForm, setShowCustomerLoginForm] = useState(true);
-  const [showMerchantLoginForm, setShowMerchantLoginForm] = useState(false);
-  const [showCustomerSignUpForm, setShowCustomerSignUpForm] = useState(false);
-  const [showMerchantSignUpForm, setShowMerchantSignUpForm] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -49,19 +42,6 @@ const Main = () => {
   const handleMerchantBtn = () => {
     navigate("/merchant/login");
     setActiveButton(CURRENT_USER.MERCHANT);
-  };
-
-  const handleSignUpBtn = () => {
-    if(activeButton === CURRENT_USER.CUSTOMER) {
-      navigate("/customer/signup")
-      setShowCustomerSignUpForm(true);
-    }
-  };
-
-  const handleMerchantSignUpBtn = () => {
-    setActiveButton(CURRENT_USER.MERCHANT);
-    setShowCustomerLoginForm(false);
-    setShowCustomerSignUpForm(true);
   };
 
   return (
