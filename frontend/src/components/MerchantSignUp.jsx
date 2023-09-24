@@ -9,8 +9,8 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
   const [success, setSuccess] = useState(null);
 
   const handleInputChange = (e, key) => {
-    const updatedClientInfo = { ...merchantInfo, [key]: e.target.value };
-    setMerchantInfo(updatedClientInfo);
+    const updatedMerchantInfo = { ...merchantInfo, [key]: e.target.value };
+    setMerchantInfo(updatedMerchantInfo);
   };
 
   const handleSubmitForm = async (e) => {
@@ -25,7 +25,6 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         `${process.env.REACT_APP_BACKEND_URL}/merchant/signup`,
         merchantInfo
       );
-      // console.log("Sign up response: ", response);
       if (response.status === 200) {
         setShowSuccessBar(true);
         setSuccess(response.data.message || "Sign up successful.");

@@ -1,12 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
-import { Box, Button, Grid } from "@mui/material";
+import { useNavigate, Outlet, Link } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+} from "@mui/material";
 import CustomerSignUp from "../components/CustomerSignUp";
 import MerchantSignUp from "../components/MerchantSignUp";
 import CustomerLogin from "../components/CustomerLogin";
+import styles from "./Main.module.css";
+import Logo from "../assets/platepals-logo.png";
 
 const Main = () => {
-  const [activeButton, setActiveButton] = useState("Customer");
+  const CURRENT_USER = {
+    CUSTOMER: "Customer",
+    MERCHANT: "Merchant",
+  };
+  const [activeButton, setActiveButton] = useState(null);
   const [showCustomerLoginForm, setShowCustomerLoginForm] = useState(true);
   const [showMerchantLoginForm, setShowMerchantLoginForm] = useState(false);
   const [showCustomerSignUpForm, setShowCustomerSignUpForm] = useState(false);
@@ -24,103 +39,86 @@ const Main = () => {
 
   const navigate = useNavigate();
 
+  // default button styles
   const buttonStyles = {
-    color: "black",
+    color: "#242424",
     fontWeight: "bold",
-    fontSize: "25px",
-    ":active": {
-      color: "white",
-    },
+    fontSize: "18px",
+    backgroundColor: "#c0ec6b",
+    height: "50px",
+    width: "40%",
+    m: "5px",
   };
 
   const handleCustomerBtn = () => {
-    setActiveButton("Customer");
-    setShowCustomerLoginForm(true);
-    setShowMerchantLoginForm(false);
-    setShowCustomerSignUpForm(false);
+    navigate("/customer/login");
+    setActiveButton(CURRENT_USER.CUSTOMER);
   };
 
   const handleMerchantBtn = () => {
-    setActiveButton("Merchant");
-    setShowCustomerLoginForm(false);
-    setShowMerchantLoginForm(true);
+    navigate("/merchant/login");
+    setActiveButton(CURRENT_USER.MERCHANT);
   };
 
   const handleCustomerSignUpBtn = () => {
-    setActiveButton("Customer");
+    setActiveButton(CURRENT_USER.CUSTOMER);
     setShowCustomerLoginForm(false);
     setShowCustomerSignUpForm(true);
   };
 
-  const handleGoBack = () => {
-    navigate("/");
-    setShowCustomerSignUpForm(false);
-    setShowCustomerLoginForm(true);
+  const handleMerchantSignUpBtn = () => {
+    setActiveButton(CURRENT_USER.MERCHANT);
+    setShowCustomerLoginForm(false);
+    setShowCustomerSignUpForm(true);
   };
+
   return (
-    <Box
-      sx={{
-        width: 300,
-        height: "70%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Grid>
-        <Grid item xs={6}>
+    <div className={styles.mainBody}>
+      <Card elevation={0} style={{ border: "none", boxShadow: "none" }}>
+        <Link to="/">
+          <CardMedia component="img" alt="plate" image={Logo} />
+        </Link>
+        <CardActions
+          elevation={0}
+          sx={{
+            backgroundColor: "#242424",
+            display: "flex",
+            justifyContent: "center",
+            pt: "60px",
+          }}
+        >
           <Button
             onClick={handleCustomerBtn}
-            sx={activeButton === "Customer" ? buttonStyles : {}}
+            sx={{
+              ...buttonStyles,
+              backgroundColor:
+                activeButton === CURRENT_USER.CUSTOMER
+                  ? "#7aa625 !important"
+                  : "#c0ec6b",
+            }}
           >
             Customer
           </Button>
           <Button
             onClick={handleMerchantBtn}
-            sx={activeButton === "Merchant" ? buttonStyles : {}}
+            sx={{
+              ...buttonStyles,
+              backgroundColor:
+                activeButton === CURRENT_USER.MERCHANT
+                  ? "#7aa625 !important"
+                  : "#c0ec6b",
+            }}
           >
             Merchant
           </Button>
-        </Grid>
+        </CardActions>
+      </Card>
+      <Grid>
         <Grid item xs={6}>
-          {showCustomerLoginForm && activeButton === "Customer" && (
-            <>
-              <span>
-                <CustomerLogin />
-                Not registered?
-                <Button variant="text" onClick={handleCustomerSignUpBtn}>
-                  Sign up here.
-                </Button>
-              </span>
-            </>
-          )}
-          {showCustomerSignUpForm && activeButton === "Customer" && (
-            <>
-              <CustomerSignUp
-                customerInfo={customerInfo}
-                setCustomerInfo={setCustomerInfo}
-              />
-              <Button variant="text" onClick={handleGoBack}>
-                Back to login
-              </Button>
-            </>
-          )}
+          <Outlet />
         </Grid>
-        <Outlet />
       </Grid>
-      {showMerchantLoginForm && activeButton === "Merchant" && (
-        <>
-          <MerchantSignUp
-            merchantInfo={merchantInfo}
-            setMerchantInfo={setMerchantInfo}
-          />
-          <Button variant="text" onClick={handleGoBack}>
-            Back to login
-          </Button>
-        </>
-      )}
-    </Box>
+    </div>
   );
 };
 

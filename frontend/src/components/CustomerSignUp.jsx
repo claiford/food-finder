@@ -52,10 +52,12 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
     }, 3000);
   };
 
+  // const handleCustomerSignUpBtn = () => {
+  //   setActiveButton(CURRENT_USER.CUSTOMER);
+  // };
   return (
     <Container maxWidth="xs">
-      <form onSubmit={handleSubmitForm }
-      autocomplete="off">
+      <form onSubmit={handleSubmitForm}>
         <TextField
           sx={{ height: 40 }}
           label="Name"
@@ -93,12 +95,18 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
         >
           Sign up as Customer
         </Button>
-        </form>
-        {showErrorMessage && (
-          <Alert severity="error">
-            <span>{error}</span>
-          </Alert>
-        )}
+      </form>
+      <div>
+        Not registered?
+        <Button variant="text" >
+          Sign up here.
+        </Button>
+      </div>
+      {showErrorMessage && (
+        <Alert severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
       {showSuccessBar && (
         <Alert severity="success">
           <span>{success}</span>

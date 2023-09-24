@@ -1,0 +1,12 @@
+.mainBody {
+    background-color: #242424;
+    color: #c0ec6b;
+    border: none;
+}
+
+.mainCard {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+

@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import styles from "../App.module.css"
 
-const CustomerLogin = ({ customerInfo, setCustomerInfo, setIsAuthenticated }) => {
+const CustomerLogin = ({ isAuthenticated, setIsAuthenticated }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
   const [loginInfo, setLoginInfo] = useState({
     email: "",
-    password: "", 
+    password: "",
   });
-
+  const navigate = useNavigate();
   const handleInputChange = (e, key) => {
     const updatedCustomerInfo = { ...loginInfo, [key]: e.target.value };
-    setLoginInfo(updatedCustomerInfo)
+    setLoginInfo(updatedCustomerInfo);
   };
 
   const handleSubmitForm = async (e) => {
@@ -36,7 +38,14 @@ const CustomerLogin = ({ customerInfo, setCustomerInfo, setIsAuthenticated }) =>
         setShowSuccessBar(true);
         // setIsAuthenticated(true);
         // Store customer ID in localstorage
-        localStorage.setItem('token', JSON.stringify(response.data.customer.id))
+        localStorage.setItem(
+          "token",
+          JSON.stringify(response.data.customer.id)
+        );
+        setIsAuthenticated(true);
+        if (isAuthenticated) {
+          navigate("/customer/home");
+        }
         // Reset form fields
         setLoginInfo({
           email: "",
@@ -61,8 +70,7 @@ const CustomerLogin = ({ customerInfo, setCustomerInfo, setIsAuthenticated }) =>
 
   return (
     <Container maxWidth="xs">
-      <form onSubmit={handleSubmitForm}
-      autocomplete="off">
+      <form onSubmit={handleSubmitForm}>
         <TextField
           sx={{ height: 40 }}
           label="Email"
@@ -87,16 +95,16 @@ const CustomerLogin = ({ customerInfo, setCustomerInfo, setIsAuthenticated }) =>
           type="submit"
           fullWidth
           size="large"
-          sx={{ marginTop: "1rem", marginBottom: "2rem" }}
+          className={styles.primaryButton}
         >
           Login as Customer
         </Button>
-        </form>
-        {showErrorMessage && (
-          <Alert severity="error">
-            <span>{error}</span>
-          </Alert>
-        )}
+      </form>
+      {showErrorMessage && (
+        <Alert severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
       {showSuccessBar && (
         <Alert severity="success">
           <span>{success}</span>
