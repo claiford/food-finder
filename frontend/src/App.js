@@ -158,25 +158,7 @@ function App() {
   //     return;
   //   }
   // }, []);
-  const axiosInstance = axios.create({
-    withCredentials: true,
-    baseURL: process.env.REACT_APP_BACKEND_URL, // Set your backend URL here
-  });
 
-  const checkAuthentication = async () => {
-    try {
-      const response = await axiosInstance.get('/api/check-auth');
-      console.log("Response: ", response)
-      if (response.status === 200) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-    } catch (err) {
-      console.log("Authentication failed:", err);
-      setIsAuthenticated(false)
-    }
-  }
 
   // useEffect(() => {
   //   checkAuthentication()
