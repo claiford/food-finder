@@ -1,81 +1,86 @@
 import React, { useState } from "react";
-import { Box, Button, Grid } from "@mui/material";
-import CustomerSignUp from "../components/CustomerSignUp";
-import MerchantSignUp from "../components/MerchantSignUp";
+import { useNavigate, Outlet, Link } from "react-router-dom";
+import { Button, Grid, Card, CardMedia, CardActions } from "@mui/material";
+import styles from "./Main.module.css";
+import Logo from "../assets/platepals-logo.png";
 
+export const CURRENT_USER = {
+  CUSTOMER: "Customer",
+  MERCHANT: "Merchant",
+};
 const Main = () => {
-  const [activeButton, setActiveButton] = useState(null)
-  const [showClientForm, setShowClientForm] = useState(false);
-  const [showMerchantForm, setShowMerchantForm] = useState(false);
-  const [customerInfo, setCustomerInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [merchantInfo, setMerchantInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [activeButton, setActiveButton] = useState(null);
 
+  const navigate = useNavigate();
+
+  // default button styles
   const buttonStyles = {
-    color: "black",
+    color: "#242424",
     fontWeight: "bold",
-    fontSize: "25px",
-    ":active": {
-      color: "white", 
-    },
+    fontSize: "18px",
+    backgroundColor: "#c0ec6b",
+    height: "50px",
+    width: "40%",
+    m: "5px",
   };
 
   const handleCustomerBtn = () => {
-    setActiveButton("Client")
-    setShowClientForm(true);
-    setShowMerchantForm(false);
+    navigate("/customer/login");
+    setActiveButton(CURRENT_USER.CUSTOMER);
   };
 
   const handleMerchantBtn = () => {
-    setActiveButton("Merchant")
-    setShowClientForm(false);
-    setShowMerchantForm(true);
+    navigate("/merchant/login");
+    setActiveButton(CURRENT_USER.MERCHANT);
   };
 
   return (
-    <Box
-      sx={{
-        width: 300,
-        height: "70%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Grid>
-        <Grid item xs={4}>
+    <div className={styles.mainBody}>
+      <Card elevation={0} style={{ border: "none", boxShadow: "none" }}>
+        <Link to="/">
+          <CardMedia component="img" alt="plate" image={Logo} />
+        </Link>
+        <CardActions
+          elevation={0}
+          sx={{
+            backgroundColor: "#242424",
+            display: "flex",
+            justifyContent: "center",
+            pt: "60px",
+          }}
+        >
           <Button
             onClick={handleCustomerBtn}
-            sx={activeButton === "Client" ? buttonStyles : {}}
+            sx={{
+              ...buttonStyles,
+              backgroundColor:
+                activeButton === CURRENT_USER.CUSTOMER
+                  ? "#7aa625 !important"
+                  : "#c0ec6b",
+            }}
           >
-            Client
+            Customer
           </Button>
           <Button
             onClick={handleMerchantBtn}
-            sx={activeButton === "Merchant" ? buttonStyles : {}}
+            sx={{
+              ...buttonStyles,
+              backgroundColor:
+                activeButton === CURRENT_USER.MERCHANT
+                  ? "#7aa625 !important"
+                  : "#c0ec6b",
+            }}
           >
             Merchant
           </Button>
+        </CardActions>
+      </Card>
+      <Grid>
+        <Grid item xs={6}>
+          <Outlet activeButton={activeButton} />
         </Grid>
       </Grid>
-      {showClientForm && activeButton === "Client" && (
-        <CustomerSignUp customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} />
-      )}
-      {showMerchantForm && activeButton === "Merchant" && (
-        <MerchantSignUp
-          merchantInfo={merchantInfo}
-          setMerchantInfo={setMerchantInfo}
-        />
-      )}
-    </Box>
+    </div>
   );
 };
 
