@@ -2,6 +2,7 @@ const Group = require("../models/GroupModel");
 
 module.exports = {
   create,
+  show,
   new: newGroup,
 };
 
@@ -19,4 +20,13 @@ async function create(req, res) {
 
 function newGroup(req, res) {
   res.render("group/new", { title: "New Group", errorMsg: "" });
+}
+
+async function show(req, res) {
+    try {
+        const group = await Group.findById(req.params.group_id).populate("memberIds");
+        res.json(group);
+    } catch (err) {
+        console.log(err)
+    }
 }

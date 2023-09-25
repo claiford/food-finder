@@ -1,13 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const groupsCtrl = require('../controllers/GroupsController');
+
+const groupsController = require('../controllers/GroupsController');
+const sessionsController = require('../controllers/SessionsController');
+
 const Customer = require('../models/CustomerModel');
 const Group = require('../models/GroupModel');
 
+router.get('/new', groupsController.new);
 
-// Your existing routes
-router.get('/new', groupsCtrl.new);
-router.post('/', groupsCtrl.create);
+router.post('/', groupsController.create);
+
+// GET /customer/group/:group_id
+router.get('/group/:group_id', groupsController.show)
+
+// GET /customer/group/:group_id/sessions
+router.get('/group/:group_id/sessions', sessionsController.index)
+
+// POST /customer/group/:group_id/sessions/new
+router.post('/group/:group_id/session/new', sessionsController.create)
 
 // Fetch customers route
 router.get("/api/customers", async (req, res) => {
@@ -41,7 +52,7 @@ router.post("/api/groups", async (req, res) => {
 // Route to fetch all groups
 router.get("/api/groups", async (req, res) => {
     try {
-      const groups = await Group.find();
+      const groups = await Group.find({});
       res.json(groups);
     } catch (error) {
       console.error("Error fetching groups", error);

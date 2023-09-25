@@ -1,4 +1,5 @@
 import React, { useState , useEffect } from "react";
+import { useNavigate } from 'react-router-dom'
 import { Box, Button, Grid, Typography, List, ListItem, ListItemText } from "@mui/material";
 import CreateNewGroup from "../components/CreateNewGroup";
 import FetchGroups from "../components/FetchGroups";
@@ -8,6 +9,8 @@ const Home = () => {
     const [showGroupsList, setShowGroupsList] = useState(true);
     const [groups, setGroups] = useState([]);
     // const [activeButton, setActiveButton] = useState(null);
+
+    const navigate = useNavigate();
     
     useEffect(() => {
       FetchGroups()
@@ -41,7 +44,8 @@ const Home = () => {
           <List>
             {groups.map((group) => (
               <ListItem key={group._id}>
-                <ListItemText primary={group.groupName} />
+                {/* <ListItemText primary={group.groupName} /> */}
+                <Button onClick={() => navigate(`/customer/group/${group._id}`)}>{group.groupName}</Button>
               </ListItem>
             ))}
           </List>
