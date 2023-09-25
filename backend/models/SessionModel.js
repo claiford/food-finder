@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+const VoterSchema = new mongoose.Schema({
+    voter: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    status: {
+        type: Number,
+    }
+})
+
 const CandidateSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -45,27 +54,24 @@ const CandidateSchema = new mongoose.Schema({
 })
 
 const SessionSchema = new mongoose.Schema({
-    // group: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     required: true,
-    // },
     group: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+    // group: {
+    //     type: String,
+    //     required: true,
+    // },
     status: {
         type: String,
         default: "incomplete",
     },
+    origin: {
+        type: String,
+    },
     candidates: [CandidateSchema],
     // num_voters need to be updated if users added/removed from group
-    num_voters: {
-        type: Number,
-    },
-    num_voted: {
-        type: Number,
-        default: 0,
-    },
+    voters: [VoterSchema],
     chosen: CandidateSchema
 },
 {

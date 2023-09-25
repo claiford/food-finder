@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Alert, Container, TextField, Button } from "@mui/material";
+import styles from "../App.module.css";
 
-const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
+const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
 
   const handleInputChange = (e, key) => {
     const updatedMerchantInfo = { ...merchantInfo, [key]: e.target.value };
@@ -25,9 +28,10 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         `${process.env.REACT_APP_BACKEND_URL}/merchant/signup`,
         merchantInfo
       );
+      console.log("Sign up response: ", response);
       if (response.status === 200) {
-        setShowSuccessBar(true);
         setSuccess(response.data.message || "Sign up successful.");
+        setShowSuccessBar(true);
         // Reset form fields
         setMerchantInfo({
           name: "",
@@ -42,6 +46,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
     } catch (err) {
       console.log(err);
     }
+
     setTimeout(() => {
       setError(null);
       setSuccess(null);
@@ -50,20 +55,26 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
     }, 3000);
   };
 
+  const handleSignUpBtn = () => {
+    navigate("/merchant/signup");
+  };
   return (
-    <Container maxWidth="xs">
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <form onSubmit={handleSubmitForm}>
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px", marginTop: "0px" }}
-          label="Name"
-          type="text"
-          fullWidth
-          margin="normal"
-          value={merchantInfo.name}
-          onChange={(e) => handleInputChange(e, "name")}
-        />
-        <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px", marginTop: "0px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Email"
           type="email"
           fullWidth
@@ -72,7 +83,11 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "8px", marginTop: "0px" }}
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "0px",
+          }}
           label="Password"
           type="password"
           fullWidth
@@ -82,7 +97,6 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         />
         <Button
           variant="contained"
-          color="primary"
           type="submit"
           fullWidth
           size="large"
@@ -92,15 +106,24 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
             fontWeight: "bold",
             marginTop: "5px",
           }}
+          // className={styles.primaryButton}
         >
-          Sign up as Merchant
+          Login as Merchant
         </Button>
-        {showErrorMessage && (
-          <Alert severity="error">
-            <span>{error}</span>
-          </Alert>
-        )}
       </form>
+      <Button
+        sx={{
+          color: "#c0ec6b",
+        }}
+        onClick={handleSignUpBtn}
+      >
+        Not registered? Sign up here
+      </Button>
+      {showErrorMessage && (
+        <Alert severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
       {showSuccessBar && (
         <Alert severity="success">
           <span>{success}</span>
@@ -110,4 +133,4 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
   );
 };
 
-export default MerchantSignUp;
+export default MerchantLogin;

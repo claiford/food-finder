@@ -1,10 +1,11 @@
-const Group = require('../models/GroupModel');
+const Group = require("../models/GroupModel");
 
 module.exports = {
-    create,
-    new: newGroup,
+  create,
+  show,
+  new: newGroup,
     getAllGroups
-}
+};
 
 // Create a new group
 
@@ -30,6 +31,14 @@ async function getAllGroups(req, res) {
 }
 
 function newGroup(req, res) {
+  res.render("group/new", { title: "New Group", errorMsg: "" });
+}
 
-    res.render("group/new", { title: "New Group", errorMsg: "" });
-  }
+async function show(req, res) {
+    try {
+        const group = await Group.findById(req.params.group_id).populate("memberIds");
+        res.json(group);
+    } catch (err) {
+        console.log(err)
+    }
+}
