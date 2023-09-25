@@ -23,7 +23,9 @@ const modalStyle = {
 
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
-    // const [isConnected, setIsConnected] = useState(socket.connected);
+    // const [isConnected, setIsConnected] = useState(socket.connected);\
+    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === "65051d0bb9ea923e2f90b222");
+    const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 
     const handleJoinOngoing = () => {
         setShowSwiper(true);
@@ -68,20 +70,34 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                 p: 3,
                 backgroundColor: "lightgray.main",
             }}>
-                <Button
-                    variant="contained"
-                    onClick={handleJoinOngoing}
-                >
-                    Join
-                </Button>
+                {isUserComplete ? (
+                    <Button
+                        variant="contained"
+                    >
+                        Waiting
+                    </Button>
+                ) : (
+                    <Button
+                        variant="contained"
+                        onClick={handleJoinOngoing}
+                    >
+                        Join
+                    </Button>
+                )}
+
                 <Box sx={{
                     mt: 2,
                 }}>
                     <Typography variant="header1" component="div">
                         {ongoingSession.origin}
                     </Typography>
+                    <Typography variant="header1" component="div">
+                        {voterStatus.length} / {ongoingSession.voters.length}
+                    </Typography>
                 </Box>
             </Box>
+
+            {/* SWIPER MODAL */}
             <Modal
                 open={showSwiper}
                 onClose={handleLeaveOngoing}

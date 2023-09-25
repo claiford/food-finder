@@ -1,4 +1,5 @@
 const Session = require('../models/SessionModel');
+const Group = require('../models/GroupModel');
 const axios = require('axios');
 const mongoose = require('mongoose');
 
@@ -103,12 +104,21 @@ async function create(req, res) {
             candidates.push(candidate);
         }
 
+        // get voters from group members
+        const group = await Group.findById(req.params.group_id);
+        const voters = group.memberIds.map((member_id) => {
+            return {
+                voter: member_id,
+                status: 0,
+            }
+        })
+
         const newSession = await Session.create({
             group: req.params.group_id,
             status: "incomplete",
             origin: originDetails.name,
             candidates: candidates,
-            num_voters: 1,
+            voters: voters,
         })
 
         console.log("SESSION CREATED")
@@ -122,14 +132,15 @@ async function create(req, res) {
 async function handleVoting(req, res) {
     try {
         console.log("updating session");
-        const update = { status: "complete" };
         const session = await Session.findById(req.params.sessionid)
         for (const [place_id, vote] of Object.entries(req.body.votes)) {
             session.candidates.find((c) => c.place_id === place_id).votes += vote;
         }
         session.num_voted += 1;
 
-        if (session.num_voted === session.num_voters) {
+        session.voters.find((voter) => voter.voter.toString() === req.body.voter).status = 999;
+
+        if (session.voters.every((voter) => voter.status === 999)) {
             session.status = "complete";
             console.log(session.candidates)
             session.chosen = session.candidates.reduce((a, b) => {
@@ -142,6 +153,19 @@ async function handleVoting(req, res) {
                 }
             })
         }
+        // if (session.num_voted === session.num_voters) {
+            // session.status = "complete";
+            // console.log(session.candidates)
+            // session.chosen = session.candidates.reduce((a, b) => {
+            //     if (a.votes === b.votes) {
+            //         if (a.distance <= b.distance) return a
+            //         if (a.distance > b.distance) return b
+            //     } else {
+            //         if (a.votes > b.votes) return a
+            //         if (a.votes < b.votes) return b
+            //     }
+            // })
+        // }
 
         await session.save()
         console.log("session updated");
