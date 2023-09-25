@@ -85,7 +85,7 @@ const CreateNewGroup = () => {
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups`, data);
     
         // Check the response status and display messages accordingly
-        if (response.status === 201) {
+        if (response.status === 200) {
           console.log("Group created successfully");
           setSuccess("Group created successfully");
           setShowSuccessBar(true);

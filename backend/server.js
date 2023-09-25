@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
 const socketsManager = require('./listeners/socketsManager.js');
-
+ 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
 const CustomerRouter = require('./routes/CustomerRouter.js');
@@ -36,7 +36,7 @@ app.use(passport.initialize());
 
 // Routers
 app.use("/", authRouter);
-app.use('/customer', customerRouter);
+app.use('/customer', CustomerRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {

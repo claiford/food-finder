@@ -3,12 +3,14 @@ const Group = require('../models/GroupModel');
 module.exports = {
     create,
     new: newGroup,
+    getAllGroups
 }
 
 // Create a new group
 
 async function create(req , res) {
     try {
+        console.log("creating backend group")
         await Group.create(req.body);
         const group = await Group.find({}); //gets every group from the group database
         res.json({message: 'Group created successfully', group});
@@ -16,6 +18,16 @@ async function create(req , res) {
         console.log(error + 'An error occurred while creating the group');
     }
 };
+
+async function getAllGroups(req, res) {
+    try {
+        const groups = await Group.find();
+        res.json(groups);
+    } catch (error) {
+        console.error('Error fetching groups', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 function newGroup(req, res) {
 
