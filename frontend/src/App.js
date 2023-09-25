@@ -13,11 +13,12 @@ import axios from "axios";
 import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
 import MerchantHome from "./pages/MerchantHome";
+import Demo from "./pages/Demo";
 
 const theme = createTheme({
   typography: {
     fontFamily: "Lato",
-    title: {
+    title1: {
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 40,
@@ -33,14 +34,14 @@ const theme = createTheme({
       // header black
       fontFamily: "Arvo",
       fontWeight: 400,
-      fontSize: 15,
+      fontSize: 20,
       color: '#000000'
     },
     header2: {
       // subheader white
       fontFamily: "Arvo",
       fontWeight: 400,
-      fontSize: 15,
+      fontSize: 20,
       color: "#FFFFFF"
     },
     body1: {
@@ -234,6 +235,7 @@ function App() {
             element={<CustomerHome customerInfo={customerInfo} />}
           />
           <Route path="merchant/home" element={<MerchantHome />}></Route>
+          <Route path="/demo" element={<Demo />}></Route>
         </Routes>
       </div>
     </ThemeProvider>

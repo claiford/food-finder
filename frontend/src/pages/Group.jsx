@@ -114,7 +114,7 @@ const Group = () => {
     return (
         <Box className="group-page" sx={{ width: '400px', textAlign: 'center' }}>
             <Typography
-                variant="title"
+                variant="title1"
                 component="div"
                 sx={{
                     m: 3,
