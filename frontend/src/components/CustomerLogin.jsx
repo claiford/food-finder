@@ -43,7 +43,8 @@ const CustomerLogin = ({
         // Store customer ID in localstorage
         localStorage.setItem(
           "token",
-          JSON.stringify(response.data.customer.id)
+          // JSON.stringify(response.data.customer.id)
+          response.data.customer.id
         );
         setIsAuthenticated(true);
         navigate("/customer/home");

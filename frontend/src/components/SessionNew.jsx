@@ -59,7 +59,6 @@ const SessionNew = ({ handleNew }) => {
                     data: res.data
                 })
             } catch (err) {
-                console.log("ERROR RES",)
                 setPostResponse({
                     status: err.response.status
                 })

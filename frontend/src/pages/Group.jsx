@@ -86,7 +86,7 @@ const Group = () => {
 
     const handleVoting = async (votes) => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { voter: "65051d0bb9ea923e2f90b222", votes: votes })
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { voter: localStorage.getItem("token"), votes: votes })
             console.log("handling complete");
             getSessions();
         } catch (err) {
