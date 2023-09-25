@@ -87,7 +87,6 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
         <form onSubmit={handleSubmitForm}>
           <TextField
             sx={{
-              backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}
@@ -100,7 +99,6 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
           />
           <TextField
             sx={{
-              backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}
@@ -112,16 +110,16 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
             onChange={(e) => handleInputChange(e, "password")}
           />
           <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            size="large"
-            sx={{
-              color: "#242424",
-              backgroundColor: "#c0ec6b",
-              fontWeight: "bold",
-              marginTop: "5px",
-            }}
+              variant="contained"
+              type="submit"
+              fullWidth
+              size="large"
+              sx={{
+                color: "#242424",
+                backgroundColor: "#c0ec6b",
+                fontWeight: "bold",
+                marginTop: "5px",
+              }}
             // className={styles.primaryButton}
           >
             Login as Merchant
@@ -129,6 +127,7 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
         </form>
         <Button
           sx={{
+            backgroundColor: "transparent",
             color: "#c0ec6b",
           }}
           onClick={handleSignUpBtn}

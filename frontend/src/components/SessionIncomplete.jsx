@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Box, Modal } from '@mui/material';
+import { Button, Box, Modal, Typography } from '@mui/material';
 import { socket } from '../socket';
 
 import Swiper from './Swiper';
@@ -10,7 +10,8 @@ const modalStyle = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '80%',
-    bgcolor: 'background.paper',
+    minHeight: '70%',
+    bgcolor: 'darkgray.main',
     borderRadius: 3,
     boxShadow: 24,
     p: 4,
@@ -22,16 +23,18 @@ const modalStyle = {
 
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
-    const [isConnected, setIsConnected] = useState(socket.connected);
+    // const [isConnected, setIsConnected] = useState(socket.connected);\
+    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("token")).status === 999;
+    const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 
     const handleJoinOngoing = () => {
         setShowSwiper(true);
-        socket.connect();
+        // socket.connect();
     };
 
     const handleLeaveOngoing = () => {
         setShowSwiper(false);
-        socket.disconnect();
+        // socket.disconnect();
     };
 
     const handleCompleteSwiping = (votes) => {
@@ -39,31 +42,62 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
         handleVoting(votes);
     }
 
-    useEffect(() => {
-        function onConnect() {
-            console.log(`connected as ${socket.id}`)
-            setIsConnected(true);
-        }
+    // useEffect(() => {
+    //     function onConnect() {
+    //         console.log(`connected as ${socket.id}`)
+    //         setIsConnected(true);
+    //     }
 
-        function onDisconnect() {
-            console.log(`disconnecting as ${socket.id}`)
-            setIsConnected(false);
-        }
+    //     function onDisconnect() {
+    //         console.log(`disconnecting as ${socket.id}`)
+    //         setIsConnected(false);
+    //     }
 
-        socket.on('connect', onConnect);
-        socket.on('disconnect', onDisconnect);
+    //     socket.on('connect', onConnect);
+    //     socket.on('disconnect', onDisconnect);
 
-        return () => {
-            socket.off('connect', onConnect);
-            socket.off('disconnect', onDisconnect);
-        };
-    }, [])
+    //     return () => {
+    //         socket.off('connect', onConnect);
+    //         socket.off('disconnect', onDisconnect);
+    //     };
+    // }, [])
 
     return (
         <>
-            <Button variant="contained" onClick={handleJoinOngoing}>
-                Join Ongoing Session
-            </Button>
+            <Box sx={{
+                borderRadius: 3,
+                m: 2,
+                p: 3,
+                backgroundColor: "lightgray.main",
+            }}>
+                {isUserComplete ? (
+                    <Button
+                        variant="contained"
+                    >
+                        Waiting
+                    </Button>
+                ) : (
+                    <Button
+                        variant="contained"
+                        onClick={handleJoinOngoing}
+                    >
+                        Join
+                    </Button>
+                )}
+
+                <Box sx={{
+                    mt: 2,
+                }}>
+                    <Typography variant="header1" component="div">
+                        {ongoingSession.origin}
+                    </Typography>
+                    <Typography variant="header1" component="div">
+                        {voterStatus.length} / {ongoingSession.voters.length}
+                    </Typography>
+                </Box>
+            </Box>
+
+            {/* SWIPER MODAL */}
             <Modal
                 open={showSwiper}
                 onClose={handleLeaveOngoing}
@@ -71,7 +105,7 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={modalStyle}>
-                    <h4>New Session - {socket.id}</h4>
+                    {/* <h4>New Session - {socket.id}</h4> */}
                     <Swiper candidates={ongoingSession.candidates} handleCompleteSwiping={handleCompleteSwiping} />
                 </Box>
             </Modal>

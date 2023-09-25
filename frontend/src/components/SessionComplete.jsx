@@ -9,21 +9,27 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
                 borderRadius: 3,
                 m: 2,
                 p: 5,
-                backgroundColor: "gray"
+                backgroundColor: "lightgray.main"
             }}>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="title2" component="div">
                     {ongoingSession.chosen.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Rating: {ongoingSession.chosen.rating ? ongoingSession.chosen.rating + "⭐" : "-"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Reviews: {ongoingSession.chosen.user_ratings_total ?? "-"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Open now: {ongoingSession.chosen.is_open === null ? "-" : ongoingSession.chosen.is_open ? "Yes" : "No"}
-                </Typography>
-                <Button variant="contained" onClick={handleArchive} sx={{ mt: 4 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Typography variant="body3">
+                        Rating: {ongoingSession.chosen.rating ? ongoingSession.chosen.rating + "⭐" : "-"}
+                    </Typography>
+                    <Typography variant="body3">
+                        Reviews: {ongoingSession.chosen.user_ratings_total ?? "-"}
+                    </Typography>
+                    <Typography variant="body3">
+                        Open now: {ongoingSession.chosen.is_open === null ? "-" : ongoingSession.chosen.is_open ? "Yes" : "No"}
+                    </Typography>
+                </Box>
+                <Button
+                    variant="contained"
+                    onClick={handleArchive}
+                    sx={{ mt: 4 }}
+                >
                     Archive
                 </Button>
             </Box>

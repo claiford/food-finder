@@ -3,6 +3,7 @@ import { Box, Button, MobileStepper, Card, CardContent, Typography, ImageList, I
 // import Carousel from 'react-material-ui-carousel'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
 import cryface from '../assets/cry-face.png'
 
 const Swiper = ({ candidates, handleCompleteSwiping }) => {
@@ -30,26 +31,8 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 
 	const candidateCards = candidates.map((candidate, i) => {
 		return (
-			<Card key={i} sx={{ width: '100%', boxShadow: 'none' }}>
+			<Card key={i} sx={{ width: '100%', boxShadow: 'none', backgroundColor: "darkgray.main" }}>
 				{candidate.photos.length > 0 ? (
-					// <Carousel
-					// 	className="carousel"
-					// 	autoPlay={false}
-					// 	animation={"slide"}
-					// 	indicators={false}
-					// 	navButtonsAlwaysVisible={true}
-					// 	// height={"400px"}
-					// >
-					// 	{
-					// 		candidate.photos.map((photoURL, i) => {
-					// 			return (
-					// 				<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} >
-					// 					<img src={photoURL} style={{margin: '0 auto'}}/>
-					// 				</Box>
-					// 			)
-					// 		})
-					// 	}
-					// </Carousel>
 					<Box className="masonry" sx={{ height: 400, overflowY: 'scroll' }}>
 						<ImageList variant="masonry" cols={2} gap={8}>
 							{candidate.photos.map((photoURL, i) => (
@@ -81,16 +64,16 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 					</Box>
 				)}
 				<CardContent>
-					<Typography gutterBottom variant="h5" component="div">
+					<Typography variant="header2" component="div" sx={{ mb: 2 }}>
 						{candidate.name}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography variant="body2">
 						Rating: {candidate.rating ? candidate.rating + "⭐" : "-"}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography variant="body2">
 						Reviews: {candidate.user_ratings_total ?? "-"}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography variant="body2">
 						Open now: {candidate.is_open === null ? "-" : candidate.is_open ? "Yes" : "No"}
 					</Typography>
 				</CardContent>
@@ -102,7 +85,8 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 		<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80%' }}>
 			{activeStep === candidates.length ? (
 				<>
-					<Button onClick={() => handleCompleteSwiping(votes)}>Complete</Button>
+					<HowToVoteRoundedIcon color="lime" sx={{fontSize: "150px"}} />
+					<Button sx={{ mt: 4 }} onClick={() => handleCompleteSwiping(votes)}>Complete</Button>
 				</>
 			) : (
 				<>
@@ -122,7 +106,7 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 						steps={candidates.length}
 						position="static"
 						activeStep={activeStep}
-						sx={{ justifyContent: 'center' }}
+						sx={{ justifyContent: 'center', backgroundColor: "darkgray.main" }}
 					/>
 				</>
 			)}

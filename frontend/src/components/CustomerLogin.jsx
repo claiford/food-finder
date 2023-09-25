@@ -88,7 +88,7 @@ const CustomerLogin = ({
         <form onSubmit={handleSubmitForm}>
           <TextField
             sx={{
-              backgroundColor: "white",
+              //backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}
@@ -101,7 +101,7 @@ const CustomerLogin = ({
           />
           <TextField
             sx={{
-              backgroundColor: "white",
+              //backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}
@@ -130,6 +130,7 @@ const CustomerLogin = ({
         </form>
         <Button
           sx={{
+            backgroundColor: "transparent",
             color: "#c0ec6b",
           }}
           onClick={handleSignUpBtn}

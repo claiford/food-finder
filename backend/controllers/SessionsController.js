@@ -1,5 +1,7 @@
 const Session = require('../models/SessionModel');
+const Group = require('../models/GroupModel');
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 const PLACE_NEARBYSEARCH_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 const PLACE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json";
@@ -8,7 +10,6 @@ const ROUTES_COMPUTEROUTES_URL = "https://routes.googleapis.com/directions/v2:co
 
 module.exports = {
     index,
-    getOngoing,
     create,
     handleVoting,
     handleArchive,
@@ -17,18 +18,8 @@ module.exports = {
 async function index(req, res) {
     try {
         // pending: "find" to be updated to query using group ID
-        const sessions = await Session.find({});
+        const sessions = await Session.find({ group: req.params.group_id });
         res.json(sessions);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function getOngoing(req, res) {
-    try {
-        // pending: "find" to be updated to query using group ID
-        const ongoingSession = await Session.find({ ongoing: true })
-        res.json(ongoingSession[0].candidates);
     } catch (err) {
         console.log(err);
     }
@@ -38,13 +29,23 @@ async function create(req, res) {
     const key = process.env.GMAPS_API_KEY;
     try {
         console.log("CREATING SESSION...")
+
+        // GET ORIGIN LAT & LNG FOR NEARBY SEARCH
+        const queryOriginDetails = PLACE_DETAILS_URL + `?place_id=${req.body.location}&key=${key}`;
+        const resOriginDetails = await axios.get(queryOriginDetails);
+        const originDetails = resOriginDetails.data.result;
+        const originLat = originDetails.geometry.location.lat;
+        const originLng = originDetails.geometry.location.lng;
+
         // PERFORM NEARBY SEARCH QUERY
-        const location = "1.387420%2C103.906998";
-        const radius = "1000";
-        const keyword = "food";
+        const location = `${originLat}%2C${originLng}`;
+        const radius = req.body.distance * 1000;
+        const maxprice = req.body.budget;
+        // pending: ignore keyword (cuisine) selection for now
+        // const keyword = "mexican";
         const type = "restaurant";
 
-        const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&keyword=${keyword}&type=${type}&key=${key}`;
+        const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&maxprice=${maxprice}&type=${type}&key=${key}`;
         const resNearbySearch = await axios.get(queryNearbySearch);
         const nearbySearch = resNearbySearch.data.results
 
@@ -103,31 +104,45 @@ async function create(req, res) {
             candidates.push(candidate);
         }
 
+        // get voters from group members
+        const group = await Group.findById(req.params.group_id);
+        const voters = group.memberIds.map((member_id) => {
+            return {
+                voter: member_id,
+                status: 0,
+            }
+        })
+
         const newSession = await Session.create({
-            group: "Test Group " + new Date(Date.now()).toLocaleTimeString(),
+            group: req.params.group_id,
             status: "incomplete",
+            origin: originDetails.name,
             candidates: candidates,
-            num_voters: 1,
+            voters: voters,
         })
 
         console.log("SESSION CREATED")
         res.json(newSession);
     } catch (err) {
         console.log(err);
+        res.status(500).send(err)
     }
 }
 
 async function handleVoting(req, res) {
     try {
         console.log("updating session");
-        const update = { status: "complete" };
         const session = await Session.findById(req.params.sessionid)
         for (const [place_id, vote] of Object.entries(req.body.votes)) {
             session.candidates.find((c) => c.place_id === place_id).votes += vote;
         }
         session.num_voted += 1;
 
-        if (session.num_voted === session.num_voters) {
+        console.log("TOKEN", req.body.voter)
+        console.log("TOKEN2", "123")
+        session.voters.find((voter) => voter.voter.toString() === req.body.voter).status = 999;
+
+        if (session.voters.every((voter) => voter.status === 999)) {
             session.status = "complete";
             console.log(session.candidates)
             session.chosen = session.candidates.reduce((a, b) => {
@@ -140,6 +155,19 @@ async function handleVoting(req, res) {
                 }
             })
         }
+        // if (session.num_voted === session.num_voters) {
+            // session.status = "complete";
+            // console.log(session.candidates)
+            // session.chosen = session.candidates.reduce((a, b) => {
+            //     if (a.votes === b.votes) {
+            //         if (a.distance <= b.distance) return a
+            //         if (a.distance > b.distance) return b
+            //     } else {
+            //         if (a.votes > b.votes) return a
+            //         if (a.votes < b.votes) return b
+            //     }
+            // })
+        // }
 
         await session.save()
         console.log("session updated");
