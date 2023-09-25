@@ -4,7 +4,7 @@ const router = express.Router();
 const groupsController = require('../controllers/GroupsController');
 const sessionsController = require('../controllers/SessionsController');
 
-const customer = require('../models/CustomerModel');
+const Customer = require('../models/CustomerModel');
 const Group = require('../models/GroupModel');
 
 router.get('/new', groupsController.new);
@@ -23,7 +23,7 @@ router.post('/group/:group_id/session/new', sessionsController.create)
 // Fetch customers route
 router.get("/api/customers", async (req, res) => {
     try {
-        const customers = await customer.find();
+        const customers = await Customer.find();
         res.json(customers);
     } catch (error) {
         console.error("Error fetching customers", error);

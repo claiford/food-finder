@@ -6,8 +6,9 @@ const Customer = require("../models/CustomerModel"); // Adjust the path as neede
 // using email and password
 passport.use(
   new LocalStrategy(
-    { usernameField: "email" },
+    { usernameField: "email", passwordField: "password" },
     async (email, password, done) => {
+      console.log("email:", email)
       try {
         const customer = await Customer.findOne({ email });
         console.log("customer found: ", customer);
@@ -41,8 +42,10 @@ passport.serializeUser((customer, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const customer = await Customer.findById(id);
+    console.log("customer deserialized: ", customer)
     done(null, customer);
   } catch (error) {
     done(error);
   }
 });
+module.exports = passport;
