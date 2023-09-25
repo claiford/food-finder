@@ -10,7 +10,8 @@ const modalStyle = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '80%',
-    bgcolor: 'background.paper',
+    minHeight: '70%',
+    bgcolor: 'darkgray.main',
     borderRadius: 3,
     boxShadow: 24,
     p: 4,
@@ -65,20 +66,18 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                 borderRadius: 3,
                 m: 2,
                 p: 3,
-                backgroundColor: "white.main",
+                backgroundColor: "lightgray.main",
             }}>
                 <Button
                     variant="contained"
-                    color="black"
                     onClick={handleJoinOngoing}
-                    sx={{ color: 'lime.main' }}
                 >
                     Join
                 </Button>
                 <Box sx={{
                     mt: 2,
                 }}>
-                    <Typography variant="header2" component="div">
+                    <Typography variant="header1" component="div">
                         {ongoingSession.origin}
                     </Typography>
                 </Box>

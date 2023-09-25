@@ -14,19 +14,16 @@ const GroupMembers = ({ members }) => {
             }}>
                 <Avatar sx={{
                     mx: 2,
-                    backgroundColor: "black.main",
+                    backgroundColor: "black",
                     color: "lime.main",
                 }}>
-                    <Typography variant="body1" fontWeight={700}>
+                    <Typography variant="body4" fontWeight={700}>
                         {initialA}{initialB}
                     </Typography>
                 </Avatar>
                 <Typography
-                    variant="body1"
+                    variant="body2"
                     fontWeight={700}
-                    sx={{
-                        color: "white.main"
-                    }}
                 >
                     {member.name}
                 </Typography>

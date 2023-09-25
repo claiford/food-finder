@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
+import SessionNew from '../components/SessionNew';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
 import SessionArchive from '../components/SessionArchive';
@@ -17,7 +18,6 @@ const TabHeader = ({text}) => {
             variant="header2"
             component="div"
             sx={{
-                color: "white.main",
                 m: 3,
             }}
         >   
@@ -46,6 +46,7 @@ const Group = () => {
     // NAVIGATION
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
+        getSessions()
     };
     /////////////////
     /////////////////
@@ -79,6 +80,10 @@ const Group = () => {
     /////////////////
     // HANDLERS
     // for ongoingSession, status: "incomplete" ==> "complete"
+    const handleNew = () => {
+        getSessions()
+    }
+
     const handleVoting = async (votes) => {
         try {
             await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { votes: votes })
@@ -109,7 +114,7 @@ const Group = () => {
     return (
         <Box className="group-page" sx={{ width: '400px', textAlign: 'center' }}>
             <Typography
-                variant="header1"
+                variant="title"
                 component="div"
                 sx={{
                     m: 3,
@@ -153,9 +158,7 @@ const Group = () => {
                             }
                         </>
                     ) : (
-                        <Button variant="contained" color="lime" onClick={() => navigate(`/customer/group/${group_id}/session/new`)}>
-                            Start New Session
-                        </Button>
+                        <SessionNew handleNew={handleNew} />
                     )}
                 </>
             }

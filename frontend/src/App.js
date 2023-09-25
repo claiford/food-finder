@@ -1,7 +1,7 @@
 import "./App.css";
 import Main from "./pages/Main";
 import Group from "./pages/Group";
-import NewSession from "./components/NewSession";
+import SessionNew from "./components/SessionNew";
 
 import { createTheme, ThemeProvider } from '@mui/material';
 import { Box } from "@mui/material";
@@ -11,23 +11,61 @@ import CustomerHome from "./pages/CustomerHome";
 const theme = createTheme({
   typography: {
     fontFamily: "Lato",
-    header1: {
+    title: {
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 40,
       color: "#C0EC6B"
     },
-    header2: {
+    title2: {
+      fontFamily: "Arvo",
+      fontWeight: 700,
+      fontSize: 25,
+      color: "#242424"
+    },
+    header1: {
+      // header black
       fontFamily: "Arvo",
       fontWeight: 400,
       fontSize: 15,
+      color: '#000000'
+    },
+    header2: {
+      // subheader white
+      fontFamily: "Arvo",
+      fontWeight: 400,
+      fontSize: 15,
+      color: "#FFFFFF"
     },
     body1: {
+      // body black
       fontFamily: "Lato",
       fontSize: 15,
+      color: "#000000"
     },
+    body2: {
+      // body white
+      fontFamily: "Lato",
+      fontSize: 15,
+      color: "#FFFFFF"
+    },
+    body3: {
+      // body darkgray
+      fontFamily: "Lato",
+      fontSize: 15,
+      color: "#242424"
+    },
+    body4: {
+      // body lime
+      fontFamily: "Lato",
+      fontSize: 15,
+      color: "#C0EC6B"
+    }
   },
   palette: {
+    primary: {
+      main: "#C0EC6B",
+    },
     darkgray: {
       main: "#242424",
     },
@@ -38,11 +76,49 @@ const theme = createTheme({
       main: "#C0EC6B",
       dark: "#7AAD16"
     },
-    white: {
-      main: "#FFFFFF",
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            color: 'white',
+            textAlign: 'left',
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#C0EC6B',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#C0EC6B',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: 'white',
+            '&.Mui-focused': {
+              color: "#C0EC6B"
+            }
+          },
+          '& .MuiInputLabel-shrink': {
+            color: '#C0EC6B'
+          },
+          '& .MuiSvgIcon-root': {
+            color: 'white',
+            '&.Mui-disabled': {
+              color: "#242424"
+            }
+          },
+        },
+      },
     },
-    black: {
-      main: "#000000"
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#000000",
+          color: "#C0EC6B"
+        }
+      }
     }
   }
 })
@@ -66,7 +142,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/customer/group/:group_id" element={<Group />} />
-          <Route path="/customer/group/:group_id/session/new" element={<NewSession />} />
+          <Route path="/customer/group/:group_id/session/new" element={<SessionNew />} />
           <Route path="/customer/home" element={<CustomerHome />} />
           <Route path="/*" element={<h1>404: Page Not Found</h1>} />
         </Routes>

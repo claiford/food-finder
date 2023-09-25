@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { TextField, Button, IconButton, CircularProgress, MenuItem, FormControl, Alert } from '@mui/material';
+import { Box, Modal, TextField, Button, IconButton, CircularProgress, MenuItem, FormControl, Alert } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
-const NewSession = () => {
+const SessionForm = () => {
     const [loading, setLoading] = useState(false);
     const [formError, setFormError] = useState({})
     const [form, setForm] = useState({
@@ -85,6 +85,10 @@ const NewSession = () => {
 
     const { ref: autocompleteRef } = usePlacesWidget({
         apiKey: "AIzaSyBLJXCbjB7HjCUmosPIocJkCpGjno-WJLg",
+        options: {
+            types: ['establishment'],
+            componentRestrictions: { country: 'sg' },
+        },
         onPlaceSelected: (place) => {
             setForm((prevForm) => {
                 return {
@@ -99,14 +103,10 @@ const NewSession = () => {
                 }
             });
         },
-        options: {
-            types: ['establishment'],
-            componentRestrictions: { country: 'sg' },
-        },
     });
 
     return (
-        <>
+        <Box>
             <h1>Create Session</h1>
             <form onSubmit={handleSubmitForm}>
                 <FormControl>
@@ -188,8 +188,8 @@ const NewSession = () => {
                     <Alert severity="error">Server error, please try again.</Alert>
                 </>
             }
-        </>
+        </Box>
     )
 };
 
-export default NewSession;
+export default SessionForm;
