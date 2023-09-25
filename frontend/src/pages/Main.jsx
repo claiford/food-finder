@@ -10,16 +10,6 @@ export const CURRENT_USER = {
 };
 const Main = () => {
   const [activeButton, setActiveButton] = useState(null);
-  const [customerInfo, setCustomerInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [merchantInfo, setMerchantInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
 
   const navigate = useNavigate();
 

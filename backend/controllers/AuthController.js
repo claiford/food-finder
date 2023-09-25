@@ -1,6 +1,8 @@
 const Customer = require("../models/CustomerModel");
 const Merchant = require("../models/MerchantModel");
 const bcrypt = require("bcrypt");
+// const passport = require("passport");
+// const LocalStrategy = require("passport-local").Strategy;
 
 module.exports = {
   createCustomer: CustomerSignUp,
@@ -91,7 +93,10 @@ async function CustomerLogin(req, res) {
       id: existingUser._id,
       email: existingUser.email,
     };
+    console.log("req.session.user => ", req.session.user);
 
+    // After successful authentication
+    res.cookie("user", JSON.stringify(req.session.user)); // Set a "user" cookie with the session data
     res.status(200).json({
       message: "Login successful",
       customer: {

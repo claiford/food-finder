@@ -8,13 +8,11 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 // const path = require('path');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const socketsManager = require('./listeners/socketsManager');
 
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
-const CustomerRouter = require('./routes/CustomerRouter');
-
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
@@ -24,7 +22,8 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const authRouter = require("./routes/AuthRouter");
+const AuthRouter = require('./routes/AuthRouter');
+const CustomerRouter = require('./routes/CustomerRouter');
 
 app.use(express.json());
 app.use(
@@ -41,11 +40,12 @@ app.use(session({
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
-// app.use(cookieParser());
+app.use(passport.session());
+app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
-app.use("/", authRouter);
+app.use("/", AuthRouter);
 app.use('/customer', CustomerRouter);
 
 // catch 404 and forward to error handler
