@@ -14,7 +14,7 @@ const modalStyle = {
     bgcolor: 'darkgray.main',
     borderRadius: 3,
     boxShadow: 24,
-    p: 4,
+    p: 2,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -86,12 +86,15 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                 )}
 
                 <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
                     mt: 2,
                 }}>
-                    <Typography variant="header1" component="div">
+                    <Typography variant="header1">
                         {ongoingSession.origin}
                     </Typography>
-                    <Typography variant="header1" component="div">
+                    <Typography variant="header1">
                         {voterStatus.length} / {ongoingSession.voters.length}
                     </Typography>
                 </Box>
