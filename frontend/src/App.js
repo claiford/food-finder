@@ -4,7 +4,7 @@ import Group from "./pages/Group";
 import Store from "./pages/Store";
 import Demo from "./pages/Demo";
 
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider } from "@mui/material";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
@@ -14,7 +14,6 @@ import axios from "axios";
 import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
 import MerchantHome from "./pages/MerchantHome";
-
 
 const theme = createTheme({
   typography: {
@@ -171,7 +170,7 @@ function App() {
   useEffect(() => {
     checkCustomerAuth();
     checkMerchantAuth();
-  }, []);
+  }, [isCustomerAuthenticated, isMerchantAuthenticated]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -182,7 +181,7 @@ function App() {
               path="customer/login"
               element={
                 <CustomerLogin
-                setIsCustomerAuthenticated={setIsCustomerAuthenticated}
+                  setIsCustomerAuthenticated={setIsCustomerAuthenticated}
                 />
               }
             />
@@ -223,15 +222,14 @@ function App() {
               <Route path="/demo" element={<Demo />} />
             </>
           )}
-             {isMerchantAuthenticated && (
+          {isMerchantAuthenticated && (
             <>
               <Route path="merchant/home" element={<MerchantHome />} />
             </>
           )}
           {!isCustomerAuthenticated && !isMerchantAuthenticated && (
-            <Route path="/*" element={<Navigate to="/"/>}/>
+            <Route path="/*" element={<Navigate to="/" />} />
           )}
-
         </Routes>
       </div>
     </ThemeProvider>

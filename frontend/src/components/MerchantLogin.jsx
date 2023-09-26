@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Container, TextField, Button } from "@mui/material";
 import styles from "../App.module.css";
 
-const MerchantLogin = ({ setIsAuthenticated }) => {
+const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
@@ -37,8 +37,8 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
           setShowSuccessBar(true);
 
           // Store merchant ID in localstorage
-          localStorage.setItem("token", response.data.merchant.id);
-          setIsAuthenticated(true);
+          localStorage.setItem("merchantToken", response.data.merchant.id);
+          setIsMerchantAuthenticated(true);
           navigate("/merchant/home");
 
           // Reset form fields
