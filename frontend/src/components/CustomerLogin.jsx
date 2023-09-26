@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "../App.module.css";
 
 const CustomerLogin = ({
-  activeButton,
-  isAuthenticated,
-  setIsAuthenticated,
+  setIsCustomerAuthenticated,
 }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -40,8 +38,8 @@ const CustomerLogin = ({
           setSuccess(response.data.message || "Sign in successful.");
           setShowSuccessBar(true);
           // Store customer ID in localstorage
-          localStorage.setItem("token", response.data.customer.id);
-          setIsAuthenticated(true);
+          localStorage.setItem("customerToken", response.data.customer.id);
+          setIsCustomerAuthenticated(true);
           navigate("/customer/home");
 
           // Reset form fields
@@ -123,7 +121,6 @@ const CustomerLogin = ({
               fontWeight: "bold",
               marginTop: "5px",
             }}
-            // className={styles.primaryButton}
           >
             Login as Customer
           </Button>
@@ -132,6 +129,7 @@ const CustomerLogin = ({
           sx={{
             backgroundColor: "transparent",
             color: "#c0ec6b",
+            mt: "10px"
           }}
           onClick={handleSignUpBtn}
         >

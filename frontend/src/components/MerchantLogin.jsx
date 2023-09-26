@@ -120,7 +120,6 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
                 fontWeight: "bold",
                 marginTop: "5px",
               }}
-            // className={styles.primaryButton}
           >
             Login as Merchant
           </Button>
@@ -129,6 +128,7 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
           sx={{
             backgroundColor: "transparent",
             color: "#c0ec6b",
+            mt: "10px"
           }}
           onClick={handleSignUpBtn}
         >

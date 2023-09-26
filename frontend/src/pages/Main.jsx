@@ -19,8 +19,8 @@ const Main = () => {
     fontWeight: "bold",
     fontSize: "18px",
     backgroundColor: "#c0ec6b",
-    height: "50px",
-    width: "40%",
+    height: "3rem",
+    width: "10rem",
     m: "5px",
   };
 
@@ -36,9 +36,16 @@ const Main = () => {
 
   return (
     <div className={styles.mainBody}>
-      <Card elevation={0} style={{ border: "none", boxShadow: "none" }}>
+      <Card elevation={0} style={{ 
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "transparent", border: "none", boxShadow: "none" }}>
         <Link to="/">
-          <CardMedia component="img" alt="plate" image={Logo} />
+          <CardMedia component="img" alt="plate" image={Logo} sx={{
+            backgroundColor: "transparent"
+          }} />
         </Link>
         <CardActions
           elevation={0}
@@ -46,11 +53,13 @@ const Main = () => {
             backgroundColor: "#242424",
             display: "flex",
             justifyContent: "center",
-            pt: "60px",
+            pt: "10px",
+            pb: "30px"
           }}
         >
           <Button
             onClick={handleCustomerBtn}
+            fullWidth
             sx={{
               ...buttonStyles,
               backgroundColor:
@@ -62,6 +71,7 @@ const Main = () => {
             Customer
           </Button>
           <Button
+            
             onClick={handleMerchantBtn}
             sx={{
               ...buttonStyles,

@@ -4,7 +4,7 @@ import Group from "./pages/Group";
 import SessionNew from "./components/SessionNew";
 
 import { createTheme, ThemeProvider } from "@mui/material";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
 import MerchantSignUp from "./components/MerchantSignUp";
@@ -131,7 +131,8 @@ const theme = createTheme({
 });
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isCustomerAuthenticated, setIsCustomerAuthenticated] = useState(null);
+  const [isMerchantAuthenticated, setIsMerchantAuthenticated] = useState(null);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -148,20 +149,33 @@ function App() {
   //   const data = axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/:id`);
 
   // }
-  const checkAuthentication = async () => {
+  const checkCustomerAuth = async () => {
     console.log("Checking for aunthentication...");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("customerToken");
     console.log("token null? ", token);
     if (token !== null) {
       console.log("token: ", token);
-      setIsAuthenticated(true);
+      setIsCustomerAuthenticated(true);
     } else {
-      setIsAuthenticated(false);
+      setIsCustomerAuthenticated(false);
+    }
+  };
+
+  const checkMerchantAuth = async () => {
+    console.log("Checking for aunthentication...");
+    const token = localStorage.getItem("merchantToken");
+    console.log("token null? ", token);
+    if (token !== null) {
+      console.log("token: ", token);
+      setIsMerchantAuthenticated(true);
+    } else {
+      setIsMerchantAuthenticated(false);
     }
   };
 
   useEffect(() => {
-    checkAuthentication();
+    checkCustomerAuth();
+    checkMerchantAuth();
   }, []);
 
   return (
@@ -169,57 +183,59 @@ function App() {
       <div className={styles.body}>
         <Routes>
           <Route path="/" element={<Main />}>
-          <Route
-            path="customer/login"
-            element={
-              <CustomerLogin
-                customerInfo={customerInfo}
-                setCustomerInfo={setCustomerInfo}
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-              />
-            }
-          />
-          <Route
-            path="customer/signup"
-            element={
-              <CustomerSignUp
-                customerInfo={customerInfo}
-                setCustomerInfo={setCustomerInfo}
-              />
-            }
-          />
-          <Route
-            path="merchant/login"
-            element={
-              <MerchantLogin
-                merchantInfo={merchantInfo}
-                setMerchantInfo={setMerchantInfo}
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-              />
-            }
-          />
-          <Route
-            path="merchant/signup"
-            element={
-              <MerchantSignUp
-                merchantInfo={merchantInfo}
-                setMerchantInfo={setMerchantInfo}
-              />
-            }
-          />
+            <Route
+              path="customer/login"
+              element={
+                <CustomerLogin
+                  setIsCustomerAuthenticated={setIsCustomerAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="customer/signup"
+              element={
+                <CustomerSignUp
+                  customerInfo={customerInfo}
+                  setCustomerInfo={setCustomerInfo}
+                />
+              }
+            />
+            <Route
+              path="merchant/login"
+              element={
+                <MerchantLogin
+                  merchantInfo={merchantInfo}
+                  setMerchantInfo={setMerchantInfo}
+                  isMerchantAuthenticated={isMerchantAuthenticated}
+                  setIsMerchantAuthenticated={setIsMerchantAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="merchant/signup"
+              element={
+                <MerchantSignUp
+                  merchantInfo={merchantInfo}
+                  setMerchantInfo={setMerchantInfo}
+                />
+              }
+            />
           </Route>
-          {isAuthenticated && (
+          {isCustomerAuthenticated && (
             <>
               <Route path="/customer/group/:group_id" element={<Group />} />
               <Route path="/customer/home" element={<CustomerHome />} />
-              <Route path="merchant/home" element={<MerchantHome />} />
               <Route path="/demo" element={<Demo />} />
             </>
-            // )
           )}
-          <Route path="/*" element={<Main />} />
+          {isMerchantAuthenticated && (
+            <>
+              <Route path="merchant/home" element={<MerchantHome />} />
+            </>
+          )}
+          {!isCustomerAuthenticated && !isMerchantAuthenticated && (
+            <Route path="/*" element={<Navigate to="/"/>}/>
+          )}
         </Routes>
       </div>
     </ThemeProvider>

@@ -4,6 +4,7 @@ import { Box, Button, Grid, Typography, List, ListItem, ListItemText } from "@mu
 import CreateNewGroup from "../components/CreateNewGroup";
 import FetchGroups from "../components/FetchGroups";
 import Navbar from "../components/Navbar";
+import styles from './CustomerHome.module.css'
 
 const Home = () => {
     const [showNewGroupForm, setShowNewGroupForm] = useState(false);
@@ -41,7 +42,7 @@ const Home = () => {
         <CreateNewGroup />
       )}
       {showGroupsList && (
-        <div>
+        <div className={styles.container}>
           <Typography variant="h6" sx={{ mt: 2 }}>Your Groups:</Typography>
           <List>
             {groups.map((group) => (
