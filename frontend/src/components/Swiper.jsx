@@ -17,11 +17,6 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 	const [candidateCards, setCandidateCards] = useState([]);
 	const [votes, setVotes] = useState(Object.fromEntries(candidates.map((c) => [c.place_id, 0])));
 
-	const handleCheck = () => {
-		console.log(votes);
-		console.log()
-	}
-
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
@@ -32,7 +27,6 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 
 	const handleYes = () => {
 		const currentCandidateID = candidates[activeStep].place_id;
-		console.log(votes);
 		setVotes((prevVotes) => {
 			return {
 				...prevVotes,

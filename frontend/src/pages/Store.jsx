@@ -56,7 +56,6 @@ const Store = () => {
 
     const handleAddPhoto = (e) => {
         e.preventDefault()
-        console.log("add photo");
         const newPhotos = [...storeForm.photos]
         newPhotos.push(e.target.newPhoto.value)
         setStoreForm((prevStoreForm) => {
@@ -69,7 +68,6 @@ const Store = () => {
     };
 
     const handleDeletePhoto = (idx) => {
-        console.log("delete photo");
         setStoreForm((prevStoreForm) => {
             return {
                 ...prevStoreForm,

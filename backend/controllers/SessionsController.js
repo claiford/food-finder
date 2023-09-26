@@ -142,7 +142,6 @@ async function handleVoting(req, res) {
 
         if (session.voters.every((voter) => voter.status === 999)) {
             session.status = "complete";
-            console.log(session.candidates)
             session.chosen = session.candidates.reduce((a, b) => {
                 if (a.votes === b.votes) {
                     if (a.distance <= b.distance) return a
