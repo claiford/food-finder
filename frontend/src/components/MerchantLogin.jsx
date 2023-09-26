@@ -71,7 +71,7 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
       <form onSubmit={handleSubmitForm}>
         <TextField
           sx={{
-            backgroundColor: "white",
+            // backgroundColor: "white",
             borderRadius: "8px",
             marginTop: "0px",
           }}
@@ -84,7 +84,7 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
         />
         <TextField
           sx={{
-            backgroundColor: "white",
+            // backgroundColor: "white",
             borderRadius: "8px",
             marginTop: "0px",
           }}
@@ -113,7 +113,7 @@ const MerchantLogin = ({ merchantInfo, setMerchantInfo }) => {
       </form>
       <Button
         sx={{
-          color: "#c0ec6b",
+          backgroundColor: "transparent",
         }}
         onClick={handleSignUpBtn}
       >

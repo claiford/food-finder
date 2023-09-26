@@ -24,7 +24,7 @@ const modalStyle = {
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
     // const [isConnected, setIsConnected] = useState(socket.connected);\
-    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("token")).status === 999;
+    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("token"))?.status === 999;
     const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 
     const handleJoinOngoing = () => {
@@ -66,7 +66,7 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
         <>
             <Box sx={{
                 borderRadius: 3,
-                m: 2,
+                m: 3,
                 p: 3,
                 backgroundColor: "lightgray.main",
             }}>
