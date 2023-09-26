@@ -10,9 +10,10 @@ module.exports = {
 }
 
 async function index(req, res) {
+    console.log(req.params.merchant_id)
     try {
-        const stores = await Store.find({});
-        res.json(stores);
+        const merchant = await Merchant.findById(req.params.merchant_id).populate('stores');
+        res.json(merchant.stores);
     } catch (err) {
         console.log(err);
     }

@@ -4,8 +4,8 @@ const router = express.Router();
 const MerchantsController = require('../controllers/MerchantsController');
 const StoresController = require('../controllers/StoresController');
 
-// GET /merchant/home :: get all stores belonging to merchant
-router.get("/home", MerchantsController.index);
+// GET /merchant/home/:merchant_id :: get all stores belonging to merchant
+router.get("/home/:merchant_id", MerchantsController.index);
 
 // GET /merchant/store/:store_id :: get single store detail
 router.get("/store/:store_id", StoresController.show);
