@@ -15,7 +15,6 @@ const GroupMembers = ({ members }) => {
                 <Avatar sx={{
                     mx: 2,
                     backgroundColor: "black",
-                    color: "lime.main",
                 }}>
                     <Typography variant="body4" fontWeight={700}>
                         {initialA}{initialB}

@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
 
 import { Box, Avatar, Button, Typography } from "@mui/material";
-import StoreRoundedIcon from '@mui/icons-material/StoreRounded';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
 
-const StoreList = ({ stores }) => {
+const GroupList = ({ groups }) => {
     const navigate = useNavigate();
 
-    const storeLinks = stores.map((store, i) => {
+    const groupLinks = groups.map((group, i) => {
         return (
             <Box
                 key={i}
-                onClick={() => navigate(`/merchant/store/${store._id}`)}
+                onClick={() => navigate(`/customer/group/${group._id}`)}
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -23,18 +23,11 @@ const StoreList = ({ stores }) => {
                     }
                 }}
             >
-                <StoreRoundedIcon color="lime" />
+                <GroupWorkIcon color="lime" />
                 <Typography variant="body2" fontWeight={700}>
-                    {store.name}
+                    {group.groupName}
                 </Typography>
             </Box>
-            // <Button 
-            //     key={i} 
-            //     variant="contained"
-            //     onClick={() => navigate(`/merchant/store/${store._id}`)}
-            // >
-            //     {store.name}
-            // </Button>
         )
     })
 
@@ -46,9 +39,9 @@ const StoreList = ({ stores }) => {
             gap: 2,
             overflowY: 'scroll'
         }}>
-            {storeLinks}
+            {groupLinks}
         </Box>
     )
 };
 
-export default StoreList;
+export default GroupList;
