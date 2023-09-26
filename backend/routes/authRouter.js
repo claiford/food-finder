@@ -20,6 +20,7 @@ router.post("/merchant/signup", AuthController.createMerchant);
 // });
 
 router.post("/customer/login", AuthController.customerLogin);
+router.post("/merchant/login", AuthController.merchantLogin);
 
 // TODO: NAVBAR FOR LOGOUT BTN
 // router.get("/logout", AuthController.Logout)

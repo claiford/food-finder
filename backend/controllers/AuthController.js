@@ -8,7 +8,8 @@ module.exports = {
   createCustomer: CustomerSignUp,
   createMerchant: MerchantSignUp,
   customerLogin: CustomerLogin,
-  Logout,
+  merchantLogin: MerchantLogin,
+  logout: Logout,
 };
 
 async function CustomerSignUp(req, res) {
@@ -77,7 +78,7 @@ async function CustomerLogin(req, res) {
     const existingUser = await Customer.findOne({ email });
     if (!existingUser) {
       return res.status(401).json({
-        message: "Authentication failed",
+        message: "Incorrect email or password. Please try again.",
       });
     }
     // Compare password
@@ -86,7 +87,7 @@ async function CustomerLogin(req, res) {
       existingUser.password
     );
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Authentication failed" });
+      return res.status(401).json({ message: "Incorrect email or password. Please try again." });
     }
     // Store user data in the session
     req.session.user = {
@@ -100,6 +101,47 @@ async function CustomerLogin(req, res) {
     res.status(200).json({
       message: "Login successful",
       customer: {
+        id: existingUser._id,
+        email: existingUser.email,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+async function MerchantLogin(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    // Check if email exists in db
+    const existingUser = await Merchant.findOne({ email });
+    if (!existingUser) {
+      return res.status(401).json({
+        message: "Incorrect email or password. Please try again.",
+      });
+    }
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Incorrect email or password. Please try again." });
+    }
+    // Store user data in the session
+    req.session.user = {
+      id: existingUser._id,
+      email: existingUser.email,
+    };
+    console.log("req.session.user => ", req.session.user);
+
+    // After successful authentication
+    res.cookie("user", JSON.stringify(req.session.user)); // Set a "user" cookie with the session data
+    res.status(200).json({
+      message: "Login successful",
+      merchant: {
         id: existingUser._id,
         email: existingUser.email,
       },
