@@ -24,6 +24,7 @@ const io = new Server(httpServer, {
 // Router import
 const AuthRouter = require('./routes/AuthRouter');
 const CustomerRouter = require('./routes/CustomerRouter');
+const MerchantRouter = require('./routes/MerchantRouter');
 
 app.use(express.json());
 app.use(
@@ -47,6 +48,7 @@ app.use(cookieParser());
 // Routers
 app.use("/", AuthRouter);
 app.use('/customer', CustomerRouter);
+app.use('/merchant', MerchantRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {

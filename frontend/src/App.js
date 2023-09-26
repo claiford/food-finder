@@ -1,9 +1,11 @@
 import styles from "./App.module.css";
 import Main from "./pages/Main";
 import Group from "./pages/Group";
-import SessionNew from "./components/SessionNew";
+import Store from "./pages/Store";
+import Demo from "./pages/Demo";
 
 import { createTheme, ThemeProvider } from '@mui/material';
+import { Box } from "@mui/material";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
@@ -13,7 +15,7 @@ import axios from "axios";
 import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
 import MerchantHome from "./pages/MerchantHome";
-import Demo from "./pages/Demo";
+
 
 const theme = createTheme({
   typography: {
@@ -102,7 +104,7 @@ const theme = createTheme({
             },
           },
           '& .MuiInputLabel-root': {
-            color: 'white',
+            color: '#C0EC6B',
             '&.Mui-focused': {
               color: "#C0EC6B"
             }
@@ -167,58 +169,63 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.body}>
-        <Routes>
-          <Route path="/" element={<Main />}>
+        <Box sx={{
+          width: "400px",
+        }}>
+          <Routes>
+            <Route path="/" element={<Main />}>
+              <Route
+                path="customer/login"
+                element={
+                  <CustomerLogin
+                    customerInfo={customerInfo}
+                    setCustomerInfo={setCustomerInfo}
+                    isAuthenticated={isAuthenticated}
+                    setIsAuthenticated={setIsAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="customer/signup"
+                element={
+                  <CustomerSignUp
+                    customerInfo={customerInfo}
+                    setCustomerInfo={setCustomerInfo}
+                  />
+                }
+              />
+              <Route
+                path="merchant/login"
+                element={
+                  <MerchantLogin
+                    merchantInfo={merchantInfo}
+                    setMerchantInfo={setMerchantInfo}
+                    isAuthenticated={isAuthenticated}
+                    setIsAuthenticated={setIsAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="merchant/signup"
+                element={
+                  <MerchantSignUp
+                    merchantInfo={merchantInfo}
+                    setMerchantInfo={setMerchantInfo}
+                  />
+                }
+              />
+            </Route>
+            {/* {!isAuthenticated && navigate("/")} */}
+            <Route path="/customer/group/:group_id" element={<Group />} />
             <Route
-              path="customer/login"
-              element={
-                <CustomerLogin
-                  customerInfo={customerInfo}
-                  setCustomerInfo={setCustomerInfo}
-                  isAuthenticated={isAuthenticated}
-                  setIsAuthenticated={setIsAuthenticated}
-                />
-              }
+              path="/customer/home"
+              element={<CustomerHome customerInfo={customerInfo} />}
             />
-            <Route
-              path="customer/signup"
-              element={
-                <CustomerSignUp
-                  customerInfo={customerInfo}
-                  setCustomerInfo={setCustomerInfo}
-                />
-              }
-            />
-            <Route
-              path="merchant/login"
-              element={
-                <MerchantLogin
-                  merchantInfo={merchantInfo}
-                  setMerchantInfo={setMerchantInfo}
-                  isAuthenticated={isAuthenticated}
-                  setIsAuthenticated={setIsAuthenticated}
-                />
-              }
-            />
-            <Route
-              path="merchant/signup"
-              element={
-                <MerchantSignUp
-                  merchantInfo={merchantInfo}
-                  setMerchantInfo={setMerchantInfo}
-                />
-              }
-            />
-          </Route>
-          {/* {!isAuthenticated && navigate("/")} */}
-          <Route path="/customer/group/:group_id" element={<Group />} />
-          <Route
-            path="/customer/home"
-            element={<CustomerHome customerInfo={customerInfo} />}
-          />
-          <Route path="merchant/home" element={<MerchantHome />}></Route>
-          <Route path="/demo" element={<Demo />}></Route>
-        </Routes>
+            <Route path="merchant/home" element={<MerchantHome />}></Route>
+            <Route path="/merchant/store/:store_id" element={<Store />} />
+            <Route path="/demo" element={<Demo />}></Route>
+          </Routes>
+        </Box>
       </div>
     </ThemeProvider>
   );

@@ -138,8 +138,6 @@ async function handleVoting(req, res) {
         }
         session.num_voted += 1;
 
-        console.log("TOKEN", req.body.voter)
-        console.log("TOKEN2", "123")
         session.voters.find((voter) => voter.voter.toString() === req.body.voter).status = 999;
 
         if (session.voters.every((voter) => voter.status === 999)) {
