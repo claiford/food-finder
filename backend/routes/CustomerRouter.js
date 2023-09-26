@@ -3,6 +3,7 @@ const router = express.Router();
 
 const groupsController = require('../controllers/GroupsController');
 const sessionsController = require('../controllers/SessionsController');
+const storesController = require('../controllers/StoresController');
 
 const Customer = require('../models/CustomerModel');
 const Group = require('../models/GroupModel');
@@ -10,15 +11,6 @@ const Group = require('../models/GroupModel');
 router.get('/new', groupsController.new);
 
 router.post('/', groupsController.create);
-
-// GET /customer/group/:group_id
-router.get('/group/:group_id', groupsController.show)
-
-// GET /customer/group/:group_id/sessions
-router.get('/group/:group_id/sessions', sessionsController.index)
-
-// POST /customer/group/:group_id/sessions/new
-router.post('/group/:group_id/session/new', sessionsController.create)
 
 // Fetch customers route
 router.get("/api/customers", async (req, res) => {
@@ -60,4 +52,17 @@ router.get("/api/groups", async (req, res) => {
     }
   });
 
+// GET /customer/group/:group_id
+router.get('/group/:group_id', groupsController.show)
+
+// GET /customer/group/:group_id/sessions
+router.get('/group/:group_id/sessions', sessionsController.index)
+
+// GET 
+router.get('/api/candidate/partnersearch/:place_id', storesController.partnerQuery)
+
+// POST /customer/group/:group_id/sessions/new
+router.post('/group/:group_id/session/new', sessionsController.create)
+
 module.exports = router;
+

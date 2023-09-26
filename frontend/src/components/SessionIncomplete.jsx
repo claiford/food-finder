@@ -23,7 +23,7 @@ const modalStyle = {
 
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
-    // const [isConnected, setIsConnected] = useState(socket.connected);\
+    // const [isConnected, setIsConnected] = useState(socket.connected);
     const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("token"))?.status === 999;
     const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 

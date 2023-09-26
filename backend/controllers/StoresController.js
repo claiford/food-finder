@@ -10,6 +10,7 @@ module.exports = {
     create,
     show,
     update,
+    partnerQuery
 }
 
 async function create(req, res) {
@@ -48,3 +49,12 @@ async function update(req, res) {
         console.log(err)
     }
 };
+
+async function partnerQuery(req, res) {
+    try {
+        const partner = await Store.find({ place_id: req.params.place_id });
+        res.json(partner[0]);
+    } catch (err) {
+        console.log(err);
+    }
+}
