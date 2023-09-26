@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button } from "@mui/material";
+import { Alert, Container, TextField, Button, Stack } from "@mui/material";
 
 const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
   const [error, setError] = useState(null);
@@ -91,6 +91,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
             backgroundColor: "#c0ec6b",
             fontWeight: "bold",
             marginTop: "5px",
+            marginBottom: "8px",
           }}
         >
           Sign up as Merchant
@@ -102,9 +103,11 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         )}
       </form>
       {showSuccessBar && (
-        <Alert severity="success">
-          <span>{success}</span>
-        </Alert>
+        <Stack sx={{ width: "80%" }}>
+          <Alert severity="success">
+            <span>{success}</span>
+          </Alert>
+        </Stack>
       )}
     </Container>
   );

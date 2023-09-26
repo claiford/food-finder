@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Box, Button, Grid, Typography, List, ListItem, ListItemText } from "@mui/material";
 import CreateNewGroup from "../components/CreateNewGroup";
 import FetchGroups from "../components/FetchGroups";
+import Navbar from "../components/Navbar";
+import styles from './CustomerHome.module.css'
 
 const Home = () => {
     const [showNewGroupForm, setShowNewGroupForm] = useState(false);
@@ -33,13 +35,14 @@ const Home = () => {
 
     return ( 
         <>
+        <Navbar/>
         <div>Groups</div>
         <Button onClick={handleNewGroupBtn}>+</Button>
         {showNewGroupForm && (
         <CreateNewGroup />
       )}
       {showGroupsList && (
-        <div>
+        <div className={styles.container}>
           <Typography variant="h6" sx={{ mt: 2 }}>Your Groups:</Typography>
           <List>
             {groups.map((group) => (
