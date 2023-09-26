@@ -16,8 +16,8 @@ const AddMembersForm = ({ onAddMember }) => {
       .then((response) => {
         if (response.status === 200) {
           const users = response.data;
-          setCustomers(users); // Store the fetched users in 'customers' state
-          setFilteredUsers(users); // Initialize 'filteredUsers' with all users
+          setCustomers(users);
+          setFilteredUsers(users);
         } else {
           console.error("Failed to fetch users.");
         }
@@ -34,11 +34,10 @@ const AddMembersForm = ({ onAddMember }) => {
     const searchText = event.target.value.toLowerCase();
     setSearchText(searchText);
 
-    // Filter the 'customers' array based on the search input
     const filteredUsers = customers.filter((user) =>
       user.name.toLowerCase().includes(searchText)
     );
-    setFilteredUsers(filteredUsers); // Update 'filteredUsers'
+    setFilteredUsers(filteredUsers);
   };
 
   const handleAddMember = async (user) => {
@@ -49,24 +48,18 @@ const AddMembersForm = ({ onAddMember }) => {
       );
 
       if (response.status === 200) {
-        // Assuming the backend responds with a success status
         const newMember = {
-          _id: user._id, // You can modify this based on how you want to handle user input
-          // Other properties as needed
+          _id: user._id
         };
 
-        // Call the onAddMember callback to add the new member
         onAddMember(newMember);
 
-        // Clear the search input
         setSearchText('');
       } else {
         console.error("Failed to add member to the group");
-        // Handle the error condition here
       }
     } catch (error) {
       console.error("Error adding member to the group:", error);
-      // Handle the error condition here
     }
   };
 

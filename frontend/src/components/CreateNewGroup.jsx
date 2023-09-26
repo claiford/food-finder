@@ -17,8 +17,8 @@ const CreateNewGroup = () => {
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
   const [groupMembers, setGroupMembers] = useState([]);
-  const [newMember, setNewMember] = useState(""); // To store input for adding new members
-  const [searchInput, setSearchInput] = useState(""); // For search bar input
+  const [newMember, setNewMember] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [customers, setCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -37,17 +37,14 @@ const CreateNewGroup = () => {
         }
       })
       .catch((error) => {
-        // Handle unexpected errors
         console.error("Error fetching user data:", error);
       })
       .finally(() => {
-        // Set isLoading to false when the request is complete
         setIsLoading(false);
       });
   }, []);
 
   const handleAddMember = (memberName) => {
-    // Add the selected member to the groupMembers array
     setGroupMembers([...groupMembers, memberName]);
     if (selectedUsers.includes(memberName)) {
         console.error("already added to the group");
@@ -56,24 +53,19 @@ const CreateNewGroup = () => {
   };
 
   const handleRemoveMember = (index) => {
-    // Remove a member from the groupMembers array by index
     const updatedMembers = groupMembers.filter((_, i) => i !== index);
     setGroupMembers(updatedMembers);
   };
 
   const handleCreateGroup = async () => {
-    // Handle group creation here (e.g., sending data to a server using axios)
-    // Display success or error messages accordingly
     if(!groupName || groupMembers.length === 0) {
         console.log("please name your group and add members")
         return;
     }
     try {
-        // Prepare the data to send to the backend
         const data = {
           groupName: groupName,
           memberIds: groupMembers.map((memberName) => {
-            // Find the user by name and get their ID
             const selectedUser = customers.find(
               (customer) => customer.name === memberName
             );
@@ -85,7 +77,6 @@ const CreateNewGroup = () => {
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups`, { user: localStorage.getItem("token"),data: data });
         //send in the user id, local storage token
     
-        // Check the response status and display messages accordingly
         if (response.status === 200) {
           console.log("Group created successfully");
           setSuccess("Group created successfully");
@@ -117,7 +108,6 @@ const CreateNewGroup = () => {
   return (
     <Container maxWidth="sm">
       {" "}
-      {/* Set maximum width to 500px */}
       <Typography variant="h5" sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }}>
         Select Group Members
       </Typography>
@@ -150,7 +140,6 @@ const CreateNewGroup = () => {
         {filteredCustomers.map((customer) => (
           <Grid item key={customer._id} xs={12}>
             <Typography>{customer.name}</Typography>
-            {/* Add a button or icon to select the user */}
             <Button
               variant="outlined"
               color="primary"

@@ -26,18 +26,13 @@ const GroupMembers = ({ members }) => {
       );
   
       if (response.status === 200) {
-        // Assuming the backend responds with a success status
-  
-        // Update the groupMembers state by filtering out the removed user
         const updatedMembers = groupMembers.filter((member) => member._id !== userId);
         setGroupMembers(updatedMembers);
       } else {
         console.error("Failed to remove member from the group");
-        // Handle the error condition here
       }
     } catch (error) {
       console.error("Error removing member from the group:", error);
-      // Handle the error condition here
     }
   };
   
