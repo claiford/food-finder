@@ -67,7 +67,6 @@ const Group = () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`);
             const sessions = res.data;
-
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
             setArchivedSessions(sessions.filter((e) => e.status === "archive"));
         } catch (err) {

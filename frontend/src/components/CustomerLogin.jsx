@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -28,39 +28,39 @@ const CustomerLogin = ({
     if (!loginInfo.email || !loginInfo.password) {
       setError("All fields are required");
       setShowErrorMessage(true);
-    }
-    // API call
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/customer/login`,
-        loginInfo
-      );
-      console.log("response", response);
-      console.log("customerID:", response.data.customer.id);
-      if (response.status === 200) {
-        setSuccess(response.data.message || "Sign in successful.");
-        setShowSuccessBar(true);
-        // Store customer ID in localstorage
-        localStorage.setItem(
-          "token",
-          // JSON.stringify(response.data.customer.id)
-          response.data.customer.id
+    } else {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/customer/login`,
+          loginInfo
         );
-        setIsAuthenticated(true);
-        navigate("/customer/home");
+        console.log("response", response);
+        console.log("customerID:", response.data.customer.id);
+        if (response.status === 200) {
+          setSuccess(response.data.message || "Sign in successful.");
+          setShowSuccessBar(true);
+          // Store customer ID in localstorage
+          localStorage.setItem("token", response.data.customer.id);
+          setIsAuthenticated(true);
+          navigate("/customer/home");
 
-        // Reset form fields
-        setLoginInfo({
-          email: "",
-          password: "",
-        });
-      } else {
-        const data = response.data;
-        setError(data.message || "Sign in failed.");
+          // Reset form fields
+          setLoginInfo({
+            email: "",
+            password: "",
+          });
+        } else {
+          const data = response.data;
+          setError(
+            data.message || "Incorrect email or password. Please try again."
+          );
+          setShowErrorMessage(true);
+        }
+      } catch (err) {
+        console.log(err);
+        setError("Incorrect email or password. Please try again.");
         setShowErrorMessage(true);
       }
-    } catch (err) {
-      console.log(err);
     }
 
     setTimeout(() => {
@@ -75,78 +75,82 @@ const CustomerLogin = ({
   };
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <form onSubmit={handleSubmitForm}>
-        <TextField
-          sx={{
-            // backgroundColor: "white",
-            borderRadius: "8px",
-            marginTop: "0px",
-          }}
-          label="Email"
-          type="email"
-          fullWidth
-          margin="normal"
-          value={loginInfo.email}
-          onChange={(e) => handleInputChange(e, "email")}
-        />
-        <TextField
-          sx={{
-            // backgroundColor: "white",
-            borderRadius: "8px",
-            marginTop: "0px",
-          }}
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={loginInfo.password}
-          onChange={(e) => handleInputChange(e, "password")}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          fullWidth
-          size="large"
-          sx={{
-            color: "#242424",
-            backgroundColor: "#c0ec6b",
-            fontWeight: "bold",
-            marginTop: "5px",
-          }}
-          // className={styles.primaryButton}
-        >
-          Login as Customer
-        </Button>
-      </form>
-      <Button
+    <>
+      <Container
+        maxWidth="xs"
         sx={{
-          backgroundColor: "transparent",
-          color: "#c0ec6b",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        onClick={handleSignUpBtn}
       >
-        Not registered? Sign up here
-      </Button>
-      {showErrorMessage && (
-        <Alert severity="error">
-          <span>{error}</span>
-        </Alert>
-      )}
-      {showSuccessBar && (
-        <Alert severity="success">
-          <span>{success}</span>
-        </Alert>
-      )}
-    </Container>
+        <form onSubmit={handleSubmitForm}>
+          <TextField
+            sx={{
+              //backgroundColor: "white",
+              borderRadius: "8px",
+              marginTop: "0px",
+            }}
+            label="Email"
+            type="email"
+            fullWidth
+            margin="normal"
+            value={loginInfo.email}
+            onChange={(e) => handleInputChange(e, "email")}
+          />
+          <TextField
+            sx={{
+              //backgroundColor: "white",
+              borderRadius: "8px",
+              marginTop: "0px",
+            }}
+            label="Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={loginInfo.password}
+            onChange={(e) => handleInputChange(e, "password")}
+          />
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            size="large"
+            sx={{
+              color: "#242424",
+              backgroundColor: "#c0ec6b",
+              fontWeight: "bold",
+              marginTop: "5px",
+            }}
+            // className={styles.primaryButton}
+          >
+            Login as Customer
+          </Button>
+        </form>
+        <Button
+          sx={{
+            backgroundColor: "transparent",
+            color: "#c0ec6b",
+          }}
+          onClick={handleSignUpBtn}
+        >
+          Not registered? Sign up here
+        </Button>
+      </Container>
+      <div>
+        {showErrorMessage && (
+          <Alert severity="error">
+            <span>{error}</span>
+          </Alert>
+        )}
+        {showSuccessBar && (
+          <Alert severity="success">
+            <span>{success}</span>
+          </Alert>
+        )}
+      </div>
+    </>
   );
 };
 

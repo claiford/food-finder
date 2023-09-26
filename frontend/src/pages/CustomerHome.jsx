@@ -1,6 +1,6 @@
-import React, { useState , useEffect } from "react";
+import { useState , useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Grid, Typography, List, ListItem, ListItemText } from "@mui/material";
+import { Button, Typography, List, ListItem } from "@mui/material";
 import CreateNewGroup from "../components/CreateNewGroup";
 import FetchGroups from "../components/FetchGroups";
 

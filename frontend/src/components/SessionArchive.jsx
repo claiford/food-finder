@@ -12,18 +12,24 @@ const SessionArchive = ({ archivedSessions }) => {
             <Box key={i} sx={{
                 borderRadius: 3,
                 backgroundColor: "white",
-                m: 2,
+                m: 3,
                 p: 3,
             }}>
                 <Typography variant="title2">
                     {archive.chosen.name}
                 </Typography>
-                <Typography variant="body3" component="div">
-                    {archive.chosen.votes} 👍
-                </Typography>
-                <Typography variant="body3" component="div">
-                    {sessionDate.toLocaleString(DateTime.DATETIME_SHORT)}
-                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mt: 2,
+                }}>
+                    <Typography variant="body3">
+                        {archive.chosen.votes} 👍
+                    </Typography>
+                    <Typography variant="body3">
+                        {sessionDate.toLocaleString(DateTime.DATETIME_SHORT)}
+                    </Typography>
+                </Box>
             </Box>
         )
     });
