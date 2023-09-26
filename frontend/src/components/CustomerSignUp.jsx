@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button } from "@mui/material";
+import { Alert, Container, TextField, Button, Stack } from "@mui/material";
 
 const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
   const [error, setError] = useState(null);
@@ -25,7 +25,6 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
         `${process.env.REACT_APP_BACKEND_URL}/customer/signup`,
         customerInfo
       );
-      // console.log("Sign up response: ", response);
       if (response.status === 200) {
         setSuccess(response.data.message || "Sign up successful.");
         setShowSuccessBar(true);
@@ -53,9 +52,8 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
   };
 
   return (
-    <Container maxWidth="xs" sx={{ height: "300px"}}>
-      <form onSubmit={handleSubmitForm}
-      >
+    <Container maxWidth="xs">
+      <form onSubmit={handleSubmitForm}>
         <TextField
           sx={{ borderRadius: "8px", marginTop: "0px" }}
           label="Name"
@@ -66,7 +64,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "name")}
         />
         <TextField
-          sx={{ borderRadius: "8px", marginTop: "0px"  }}
+          sx={{ borderRadius: "8px", marginTop: "0px" }}
           label="Email"
           type="email"
           fullWidth
@@ -75,7 +73,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
-          sx={{ borderRadius: "8px",  marginTop: "0px" }}
+          sx={{ borderRadius: "8px", marginTop: "0px" }}
           label="Password"
           type="password"
           fullWidth
@@ -93,6 +91,7 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
             backgroundColor: "#c0ec6b",
             fontWeight: "bold",
             marginTop: "5px",
+            marginBottom: "8px",
           }}
         >
           Sign up as Customer

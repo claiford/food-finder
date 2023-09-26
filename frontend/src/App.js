@@ -1,9 +1,10 @@
 import styles from "./App.module.css";
 import Main from "./pages/Main";
 import Group from "./pages/Group";
-import SessionNew from "./components/SessionNew";
+import Store from "./pages/Store";
+import Demo from "./pages/Demo";
 
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
@@ -13,7 +14,7 @@ import axios from "axios";
 import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
 import MerchantHome from "./pages/MerchantHome";
-import Demo from "./pages/Demo";
+
 
 const theme = createTheme({
   typography: {
@@ -150,11 +151,8 @@ function App() {
 
   // }
   const checkCustomerAuth = async () => {
-    console.log("Checking for aunthentication...");
     const token = localStorage.getItem("customerToken");
-    console.log("token null? ", token);
     if (token !== null) {
-      console.log("token: ", token);
       setIsCustomerAuthenticated(true);
     } else {
       setIsCustomerAuthenticated(false);
@@ -162,11 +160,8 @@ function App() {
   };
 
   const checkMerchantAuth = async () => {
-    console.log("Checking for aunthentication...");
     const token = localStorage.getItem("merchantToken");
-    console.log("token null? ", token);
     if (token !== null) {
-      console.log("token: ", token);
       setIsMerchantAuthenticated(true);
     } else {
       setIsMerchantAuthenticated(false);
@@ -187,7 +182,7 @@ function App() {
               path="customer/login"
               element={
                 <CustomerLogin
-                  setIsCustomerAuthenticated={setIsCustomerAuthenticated}
+                setIsCustomerAuthenticated={setIsCustomerAuthenticated}
                 />
               }
             />
@@ -228,7 +223,7 @@ function App() {
               <Route path="/demo" element={<Demo />} />
             </>
           )}
-          {isMerchantAuthenticated && (
+             {isMerchantAuthenticated && (
             <>
               <Route path="merchant/home" element={<MerchantHome />} />
             </>
@@ -236,6 +231,7 @@ function App() {
           {!isCustomerAuthenticated && !isMerchantAuthenticated && (
             <Route path="/*" element={<Navigate to="/"/>}/>
           )}
+
         </Routes>
       </div>
     </ThemeProvider>

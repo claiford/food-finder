@@ -110,25 +110,27 @@ const MerchantLogin = ({ setIsAuthenticated }) => {
             onChange={(e) => handleInputChange(e, "password")}
           />
           <Button
-              variant="contained"
-              type="submit"
-              fullWidth
-              size="large"
-              sx={{
-                color: "#242424",
-                backgroundColor: "#c0ec6b",
-                fontWeight: "bold",
-                marginTop: "5px",
-              }}
+            variant="contained"
+            type="submit"
+            fullWidth
+            size="large"
+            sx={{
+              color: "#242424",
+              backgroundColor: "#c0ec6b",
+              fontWeight: "bold",
+              marginTop: "5px",
+            }}
           >
             Login as Merchant
           </Button>
         </form>
         <Button
           sx={{
+            display: "flex",
+            justifyContent: "center",
             backgroundColor: "transparent",
             color: "#c0ec6b",
-            mt: "10px"
+            margin: "0 auto",
           }}
           onClick={handleSignUpBtn}
         >

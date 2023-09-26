@@ -44,7 +44,9 @@ const Main = () => {
         backgroundColor: "transparent", border: "none", boxShadow: "none" }}>
         <Link to="/">
           <CardMedia component="img" alt="plate" image={Logo} sx={{
-            backgroundColor: "transparent"
+            backgroundColor: "transparent", 
+            height: "350px",
+            width: "350px"
           }} />
         </Link>
         <CardActions
@@ -87,7 +89,7 @@ const Main = () => {
       </Card>
       <Grid>
         <Grid item xs={6}>
-          <Outlet activeButton={activeButton} />
+          <Outlet activeButton={activeButton}/>
         </Grid>
       </Grid>
     </div>

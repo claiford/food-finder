@@ -7,7 +7,7 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
                 // width: '100%',
                 // height: '100%',
                 borderRadius: 3,
-                m: 2,
+                m: 3,
                 p: 5,
                 backgroundColor: "lightgray.main"
             }}>

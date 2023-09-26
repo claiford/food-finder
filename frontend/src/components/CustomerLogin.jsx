@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button } from "@mui/material";
+import { Alert, Container, TextField, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styles from "../App.module.css";
 
-const CustomerLogin = ({
-  setIsCustomerAuthenticated,
-}) => {
+const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
@@ -76,12 +74,12 @@ const CustomerLogin = ({
     <>
       <Container
         maxWidth="xs"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        // sx={{
+        //   display: "flex",
+        //   flexDirection: "column",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        // }}
       >
         <form onSubmit={handleSubmitForm}>
           <TextField
@@ -127,16 +125,16 @@ const CustomerLogin = ({
         </form>
         <Button
           sx={{
+            display: "flex",
+            justifyContent: "center",
             backgroundColor: "transparent",
             color: "#c0ec6b",
-            mt: "10px"
+            margin: "0 auto",
           }}
           onClick={handleSignUpBtn}
         >
           Not registered? Sign up here
         </Button>
-      </Container>
-      <div>
         {showErrorMessage && (
           <Alert severity="error">
             <span>{error}</span>
@@ -147,7 +145,7 @@ const CustomerLogin = ({
             <span>{success}</span>
           </Alert>
         )}
-      </div>
+      </Container>
     </>
   );
 };
