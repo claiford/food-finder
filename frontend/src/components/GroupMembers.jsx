@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Button, Avatar, Box, Typography } from "@mui/material";
 
 const GroupMembers = ({ members }) => {
     const memberList = members.map((member, i) => {
@@ -34,6 +34,10 @@ const GroupMembers = ({ members }) => {
     return (
         <>
             {memberList}
+            <br/>
+            <Button variant="contained" color="primary">
+        Edit Members
+      </Button>
         </>
     )
 };
