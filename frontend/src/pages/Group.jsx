@@ -119,7 +119,7 @@ const Group = () => {
                     m: 3,
                 }}
             >
-                {group.groupName}
+                {group.name}
             </Typography>
 
             <Tabs
@@ -174,7 +174,7 @@ const Group = () => {
             {tabValue === 2 &&
                 <>
                     <TabHeader text="Members"></TabHeader>
-                    <GroupMembers members={group.memberIds} />
+                    <GroupMembers members={group.members} />
                 </>
             }
 

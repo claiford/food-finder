@@ -53,14 +53,6 @@ const Home = () => {
 				<CreateNewGroup />
 			) : (
 				<GroupList groups={groups} />
-				// <List>
-				// 	{groups.map((group) => (
-				// 		<ListItem key={group._id}>
-				// 			{/* <ListItemText primary={group.groupName} /> */}
-				// 			<Button onClick={() => navigate(`/customer/group/${group._id}`)}>{group.groupName}</Button>
-				// 		</ListItem>
-				// 	))}
-				// </List>
 			)}
 		</>
 	);

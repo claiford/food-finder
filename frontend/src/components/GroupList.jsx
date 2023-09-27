@@ -25,7 +25,7 @@ const GroupList = ({ groups }) => {
             >
                 <GroupWorkIcon color="lime" />
                 <Typography variant="body2" fontWeight={700}>
-                    {group.groupName}
+                    {group.name}
                 </Typography>
             </Box>
         )

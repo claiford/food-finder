@@ -13,16 +13,24 @@ module.exports = {
 };
 
 // Create a new group
-
 async function create(req , res) {
     try {
-        console.log("creating backend group");
-        const newGroup = await Group.create(req.body.data); //creates doc in mongodb
-        const member = await Customer.findById(req.body.user); //gives specific customer 
-        //put group id into member groupIds 
-        const memberGroup = member.groups_id;
-        memberGroup.push(newGroup._id);
-        member.save(); //saves doc after changes
+        const user = await Customer.findById(req.body.user);
+        const newGroupData = req.body.data;
+        newGroupData.members.push(user);
+
+        const newGroup = await Group.create(newGroupData); //creates doc in mongodb
+
+        newGroupData.members.forEach(async (m) => {
+          const member = await Customer.findById(m._id);
+          member.groups.push(newGroup._id);
+          member.save();
+        })
+        // const member = await Customer.findById(req.body.user); //gives specific customer 
+        // //put group id into member groupIds 
+        // const memberGroup = member.groups;
+        // memberGroup.push(newGroup._id);
+        // member.save(); //saves doc after changes
         res.json({message: 'Group created successfully', newGroup});
     } catch (error) {
         console.log(error + 'An error occurred while creating the group');
@@ -32,12 +40,12 @@ async function create(req , res) {
 async function getAllGroups(req, res) {
     try {
       const userId = req.params.customer_id;
-      const member = await Customer.findById(userId).populate("groups_id");
+      const member = await Customer.findById(userId).populate("groups");
     if (!member) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-      const memberGroup = member.groups_id;
+      const memberGroup = member.groups;
         res.json(memberGroup);
     } catch (error) {
         console.error('Error fetching groups', error);
@@ -67,7 +75,7 @@ async function addMember(req, res) {
     group.memberIds = group.memberIds.concat(validMembers);
     await group.save();
 
-    // Update members' groups_id array
+    // Update members' groups array
     for (const newMemberId of validMembers) {
       const member = await Customer.findById(newMemberId);
       
@@ -75,8 +83,8 @@ async function addMember(req, res) {
         return res.status(404).json({ error: `User with ID ${newMemberId} not found` });
       }
 
-      if (!member.groups_id.includes(groupId)) {  // ensure groupId isn't added more than once
-        member.groups_id.push(groupId);
+      if (!member.groups.includes(groupId)) {  // ensure groupId isn't added more than once
+        member.groups.push(groupId);
         await member.save();
       }
     }
@@ -114,8 +122,8 @@ async function removeMember(req, res) {
           return res.status(404).json({ error: 'User not found' });
       }
 
-      // Remove the group ID from the user's groups_id array
-      user.groups_id = user.groups_id.filter((currentGroupId) => currentGroupId.toString() !== groupId);
+      // Remove the group ID from the user's groups array
+      user.groups = user.groups.filter((currentGroupId) => currentGroupId.toString() !== groupId);
       await user.save();
 
       res.json({ message: 'Member removed from the group successfully' });
@@ -131,7 +139,7 @@ function newGroup(req, res) {
 
 async function show(req, res) {
     try {
-        const group = await Group.findById(req.params.group_id).populate("memberIds");
+        const group = await Group.findById(req.params.group_id).populate("members");
         res.json(group);
     } catch (err) {
         console.log(err)
