@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, ImageList, ImageListItem, TextField, Button, IconButton, Typography, Card, CardMedia, CardContent, CardActions } from '@mui/material';
+import { Box, ImageList, ImageListItem, TextField, Button, IconButton, Typography, Card, CardMedia, Stack } from '@mui/material';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -54,13 +54,8 @@ const Store = () => {
         })
     };
 
-    const handleToggleAddPhoto = () => {
-        setIsAddPhoto((prev) => !prev);
-    }
-
     const handleAddPhoto = (e) => {
         e.preventDefault()
-        console.log("add photo");
         const newPhotos = [...storeForm.photos]
         newPhotos.push(e.target.newPhoto.value)
         setStoreForm((prevStoreForm) => {
@@ -69,11 +64,10 @@ const Store = () => {
                 photos: newPhotos,
             }
         })
-        setIsAddPhoto(false);
+        e.target.reset();
     };
 
     const handleDeletePhoto = (idx) => {
-        console.log("delete photo");
         setStoreForm((prevStoreForm) => {
             return {
                 ...prevStoreForm,
@@ -128,10 +122,9 @@ const Store = () => {
                 <IconButton onClick={handleBack}>
                     <ArrowBackRoundedIcon color="lime" fontSize="large" />
                 </IconButton>
-                <Typography variant="title1">
-                    Store
-                    {/* {store.name} */}
-                </Typography>
+                {/* <Typography variant="title1">
+                    PlatePal
+                </Typography> */}
                 {!isEdit ? (
                     <IconButton onClick={handleEdit}>
                         <EditRoundedIcon color="lime" fontSize="large" />
@@ -150,92 +143,95 @@ const Store = () => {
                 mt: 2,
                 mx: 3,
             }}>
-                <Typography variant="header2">
-                    Name
-                </Typography>
-                {!isEdit ? (
-                    <Typography variant="body1"
-                        sx={{
-                            backgroundColor: 'white',
-                            color: "black",
-                            borderRadius: 1,
-                            py: 2,
-                            px: 1.75,
-                            boxSizing: 'border-box'
-                        }}
-                    >
-                        {store.name}
+                {/* NAME */}
+                <Stack spacing={1}>
+                    <Typography variant="header2">
+                        Name
                     </Typography>
-                ) : (
-                    <TextField
-                        value={storeForm.name}
-                        name="name"
-                        onChange={handleFormChange}
-                    >
-                    </TextField>
-                )}
+                    {!isEdit ? (
+                        <Typography variant="body4" fontWeight={700}
+                            sx={{
+                                backgroundColor: 'black',
+                                borderRadius: 1,
+                                py: 2.3,
+                                px: 1.75,
+                                boxSizing: 'border-box'
+                            }}
+                        >
+                            {store.name}
+                        </Typography>
+                    ) : (
+                        <TextField
+                            value={storeForm.name}
+                            name="name"
+                            onChange={handleFormChange}
+                        >
+                        </TextField>
+                    )}
+                </Stack>
 
-                <Typography variant="header2">
-                    Promotion
-                </Typography>
-                {!isEdit ? (
-                    <Typography variant="body1"
-                        sx={{
-                            backgroundColor: 'white',
-                            borderRadius: 1,
-                            py: 2,
-                            px: 1.75,
-                            boxSizing: 'border-box'
-                        }}
-                    >
-                        {store.promotion}
+                {/* PROMOTION */}
+                <Stack spacing={1}>
+                    <Typography variant="header2">
+                        Promotion
                     </Typography>
-                ) : (
-                    <TextField
-                        value={storeForm.promotion}
-                        name="promotion"
-                        onChange={handleFormChange}
-                    >
-                    </TextField>
-                )}
+                    {!isEdit ? (
+                        <Typography variant="body4" fontWeight={700}
+                            sx={{
+                                backgroundColor: 'black',
+                                borderRadius: 1,
+                                py: 2.3,
+                                px: 1.75,
+                                boxSizing: 'border-box'
+                            }}
+                        >
+                            {store.promotion}
+                        </Typography>
+                    ) : (
+                        <TextField
+                            value={storeForm.promotion}
+                            name="promotion"
+                            onChange={handleFormChange}
+                        >
+                        </TextField>
+                    )}
+                </Stack>
 
+                {/* PHOTOS */}
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    minHeight: '40px',
                 }}>
                     <Typography variant="header2">
                         Photos
                     </Typography>
                     {isEdit &&
-                        <IconButton sx={{ p: 0 }} onClick={handleToggleAddPhoto}>
-                            <AddRoundedIcon color="lime" />
-                        </IconButton>
+                        <form onSubmit={handleAddPhoto}>
+                            <Box sx={{
+                                display: 'flex',
+                                gap: 1,
+                                alignItems: 'center',
+                            }}>
+                                <TextField
+                                    // variant="standard"
+                                    size="small"
+                                    label="New Photo (url)"
+                                    name="newPhoto"
+                                >
+                                </TextField>
+                                <IconButton type="submit" sx={{ p: 0 }}>
+                                    <AddRoundedIcon color="lime" />
+                                </IconButton>
+                            </Box>
+                        </form>
                     }
                 </Box>
-                {isAddPhoto &&
-                    <form onSubmit={handleAddPhoto}>
-                        <Box sx={{
-                            display: 'flex',
-                            gap: 1,
-                            alignItems: 'center',
-                        }}>
-                            <TextField
-                                fullWidth
-                                label="Photo URL"
-                                name="newPhoto"
-                            >
-                            </TextField>
-                            <IconButton type="submit">
-                                <DoneRoundedIcon color="lime" fontSize='small' />
-                            </IconButton>
-                        </Box>
-                    </form>
-                }
                 {!isEdit ? (
                     <>
                         {store.photos?.length > 0 ? (
-                            <Box className="masonry" sx={{ height: 400, overflowY: 'scroll', mt: -2 }}>
+                            <Box className="masonry" sx={{ height: 300, overflowY: 'scroll', mt: -2 }}>
                                 <ImageList variant="masonry" cols={2} gap={8}>
                                     {store.photos.map((photoURL, i) => (
                                         <ImageListItem key={i}>
@@ -251,7 +247,7 @@ const Store = () => {
                             </Box>
                         ) : (
                             <Box sx={{
-                                height: 400,
+                                height: 300,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
@@ -267,7 +263,7 @@ const Store = () => {
                         )}
                     </>
                 ) : (
-                    <ImageList sx={{ height: 400, mt: 0 }} cols={1} gap={15}>
+                    <ImageList sx={{ height: 300, mt: 0 }} cols={1} gap={15}>
                         {storeForm.photos.map((photoURL, idx) => {
                             return (
                                 <ImageListItem key={idx}>

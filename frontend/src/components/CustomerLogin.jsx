@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
           setShowSuccessBar(true);
           // Store customer ID in localstorage
           localStorage.setItem("customerToken", response.data.customer.id);
-          setIsCustomerAuthenticated(true);
+          // setIsCustomerAuthenticated(true);
           navigate("/customer/home");
 
           // Reset form fields
