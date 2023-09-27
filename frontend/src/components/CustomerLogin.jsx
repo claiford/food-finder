@@ -37,7 +37,7 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
           setShowSuccessBar(true);
           // Store customer ID in localstorage
           localStorage.setItem("customerToken", response.data.customer.id);
-          // setIsCustomerAuthenticated(true);
+          setIsCustomerAuthenticated(true);
           navigate("/customer/home");
 
           // Reset form fields
