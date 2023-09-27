@@ -3,7 +3,7 @@ import axios from 'axios';
 const FetchGroups = async () => {
   try {
     // Make a GET request to your backend API endpoint for fetching groups
-    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups`);
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/${localStorage.getItem("token")}`);
 
     // Check if the request was successful (status code 200)
     if (response.status === 200) {
