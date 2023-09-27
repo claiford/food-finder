@@ -5,8 +5,7 @@ import Store from "./pages/Store";
 import Demo from "./pages/Demo";
 
 import { createTheme, ThemeProvider } from '@mui/material';
-import { Box } from "@mui/material";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
 import MerchantSignUp from "./components/MerchantSignUp";
@@ -24,52 +23,52 @@ const theme = createTheme({
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 40,
-      color: "#C0EC6B"
+      color: "#C0EC6B",
     },
     title2: {
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 25,
-      color: "#242424"
+      color: "#242424",
     },
     header1: {
       // header black
       fontFamily: "Arvo",
       fontWeight: 400,
       fontSize: 20,
-      color: '#000000'
+      color: "#000000",
     },
     header2: {
       // subheader white
       fontFamily: "Arvo",
       fontWeight: 400,
       fontSize: 20,
-      color: "#FFFFFF"
+      color: "#FFFFFF",
     },
     body1: {
       // body black
       fontFamily: "Lato",
       fontSize: 15,
-      color: "#000000"
+      color: "#000000",
     },
     body2: {
       // body white
       fontFamily: "Lato",
       fontSize: 15,
-      color: "#FFFFFF"
+      color: "#FFFFFF",
     },
     body3: {
       // body darkgray
       fontFamily: "Lato",
       fontSize: 15,
-      color: "#242424"
+      color: "#242424",
     },
     body4: {
       // body lime
       fontFamily: "Lato",
       fontSize: 15,
-      color: "#C0EC6B"
-    }
+      color: "#C0EC6B",
+    },
   },
   palette: {
     primary: {
@@ -83,40 +82,40 @@ const theme = createTheme({
     },
     lime: {
       main: "#C0EC6B",
-      dark: "#7AAD16"
+      dark: "#7AAD16",
     },
   },
   components: {
     MuiTextField: {
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-root': {
-            color: 'white',
-            textAlign: 'left',
-            '& fieldset': {
-              borderColor: 'white',
+          "& .MuiOutlinedInput-root": {
+            color: "white",
+            textAlign: "left",
+            "& fieldset": {
+              borderColor: "white",
             },
-            '&:hover fieldset': {
-              borderColor: '#C0EC6B',
+            "&:hover fieldset": {
+              borderColor: "#C0EC6B",
             },
-            '&.Mui-focused fieldset': {
-              borderColor: '#C0EC6B',
+            "&.Mui-focused fieldset": {
+              borderColor: "#C0EC6B",
             },
           },
-          '& .MuiInputLabel-root': {
-            color: '#C0EC6B',
-            '&.Mui-focused': {
-              color: "#C0EC6B"
-            }
+          "& .MuiInputLabel-root": {
+            color: "white",
+            "&.Mui-focused": {
+              color: "#C0EC6B",
+            },
           },
-          '& .MuiInputLabel-shrink': {
-            color: '#C0EC6B'
+          "& .MuiInputLabel-shrink": {
+            color: "#C0EC6B",
           },
-          '& .MuiSvgIcon-root': {
-            color: 'white',
-            '&.Mui-disabled': {
-              color: "#242424"
-            }
+          "& .MuiSvgIcon-root": {
+            color: "white",
+            "&.Mui-disabled": {
+              color: "#242424",
+            },
           },
         },
       },
@@ -125,15 +124,16 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#000000",
-          color: "#C0EC6B"
-        }
-      }
-    }
-  }
-})
+          color: "#C0EC6B",
+        },
+      },
+    },
+  },
+});
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCustomerAuthenticated, setIsCustomerAuthenticated] = useState(null);
+  const [isMerchantAuthenticated, setIsMerchantAuthenticated] = useState(null);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -150,87 +150,92 @@ function App() {
   //   const data = axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/:id`);
 
   // }
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   console.log("token: ", token);
-  //   if (token) {
-  //     setIsAuthenticated(true);
-  //     console.log("isAuthenticated => ", isAuthenticated);
-  //   } else {
-  //     return;
-  //   }
-  // }, []);
+  const checkCustomerAuth = async () => {
+    const token = localStorage.getItem("customerToken");
+    if (token !== null) {
+      setIsCustomerAuthenticated(true);
+    } else {
+      setIsCustomerAuthenticated(false);
+    }
+  };
 
+  const checkMerchantAuth = async () => {
+    const token = localStorage.getItem("merchantToken");
+    if (token !== null) {
+      setIsMerchantAuthenticated(true);
+    } else {
+      setIsMerchantAuthenticated(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   checkAuthentication()
-  // }, [])
+  useEffect(() => {
+    checkCustomerAuth();
+    checkMerchantAuth();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.body}>
-        <Box sx={{
-          width: "400px",
-        }}>
-          <Routes>
-            <Route path="/" element={<Main />}>
-              <Route
-                path="customer/login"
-                element={
-                  <CustomerLogin
-                    customerInfo={customerInfo}
-                    setCustomerInfo={setCustomerInfo}
-                    isAuthenticated={isAuthenticated}
-                    setIsAuthenticated={setIsAuthenticated}
-                  />
-                }
-              />
-              <Route
-                path="customer/signup"
-                element={
-                  <CustomerSignUp
-                    customerInfo={customerInfo}
-                    setCustomerInfo={setCustomerInfo}
-                  />
-                }
-              />
-              <Route
-                path="merchant/login"
-                element={
-                  <MerchantLogin
-                    merchantInfo={merchantInfo}
-                    setMerchantInfo={setMerchantInfo}
-                    isAuthenticated={isAuthenticated}
-                    setIsAuthenticated={setIsAuthenticated}
-                  />
-                }
-              />
-              <Route
-                path="merchant/signup"
-                element={
-                  <MerchantSignUp
-                    merchantInfo={merchantInfo}
-                    setMerchantInfo={setMerchantInfo}
-                  />
-                }
-              />
-            </Route>
-            {/* {!isAuthenticated && navigate("/")} */}
-            <Route path="/customer/group/:group_id" element={<Group />} />
+        <Routes>
+          <Route path="/" element={<Main />}>
             <Route
-              path="/customer/home"
-              element={<CustomerHome customerInfo={customerInfo} />}
+              path="customer/login"
+              element={
+                <CustomerLogin
+                setIsCustomerAuthenticated={setIsCustomerAuthenticated}
+                />
+              }
             />
-            <Route path="merchant/home" element={<MerchantHome />}></Route>
-            <Route path="/merchant/store/:store_id" element={<Store />} />
-            <Route path="/demo" element={<Demo />}></Route>
-          </Routes>
-        </Box>
+            <Route
+              path="customer/signup"
+              element={
+                <CustomerSignUp
+                  customerInfo={customerInfo}
+                  setCustomerInfo={setCustomerInfo}
+                />
+              }
+            />
+            <Route
+              path="merchant/login"
+              element={
+                <MerchantLogin
+                  merchantInfo={merchantInfo}
+                  setMerchantInfo={setMerchantInfo}
+                  isMerchantAuthenticated={isMerchantAuthenticated}
+                  setIsMerchantAuthenticated={setIsMerchantAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="merchant/signup"
+              element={
+                <MerchantSignUp
+                  merchantInfo={merchantInfo}
+                  setMerchantInfo={setMerchantInfo}
+                />
+              }
+            />
+          </Route>
+          {isCustomerAuthenticated && (
+            <>
+              <Route path="/customer/group/:group_id" element={<Group />} />
+              <Route path="/customer/home" element={<CustomerHome />} />
+              <Route path="/demo" element={<Demo />} />
+            </>
+          )}
+             {isMerchantAuthenticated && (
+            <>
+              <Route path="merchant/home" element={<MerchantHome />} />
+            </>
+          )}
+          {!isCustomerAuthenticated && !isMerchantAuthenticated && (
+            <Route path="/*" element={<Navigate to="/"/>}/>
+          )}
+
+        </Routes>
       </div>
     </ThemeProvider>
   );
 }
 
 export default App;
-
-

@@ -57,7 +57,7 @@ const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelect
     // Filter: not current user, not already added members, and based on search input
     const filteredCustomers = customers
         .filter((customer) =>
-            customer._id !== localStorage.getItem("token") &&
+            customer._id !== localStorage.getItem("customerToken") &&
             !selectedMembers.includes(customer) &&
             customer.name.toLowerCase().includes(searchInput.toLowerCase()))
         .map((customer, idx) => (

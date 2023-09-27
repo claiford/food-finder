@@ -26,7 +26,7 @@ const MerchantHome = () => {
 	const getStores = async () => {
 		try {
 			console.log("getting stores")
-			const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/home/${localStorage.getItem("token")}`);
+			const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/home/${localStorage.getItem("merchantToken")}`);
 			setStores(res.data);
 		} catch (err) {
 			console.log(err);

@@ -46,7 +46,7 @@ const StoreNew = ({ handleNewStore }) => {
         if (form.location) {
             try {
                 setLoading(true);
-                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/new`, { merchant: localStorage.getItem("token"), place_id: form.location })
+                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/new`, { merchant: localStorage.getItem("merchantToken"), place_id: form.location })
                 setPostResponse({
                     status: res.status,
                     data: res.data

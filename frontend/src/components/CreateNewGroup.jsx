@@ -72,8 +72,8 @@ const CreateNewGroup = () => {
 				};
 
 				// Send a POST request to create the group
-				const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/new`, { user: localStorage.getItem("token"), data: data });
-				//send in the user id, local storage token
+				const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/new`, { user: localStorage.getItem("customerToken"), data: data });
+				//send in the user id, local storage customerToken
 
 				if (response.status === 200) {
 					console.log("Group created successfully");

@@ -21,7 +21,7 @@ const GroupMembers = ({ members }) => {
             const response = await axios.delete(
                 `${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/remove-member/${userId}`,
                 {
-                    data: { user: localStorage.getItem("token") },
+                    data: { user: localStorage.getItem("customerToken") },
                 }
             );
 

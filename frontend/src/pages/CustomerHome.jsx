@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
 
 import { Box, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
@@ -7,6 +7,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CreateNewGroup from "../components/CreateNewGroup";
 import FetchGroups from "../components/FetchGroups";
 import GroupList from "../components/GroupList";
+import Navbar from "../components/Navbar";
+import styles from './CustomerHome.module.css'
 
 const Home = () => {
 	const [showNewGroupForm, setShowNewGroupForm] = useState(false);
@@ -35,8 +37,9 @@ const Home = () => {
 
 	return (
 		<>
+			<Navbar />
 			<Box sx={{
-				width: '100%',
+				width: '400px',
 				display: 'flex',
 				justifyContent: "space-between",
 				alignItems: 'center',
