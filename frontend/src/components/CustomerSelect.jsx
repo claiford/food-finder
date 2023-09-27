@@ -12,8 +12,6 @@ import {
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 
-import FetchUsers from "./FetchUsers";
-
 const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelected }) => {
     const [customers, setCustomers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,28 +29,38 @@ const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelect
         }
     }
 
-    const selectedCustomers = selectedMembers.map((customer, idx) => (
-        <Box key={idx} sx={{ maxHeight: '45px' }}>
-            <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                    <IconButton sx={{ ml: 1.5 }} onClick={() => handleRemoveSelected(idx)}>
-                        <CancelRoundedIcon color="lightgray" />
-                    </IconButton>
-                }
-            >
-                <Avatar sx={{
-                    backgroundColor: "black",
-                }}>
-                    <Typography variant="body4" fontWeight={700}>
-                        {customer.name.split(" ")[0][0].toUpperCase()}
-                        {(customer.name.split(" ").length > 1) ? customer.name.split(" ")[1][0].toUpperCase() : ""}
-                    </Typography>
-                </Avatar>
-            </Badge>
-        </Box>
-    ))
+    const nameToInitials = (fullName) => {
+        const nameparts = fullName.split(" ");
+        const initialA = nameparts[0][0].toUpperCase();
+        const initialB = nameparts.length > 1 ? nameparts[1][0].toUpperCase() : "";
+        return [initialA, initialB]
+    }
+
+    const selectedCustomers = selectedMembers.map((customer, idx) => {
+        const [initialA, initialB] = nameToInitials(customer.name);
+        return (
+            <Box key={idx} sx={{ maxHeight: '45px' }}>
+                <Badge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    badgeContent={
+                        <IconButton sx={{ ml: 1.5 }} onClick={() => handleRemoveSelected(idx)}>
+                            <CancelRoundedIcon color="lightgray" />
+                        </IconButton>
+                    }
+                >
+                    <Avatar sx={{
+                        backgroundColor: "black",
+                    }}>
+                        <Typography variant="body4" fontWeight={700}>
+                            {customer.name.split(" ")[0][0].toUpperCase()}
+                            {(customer.name.split(" ").length > 1) ? customer.name.split(" ")[1][0].toUpperCase() : ""}
+                        </Typography>
+                    </Avatar>
+                </Badge>
+            </Box>
+        )
+    })
 
     // Filter: not current user, not already added members, and based on search input
     const filteredCustomers = customers
@@ -60,37 +68,37 @@ const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelect
             customer._id !== localStorage.getItem("customerToken") &&
             !selectedMembers.includes(customer) &&
             customer.name.toLowerCase().includes(searchInput.toLowerCase()))
-        .map((customer, idx) => (
-            <Box
-                key={idx}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    p: 2,
-                    gap: 2,
-                    '&:hover': {
-                        cursor: 'pointer',
-                    }
-                }}
-            >
-                <Avatar sx={{
-                    backgroundColor: "black",
-                }}>
-                    <Typography variant="body4" fontWeight={700}>
-                        {customer.name.split(" ")[0][0].toUpperCase()}
-                        {(customer.name.split(" ").length > 1) ? customer.name.split(" ")[1][0].toUpperCase() : ""}
+        .map((customer, idx) => {
+            const [initialA, initialB] = nameToInitials(customer.name);
+            return (
+                <Box
+                    key={idx}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        p: 2,
+                        gap: 2,
+                        '&:hover': {
+                            cursor: 'pointer',
+                        }
+                    }}
+                >
+                    <Avatar sx={{
+                        backgroundColor: "black",
+                    }}>
+                        <Typography variant="body4" fontWeight={700}>
+                            {initialA}{initialB}
+                        </Typography>
+                    </Avatar>
+                    <Typography variant="body2" fontWeight={700}>
+                        {customer.name}
                     </Typography>
-                </Avatar>
-                <Typography variant="body2" fontWeight={700}>
-                    {customer.name}
-                </Typography>
-                <IconButton onClick={() => handleAddSelected(customer)} sx={{ ml: "auto" }}>
-                    <AddCircleRoundedIcon color="lime" />
-                </IconButton>
-            </Box>
-        ))
-
-    // const filteredCustomers = 
+                    <IconButton onClick={() => handleAddSelected(customer)} sx={{ ml: "auto" }}>
+                        <AddCircleRoundedIcon color="lime" />
+                    </IconButton>
+                </Box>
+            )
+        })
 
     useEffect(() => {
         getCustomers()
@@ -106,18 +114,15 @@ const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelect
                 label="Search"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                fullWidth
-                margin="normal"
             />
 
-            <Box sx={{
-                height: "400px",
-                overflowY: 'scroll'
+            <Stack direction="column" spacing={0} sx={{
+                height: "300px",
+                my: 2,
+                overflowY: 'scroll',
             }}>
-                <Stack direction="column" spacing={0}>
-                    {filteredCustomers}
-                </Stack>
-            </Box>
+                {filteredCustomers}
+            </Stack>
         </>
     )
 };

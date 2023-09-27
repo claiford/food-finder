@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-import { Box, Avatar, Button, Typography } from "@mui/material";
+import { Box, Stack, Avatar, Button, Typography, LinearProgress } from "@mui/material";
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
 
-const GroupList = ({ groups }) => {
+const GroupList = ({ groups, inSession }) => {
     const navigate = useNavigate();
 
     const groupLinks = groups.map((group, i) => {
@@ -15,7 +15,8 @@ const GroupList = ({ groups }) => {
                     display: 'flex',
                     alignItems: 'center',
                     borderRadius: 3,
-                    p: 2,
+                    py: 2,
+                    px: 3,
                     gap: 2,
                     backgroundColor: "black",
                     '&:hover': {
@@ -27,20 +28,19 @@ const GroupList = ({ groups }) => {
                 <Typography variant="body2" fontWeight={700}>
                     {group.name}
                 </Typography>
+                {inSession.some((g) => g._id === group._id) &&
+                    <Box sx={{ width: "10%", ml: 'auto' }}>
+                        <LinearProgress color="lime" sx={{ backgroundColor: "darkgray.main" }} />
+                    </Box>
+                }
             </Box>
         )
     })
 
     return (
-        <Box sx={{
-            maxHeight: '600px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            overflowY: 'scroll'
-        }}>
+        <Stack direction='column' spacing={2} sx={{ maxHeight: "calc(100% - 78px)", overflowY: 'scroll'}}>
             {groupLinks}
-        </Box>
+        </Stack>
     )
 };
 
