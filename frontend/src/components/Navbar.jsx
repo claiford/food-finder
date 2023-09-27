@@ -8,10 +8,12 @@ import {
   Typography,
   Menu,
   MenuItem,
+  CardMedia
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Fade from "@mui/material/Fade";
+import LogoNoText from "../assets/platepals-notext.png";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -39,13 +41,17 @@ const Navbar = () => {
   return (
     <>
       <div>
-        <AppBar position="fixed" color="primary" sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed">
           <Toolbar>
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                PlatePals
-              </Typography>
-            </Box>
+            <CardMedia component="img" alt="logo-notext" image={LogoNoText} sx={{
+              backgroundColor: "transparent",
+              height: "50px",
+              width: "50px",
+              mr: 1,
+            }} />
+            <Typography variant="appname" sx={{ flexGrow: 1 }}>
+              PlatePals
+            </Typography>
             <IconButton
               color="inherit"
               aria-label="open menu"
@@ -63,14 +69,14 @@ const Navbar = () => {
               open={open}
               onClose={handleMenuClose}
               TransitionComponent={Fade}
-              // anchorOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
-              // transformOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
+            // anchorOrigin={{
+            //   vertical: "top",
+            //   horizontal: "right",
+            // }}
+            // transformOrigin={{
+            //   vertical: "top",
+            //   horizontal: "right",
+            // }}
             >
               <MenuItem
                 onClick={handleLogout}
@@ -78,7 +84,7 @@ const Navbar = () => {
                   color: "white"
                 }}
               >
-                <LogoutIcon sx={{ color: "white"}}/>
+                <LogoutIcon sx={{ color: "white" }} />
                 Logout
               </MenuItem>
             </Menu>

@@ -36,6 +36,7 @@ async function create(req, res) {
         const originDetails = resOriginDetails.data.result;
         const originLat = originDetails.geometry.location.lat;
         const originLng = originDetails.geometry.location.lng;
+        console.log(">> origin found")
 
         // PERFORM NEARBY SEARCH QUERY
         const location = `${originLat}%2C${originLng}`;
@@ -48,9 +49,10 @@ async function create(req, res) {
         const queryNearbySearch = PLACE_NEARBYSEARCH_URL + `?location=${location}&radius=${radius}&maxprice=${maxprice}&type=${type}&key=${key}`;
         const resNearbySearch = await axios.get(queryNearbySearch);
         const nearbySearch = resNearbySearch.data.results
+        console.log(">> nearby searched")
 
         const candidates = []
-        for (const place of nearbySearch) {
+        for (const [i, place] of nearbySearch.entries()) {
             // PERFORM PLACE DETAILS QUERY
             const queryPlaceDetails = PLACE_DETAILS_URL + `?place_id=${place.place_id}&key=${key}`;
             const resPlaceDetails = await axios.get(queryPlaceDetails);
@@ -102,16 +104,18 @@ async function create(req, res) {
             }
 
             candidates.push(candidate);
+            console.log(`>> candidate ${i + 1} added`)
         }
 
         // get voters from group members
         const group = await Group.findById(req.params.group_id);
-        const voters = group.memberIds.map((member_id) => {
+        const voters = group.members.map((member_id) => {
             return {
                 voter: member_id,
                 status: 0,
             }
         })
+        console.log(">> voters assigned")
 
         const newSession = await Session.create({
             group: req.params.group_id,
@@ -152,19 +156,6 @@ async function handleVoting(req, res) {
                 }
             })
         }
-        // if (session.num_voted === session.num_voters) {
-            // session.status = "complete";
-            // console.log(session.candidates)
-            // session.chosen = session.candidates.reduce((a, b) => {
-            //     if (a.votes === b.votes) {
-            //         if (a.distance <= b.distance) return a
-            //         if (a.distance > b.distance) return b
-            //     } else {
-            //         if (a.votes > b.votes) return a
-            //         if (a.votes < b.votes) return b
-            //     }
-            // })
-        // }
 
         await session.save()
         console.log("session updated");
@@ -176,10 +167,10 @@ async function handleVoting(req, res) {
 
 async function handleArchive(req, res) {
     try {
-        console.log("updating session");
+        console.log("archiving session");
         await Session.findOneAndUpdate({ _id: req.params.sessionid }, { status: "archive" })
         console.log("session updated");
-        res.send('session updated');
+        res.send('session archived');
     } catch (err) {
         console.log(err);
     }

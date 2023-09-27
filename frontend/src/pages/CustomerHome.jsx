@@ -1,64 +1,80 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 
-import { Box, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
+import { 
+	Box,
+	Typography,
+	IconButton 
+} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 import CreateNewGroup from "../components/CreateNewGroup";
-import FetchGroups from "../components/FetchGroups";
 import GroupList from "../components/GroupList";
 import Navbar from "../components/Navbar";
-import styles from './CustomerHome.module.css'
 
-const Home = () => {
+const CustomerHome = () => {
 	const [showNewGroupForm, setShowNewGroupForm] = useState(false);
 	const [groups, setGroups] = useState([]);
-	// const [activeButton, setActiveButton] = useState(null);
+	const [inSession, setInSession] = useState([]);
 
-	const navigate = useNavigate();
+	const getGroups = async () => {
+		try {
+			// Make a GET request to your backend API endpoint for fetching groups
+			const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/${localStorage.getItem("customerToken")}`);
+			setGroups(response.data.groups);
+			setInSession(response.data.inSession)
+		  } catch (error) {
+			// Handle network errors or other exceptions
+			console.error('Error fetching groups data:', error);
+		  }
+	}
 
-	useEffect(() => {
-		FetchGroups()
-			.then((data) => {
-				if (data) {
-					setGroups(data);
-				} else {
-					console.error("Failed to fetch groups data.");
-				}
-			})
-			.catch((error) => {
-				console.error("Error fetching groups data:", error);
-			});
-	}, []);
-
+	const handleNewGroup = () => {
+		console.log('handling new group');
+		setShowNewGroupForm(false);
+		getGroups()
+	}
+	
 	const handleNewGroupBtn = () => {
 		setShowNewGroupForm((prev) => !prev);
 	}
+	
+	useEffect(() => {
+		getGroups()
+	}, []);
 
 	return (
 		<>
 			<Navbar />
 			<Box sx={{
-				width: '400px',
-				display: 'flex',
-				justifyContent: "space-between",
-				alignItems: 'center',
-				my: 4,
+				width: "90%",
+				maxWidth: '350px',
+				height: "calc(100% - 56px - 24px)",
+				maxHeight: '800px',
+				mt: '56px',
+				mb: '24px',
 			}}>
-				<Typography variant="header2">
-					Your group(s)
-				</Typography>
-				<IconButton size="small" onClick={handleNewGroupBtn}>
-					<AddIcon color="lime" fontSize="small" />
-				</IconButton>
+				<Box sx={{
+					display: 'flex',
+					justifyContent: "space-between",
+					alignItems: 'center',
+					my: 3,
+				}}>
+					<Typography variant="header2">
+						Your group(s)
+					</Typography>
+					<IconButton size="small" onClick={handleNewGroupBtn}>
+						<AddIcon color="lime" fontSize="small" />
+					</IconButton>
+				</Box>
+				{showNewGroupForm ? (
+					<CreateNewGroup handleNewGroup={handleNewGroup}/>
+				) : (
+					<GroupList groups={groups} inSession={inSession} />
+				)}
 			</Box>
-			{showNewGroupForm ? (
-				<CreateNewGroup />
-			) : (
-				<GroupList groups={groups} />
-			)}
 		</>
 	);
 }
 
-export default Home;
+export default CustomerHome;
