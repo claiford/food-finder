@@ -5,7 +5,7 @@ const passport = require("passport");
 router.post("/customer/signup", AuthController.createCustomer);
 router.post("/merchant/signup", AuthController.createMerchant);
 
-// IN PROGRESS: TESTING AUTH USING PASSPORTJS
+// Authentication routes
 router.post(
   "/auth/customer/login",
   passport.authenticate("local-customer"),
@@ -43,11 +43,10 @@ router.post(
         name: merchant.name,
       };
       // Set a cookie with user information
-      res.cookie("userData", JSON.stringify(merchantData), {
+      res.cookie("merchantData", JSON.stringify(merchantData), {
         maxAge: 30 * 60 * 1000,
         httpOnly: true,
       });
-      console.log("Merchant data: ", merchantData)
       res.json({ authenticated: true, merchantData });
     } else {
       res
@@ -56,11 +55,5 @@ router.post(
     }
   }
 );
-
-// router.post("/customer/login", AuthController.customerLogin);
-// router.post("/merchant/login", AuthController.merchantLogin);
-
-// TODO: NAVBAR FOR LOGOUT BTN
-// router.get("/logout", AuthController.Logout)
 
 module.exports = router;
