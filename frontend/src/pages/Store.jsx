@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, ImageList, ImageListItem, TextField, Button, IconButton, Typography, Card, CardMedia, Stack } from '@mui/material';
 import axios from 'axios';
 import _ from 'lodash';
 
+import {
+    Box,
+    ImageList,
+    ImageListItem,
+    TextField,
+    Button,
+    IconButton,
+    Typography,
+    Card,
+    CardMedia,
+    Stack
+} from '@mui/material';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
-import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 
 const images = require.context('../assets', true);
 
@@ -20,7 +30,6 @@ const Store = () => {
     // => complete   : ongoing session reached decision
     const [store, setStore] = useState({});
     const [isEdit, setIsEdit] = useState(false);
-    const [isAddPhoto, setIsAddPhoto] = useState(false);
     const [storeForm, setStoreForm] = useState({});
 
     /////////////////
@@ -29,10 +38,9 @@ const Store = () => {
     /////////////////
     /////////////////
 
-
     /////////////////
     // HANDLERS
-    const handleBack = () => {
+    const handlePageBack = () => {
         navigate("/merchant/home");
     }
 
@@ -83,7 +91,7 @@ const Store = () => {
                 promotion: storeForm.promotion,
                 photos: storeForm.photos,
             }
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/${store_id}/edit`, { storeInfo: storeInfo });
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/merchant/api/store/${store_id}/edit`, { storeInfo: storeInfo });
             setIsEdit(false);
             getStore();
         } catch (err) {
@@ -98,7 +106,7 @@ const Store = () => {
     const getStore = async () => {
         console.log("getting store")
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/${store_id}`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/api/store/${store_id}`);
             setStore(res.data);
             setStoreForm(res.data);
         } catch (err) {
@@ -113,18 +121,31 @@ const Store = () => {
     }, [])
 
     return (
-        <Box className="store-page" sx={{ width: '400px', textAlign: 'left' }}>
+        <Box className="group-page" sx={{
+            width: "90%",
+            maxWidth: '350px',
+            height: "100%",
+            maxHeight: '800px',
+        }}>
+
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
             }}>
-                <IconButton onClick={handleBack}>
+                <IconButton onClick={handlePageBack}>
                     <ArrowBackRoundedIcon color="lime" fontSize="large" />
                 </IconButton>
-                {/* <Typography variant="title1">
-                    PlatePal
-                </Typography> */}
+                <Typography
+                    variant="title1"
+                    component="div"
+                    sx={{
+                        m: 3,
+                        textAlign: 'center'
+                    }}
+                >
+                    Store
+                </Typography>
                 {!isEdit ? (
                     <IconButton onClick={handleEdit}>
                         <EditRoundedIcon color="lime" fontSize="large" />
@@ -145,14 +166,14 @@ const Store = () => {
             }}>
                 {/* NAME */}
                 <Stack spacing={1}>
-                    <Typography variant="header2">
+                    <Typography variant="header2" sx={{ pl: 1 }}>
                         Name
                     </Typography>
                     {!isEdit ? (
                         <Typography variant="body4" fontWeight={700}
                             sx={{
                                 backgroundColor: 'black',
-                                borderRadius: 1,
+                                borderRadius: 3,
                                 py: 2.3,
                                 px: 1.75,
                                 boxSizing: 'border-box'
@@ -172,14 +193,14 @@ const Store = () => {
 
                 {/* PROMOTION */}
                 <Stack spacing={1}>
-                    <Typography variant="header2">
+                    <Typography variant="header2" sx={{ pl: 1 }}>
                         Promotion
                     </Typography>
                     {!isEdit ? (
                         <Typography variant="body4" fontWeight={700}
                             sx={{
                                 backgroundColor: 'black',
-                                borderRadius: 1,
+                                borderRadius: 3,
                                 py: 2.3,
                                 px: 1.75,
                                 boxSizing: 'border-box'
@@ -200,22 +221,22 @@ const Store = () => {
                 {/* PHOTOS */}
                 <Box sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
                     alignItems: 'center',
                     minHeight: '40px',
                 }}>
-                    <Typography variant="header2">
+                    <Typography variant="header2" sx={{ pl: 1, mr: 3 }}>
                         Photos
                     </Typography>
                     {isEdit &&
                         <form onSubmit={handleAddPhoto}>
                             <Box sx={{
+                                width: "100%",
                                 display: 'flex',
                                 gap: 1,
                                 alignItems: 'center',
+                                justifyContent: 'flex-end',
                             }}>
                                 <TextField
-                                    // variant="standard"
                                     size="small"
                                     label="New Photo (url)"
                                     name="newPhoto"

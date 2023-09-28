@@ -1,7 +1,21 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { Box, Button, MobileStepper, Alert, Rating, Card, CardContent, Typography, ImageList, ImageListItem, Chip } from '@mui/material'
+import cryface from '../assets/cry-face.png'
+
+import {
+	Box,
+	Button,
+	MobileStepper,
+	Alert,
+	Rating,
+	Card,
+	CardContent,
+	Typography,
+	ImageList,
+	ImageListItem,
+	Chip
+} from '@mui/material'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
@@ -9,7 +23,6 @@ import FaceRetouchingNaturalRoundedIcon from '@mui/icons-material/FaceRetouching
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
-import cryface from '../assets/cry-face.png'
 const images = require.context('../assets', true);
 
 const Swiper = ({ candidates, handleCompleteSwiping }) => {
@@ -38,7 +51,7 @@ const Swiper = ({ candidates, handleCompleteSwiping }) => {
 
 	const partnerQuery = async (place_id) => {
 		try {
-			const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/candidate/partnersearch/${place_id}`);
+			const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/store/findpartner/${place_id}`);
 			const partner = res.data;
 			return partner ?? null;
 		} catch (err) {

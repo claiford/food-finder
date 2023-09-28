@@ -1,9 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Box, TextField, Button, IconButton, CircularProgress, MenuItem, Alert } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
+import {
+    Box,
+    TextField,
+    Button,
+    IconButton,
+    CircularProgress,
+    MenuItem,
+    Alert
+} from '@mui/material';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 const SessionNew = ({ refreshData }) => {
@@ -54,7 +62,7 @@ const SessionNew = ({ refreshData }) => {
             try {
                 setLoading(true);
                 setFormDisabled(true);
-                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/session/new`, form)
+                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/sessions/new`, { group_id: group_id, data: form })
                 setPostResponse({
                     status: res.status,
                     data: res.data

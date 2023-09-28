@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-import { Box, Stack, Avatar, Button, Typography, LinearProgress } from "@mui/material";
+import {
+    Box,
+    Stack,
+    Typography,
+    LinearProgress
+} from "@mui/material";
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
 
 const GroupList = ({ groups, inSession }) => {
@@ -39,7 +44,13 @@ const GroupList = ({ groups, inSession }) => {
     })
 
     return (
-        <Stack direction='column' spacing={2} sx={{ maxHeight: "calc(100% - 78px)", overflowY: 'scroll'}}>
+        <Stack
+            direction='column'
+            spacing={2}
+            sx={{
+                maxHeight: "calc(100% - 78px)", overflowY: 'scroll'
+            }}
+        >
             {groupLinks}
         </Stack>
     )

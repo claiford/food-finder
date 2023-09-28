@@ -27,11 +27,15 @@ async function index(req, res) {
 
 async function create(req, res) {
     const key = process.env.GMAPS_API_KEY;
+    const origin = req.body.data.location
+    const distanceCap = req.body.data.distance
+    const budgetCap = req.body.data.budget
+
     try {
         console.log("CREATING SESSION...")
 
         // GET ORIGIN LAT & LNG FOR NEARBY SEARCH
-        const queryOriginDetails = PLACE_DETAILS_URL + `?place_id=${req.body.location}&key=${key}`;
+        const queryOriginDetails = PLACE_DETAILS_URL + `?place_id=${origin}&key=${key}`;
         const resOriginDetails = await axios.get(queryOriginDetails);
         const originDetails = resOriginDetails.data.result;
         const originLat = originDetails.geometry.location.lat;
@@ -40,8 +44,8 @@ async function create(req, res) {
 
         // PERFORM NEARBY SEARCH QUERY
         const location = `${originLat}%2C${originLng}`;
-        const radius = req.body.distance * 1000;
-        const maxprice = req.body.budget;
+        const radius = distanceCap * 1000;
+        const maxprice = budgetCap;
         // pending: ignore keyword (cuisine) selection for now
         // const keyword = "mexican";
         const type = "restaurant";
@@ -57,6 +61,7 @@ async function create(req, res) {
             const queryPlaceDetails = PLACE_DETAILS_URL + `?place_id=${place.place_id}&key=${key}`;
             const resPlaceDetails = await axios.get(queryPlaceDetails);
             const placeDetails = resPlaceDetails.data.result;
+            console.log(`candidate ${i} place details ok`)
 
             // PERFORM ROUTE QUERY
             const fields = "routes.duration,routes.distanceMeters"
@@ -75,6 +80,7 @@ async function create(req, res) {
                 }
             })
             const computeRoutes = resComputeRoutes.data.routes[0]
+            console.log(`candidate ${i} routes ok`)
 
             // PERFORM PHOTO QUERY
             const placePhotos = []
@@ -86,6 +92,7 @@ async function create(req, res) {
                     placePhotos.push(photoUrl);
                 }
             }
+            console.log(`candidate ${i} photos ok`)
 
             // construct candidate object
             const candidate = {
@@ -108,7 +115,7 @@ async function create(req, res) {
         }
 
         // get voters from group members
-        const group = await Group.findById(req.params.group_id);
+        const group = await Group.findById(req.body.group_id);
         const voters = group.members.map((member_id) => {
             return {
                 voter: member_id,
@@ -118,7 +125,7 @@ async function create(req, res) {
         console.log(">> voters assigned")
 
         const newSession = await Session.create({
-            group: req.params.group_id,
+            group: req.body.group_id,
             status: "incomplete",
             origin: originDetails.name,
             candidates: candidates,
@@ -136,7 +143,7 @@ async function create(req, res) {
 async function handleVoting(req, res) {
     try {
         console.log("updating session");
-        const session = await Session.findById(req.params.sessionid)
+        const session = await Session.findById(req.params.session_id)
         for (const [place_id, vote] of Object.entries(req.body.votes)) {
             session.candidates.find((c) => c.place_id === place_id).votes += vote;
         }
@@ -168,7 +175,7 @@ async function handleVoting(req, res) {
 async function handleArchive(req, res) {
     try {
         console.log("archiving session");
-        await Session.findOneAndUpdate({ _id: req.params.sessionid }, { status: "archive" })
+        await Session.findOneAndUpdate({ _id: req.params.session_id }, { status: "archive" })
         console.log("session updated");
         res.send('session archived');
     } catch (err) {

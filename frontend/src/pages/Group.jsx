@@ -1,19 +1,26 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { AuthContext } from '../contexts/AuthContext';
-import GroupContext from './GroupContext';
+import GroupContext from '../contexts/GroupContext';
 import SessionNew from '../components/SessionNew';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
 import SessionArchive from '../components/SessionArchive';
+import GroupMembers from '../components/GroupMembers';
 
+import {
+    Box,
+    IconButton,
+    Tabs,
+    Tab,
+    Typography
+} from '@mui/material';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import GroupMembers from '../components/GroupMembers';
 
 const TabHeader = ({ text }) => {
     return (
@@ -54,6 +61,10 @@ const Group = () => {
         setTabValue(newValue);
         refreshData()
     };
+
+    const handlePageBack = () => {
+        navigate("/customer/home");
+    }
     /////////////////
     /////////////////
 
@@ -68,7 +79,7 @@ const Group = () => {
     const getGroup = async () => {
         console.log("getting group")
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}`);
             setGroup(res.data);
         } catch (err) {
             console.log(err);
@@ -77,7 +88,7 @@ const Group = () => {
 
     const getSessions = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/sessions/${group_id}`);
             const sessions = res.data;
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
             setArchivedSessions(sessions.filter((e) => e.status === "archive"));
@@ -93,7 +104,7 @@ const Group = () => {
     // for ongoingSession, status: "incomplete" ==> "complete"
     const handleVoting = async (votes) => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { voter: customerInfo._id, votes: votes })
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/session/${ongoingSession._id}/handle-voting`, { voter: customerInfo._id, votes: votes })
             console.log("handling complete");
             getSessions();
         } catch (err) {
@@ -103,7 +114,7 @@ const Group = () => {
 
     const handleArchive = async () => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-archive`)
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/session/${ongoingSession._id}/handle-archive`)
             console.log("handling archive");
             getSessions();
         } catch (err) {
@@ -125,19 +136,31 @@ const Group = () => {
                 maxWidth: '350px',
                 height: "100%",
                 maxHeight: '800px',
-                // mt: '56px',
-                mb: '24px',
             }}>
-                <Typography
-                    variant="title1"
-                    component="div"
-                    sx={{
-                        m: 3,
-                        textAlign: 'center'
-                    }}
-                >
-                    {group.name}
-                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}>
+                    <IconButton onClick={handlePageBack}>
+                        <ArrowBackRoundedIcon color="lime" fontSize="large" />
+                    </IconButton>
+                    <Typography
+                        variant="title1"
+                        component="div"
+                        sx={{
+                            m: 3,
+                            textAlign: 'center'
+                        }}
+                    >
+                        {group.name}
+                    </Typography>
+                    <IconButton disabled>
+                        {/* placeholder icon to occupy space */}
+                        <ArrowBackRoundedIcon color="darkgray" fontSize="large" />
+                    </IconButton>
+                </Box>
+
 
                 <Tabs
                     value={tabValue}

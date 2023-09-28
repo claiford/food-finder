@@ -1,12 +1,14 @@
 import { DateTime } from "luxon";
 
-import { Button, Box, Stack, Typography, LinearProgress, Rating } from '@mui/material'
-
+import {
+    Button,
+    Box,
+    Stack,
+    Typography,
+    Rating
+} from '@mui/material'
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
-import LensIcon from '@mui/icons-material/Lens';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
-import RectangleRoundedIcon from '@mui/icons-material/RectangleRounded';
 
 const CompletedSession = ({ ongoingSession, handleArchive }) => {
     return (
@@ -25,8 +27,8 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
                 precision={1}
                 value={ongoingSession.chosen.votes}
                 max={ongoingSession.voters.length}
-                icon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "success.main"}}></Box>}
-                emptyIcon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "error.main"}}></Box>}
+                icon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "success.main" }}></Box>}
+                emptyIcon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "error.main" }}></Box>}
             />
             <Typography variant="header3" sx={{ textAlign: 'center' }}>
                 {ongoingSession.chosen.name}
@@ -59,7 +61,7 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
                     <Typography variant="caption1">
                         {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ hour: 'numeric', minute: '2-digit' })}
                     </Typography>
-                    <Typography variant="caption1" fontwei>
+                    <Typography variant="caption1">
                         {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit' })}
                     </Typography>
                 </Stack>

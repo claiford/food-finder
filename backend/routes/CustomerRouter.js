@@ -1,38 +1,37 @@
 const express = require('express');
 const router = express.Router();
 
+const customersController = require('../controllers/CustomersController')
 const groupsController = require('../controllers/GroupsController');
 const sessionsController = require('../controllers/SessionsController');
 const storesController = require('../controllers/StoresController');
-const customersController = require('../controllers/CustomersController')
 
-router.post('/api/groups/new', groupsController.create);
-router.get('/api/groups/:customer_id', groupsController.index);
+// GET Customer
 router.get('/api/customers', customersController.getAllCustomers);
-router.post('/', groupsController.create);
 
+// GET Group
+router.get('/api/groups/:customer_id', groupsController.index);
+router.get('/api/group/:group_id', groupsController.show)
+
+// GET Session
+router.get('/api/sessions/:group_id', sessionsController.index)
+
+// GET Store
+router.get('/api/store/findpartner/:place_id', storesController.partnerQuery)
+
+// POST Group
+router.post('/api/groups/new', groupsController.create);
+
+// POST Session
+router.post('/api/sessions/new', sessionsController.create)
+
+// PATCH Group
 router.patch('/api/group/:group_id/add-members', groupsController.addMember);
-router.patch('/api/group/:group_id/remove-member', groupsController.removeMember);
+router.patch('/api/group/:group_id/removemember', groupsController.removeMember);
 
-
-// GET /customer/group/:group_id
-router.get('/group/:group_id', groupsController.show)
-// GET /customer/group/:group_id/sessions
-router.get('/group/:group_id/sessions', sessionsController.index)
-// POST /customer/group/:group_id/sessions/new
-router.post('/group/:group_id/session/new', sessionsController.create)
-
-// GET /customer/group/:group_id
-router.get('/group/:group_id', groupsController.show)
-
-// GET /customer/group/:group_id/sessions
-router.get('/group/:group_id/sessions', sessionsController.index)
-
-// GET 
-router.get('/api/candidate/partnersearch/:place_id', storesController.partnerQuery)
-
-// POST /customer/group/:group_id/sessions/new
-router.post('/group/:group_id/session/new', sessionsController.create)
+// PATCH Session
+router.patch("/api/session/:session_id/handle-voting", sessionsController.handleVoting);
+router.patch("/api/session/:session_id/handle-archive", sessionsController.handleArchive);
 
 module.exports = router;
 
