@@ -15,6 +15,11 @@ const MerchantHome = () => {
   const [showForm, setShowForm] = useState(false);
   const { merchantInfo } = useContext(AuthContext);
 
+  const handleNewStore = () => {
+    setShowForm(false);
+    getStores();
+  };
+	
   const toggleForm = () => {
     setShowForm((prev) => !prev);
   };
@@ -67,7 +72,7 @@ const MerchantHome = () => {
         </Box>
 
         {showForm ? (
-          <StoreNew toggleForm={toggleForm} />
+          <StoreNew handleNewStore={handleNewStore} />
         ) : (
           <StoreList stores={stores} />
         )}
