@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
   IconButton,
-  Box,
   Typography,
   Menu,
   MenuItem,
@@ -15,10 +13,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Fade from "@mui/material/Fade";
 import LogoNoText from "../assets/platepals-notext.png";
 
-const Navbar = ({customerInfo, handleLogout}) => {
+const Navbar = ({ customerInfo, handleLogout }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
 
   const handleMenuClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -71,14 +68,6 @@ const Navbar = ({customerInfo, handleLogout}) => {
               open={open}
               onClose={handleMenuClose}
               TransitionComponent={Fade}
-              // anchorOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
-              // transformOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
             >
               <MenuItem
                 onClick={handleLogout}
