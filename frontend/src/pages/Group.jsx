@@ -19,6 +19,7 @@ const TabHeader = ({text}) => {
             component="div"
             sx={{
                 m: 3,
+                textAlign: 'center',
             }}
         >   
             {text}
@@ -111,12 +112,20 @@ const Group = () => {
     }, [])
 
     return (
-        <Box className="group-page" sx={{ width: '400px', textAlign: 'center' }}>
+        <Box className="group-page" sx={{
+            width: "90%",
+            maxWidth: '350px',
+            height: "100%",
+            maxHeight: '800px',
+            // mt: '56px',
+            mb: '24px',
+        }}>
             <Typography
                 variant="title1"
                 component="div"
                 sx={{
                     m: 3,
+                    textAlign: 'center'
                 }}
             >
                 {group.name}
