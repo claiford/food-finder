@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from '../contexts/AuthContext';
+
 import {
   AppBar,
   Toolbar,
@@ -15,10 +18,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Fade from "@mui/material/Fade";
 import LogoNoText from "../assets/platepals-notext.png";
 
-const Navbar = ({customerInfo, handleLogout}) => {
+const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { customerInfo, handleLogout } = useContext(AuthContext);
 
   const handleMenuClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -50,7 +55,7 @@ const Navbar = ({customerInfo, handleLogout}) => {
             {!customerInfo ? (
               <Typography>Hello!</Typography>
             ) : (
-              <Typography sx={{ fontWeight: "bold" }}>
+              <Typography variant="body3" fontWeight={700}>
                 Hello, {customerInfo.name}!
               </Typography>
             )}

@@ -6,7 +6,7 @@ import { usePlacesWidget } from "react-google-autocomplete";
 
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
-const SessionNew = ({ handleNew }) => {
+const SessionNew = ({ refreshData }) => {
     const [loading, setLoading] = useState(false);
     const [formDisabled, setFormDisabled] = useState(false);
     const [formError, setFormError] = useState({})
@@ -105,83 +105,87 @@ const SessionNew = ({ handleNew }) => {
 
     return (
         <>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                alignItems: 'center',
+                borderRadius: 3,
+                m: 3,
+            }}>
                 <form onSubmit={handleSubmitForm}>
-                    <Box sx={{mx: 3}}>
-                        <TextField
-                            sx={{ mt: 2 }}
-                            fullWidth
-                            placeholder=""
-                            inputRef={autocompleteRef}
-                            label="Location"
-                            disabled={formDisabled}
-                            error={formError.location ? true : false}
-                            helperText={formError.location ? "Please select a valid location." : ""}
-                            onChange={(e) => handleInputChange(e, "location")}
-                        />
-                        <TextField
-                            select
-                            sx={{ my: 2 }}
-                            fullWidth
-                            label="Distance"
-                            defaultValue={""}
-                            disabled={formDisabled}
-                            error={formError.distance ? true : false}
-                            helperText={formError.distance ? "Please select an option." : ""}
-                            onChange={(e) => handleInputChange(e, "distance")}
-                        >
-                            <MenuItem value={""} sx={{display:'none'}}></MenuItem>
-                            <MenuItem sx={{color: "black"}} value={1}>{"< 1km"}</MenuItem>
-                            <MenuItem sx={{color: "black"}} value={2}>{"< 2km"}</MenuItem>
-                            <MenuItem sx={{color: "black"}} value={3}>{"< 3km"}</MenuItem>
-                        </TextField>
-                        <TextField
-                            select
-                            sx={{ mb: 2 }}
-                            fullWidth
-                            label="Budget"
-                            defaultValue={""}
-                            disabled={formDisabled}
-                            error={formError.budget ? true : false}
-                            helperText={formError.budget ? "Please select an option." : ""}
-                            onChange={(e) => handleInputChange(e, "budget")}
-                        >
-                            <MenuItem value={""} sx={{display:'none'}}></MenuItem>
-                            <MenuItem sx={{color: "black"}} value={4}>Any</MenuItem>
-                            <MenuItem sx={{color: "black"}} value={1}>$</MenuItem>
-                            <MenuItem sx={{color: "black"}} value={2}>$$</MenuItem>
-                            <MenuItem sx={{color: "black"}} value={3}>$$$</MenuItem>
-                        </TextField>
-                        <Button
-                            variant="contained"
-                            type="submit"
-                            disabled={formDisabled}
-                        >
-                            Create
-                            {loading && (
-                                <CircularProgress
-                                    color="lime"
-                                    size={24}
-                                    sx={{
-                                        position: 'absolute',
-                                    }}
-                                />
-                            )}
-                        </Button>
-                    </Box>
+                    <TextField
+                        sx={{ mt: 2 }}
+                        fullWidth
+                        placeholder=""
+                        inputRef={autocompleteRef}
+                        label="Location"
+                        disabled={formDisabled}
+                        error={formError.location ? true : false}
+                        helperText={formError.location ? "Please select a valid location." : ""}
+                        onChange={(e) => handleInputChange(e, "location")}
+                    />
+                    <TextField
+                        select
+                        sx={{ my: 2 }}
+                        fullWidth
+                        label="Distance"
+                        defaultValue={""}
+                        disabled={formDisabled}
+                        error={formError.distance ? true : false}
+                        helperText={formError.distance ? "Please select an option." : ""}
+                        onChange={(e) => handleInputChange(e, "distance")}
+                    >
+                        <MenuItem value={""} sx={{ display: 'none' }}></MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={1}>{"< 1km"}</MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={2}>{"< 2km"}</MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={3}>{"< 3km"}</MenuItem>
+                    </TextField>
+                    <TextField
+                        select
+                        sx={{ mb: 2 }}
+                        fullWidth
+                        label="Budget"
+                        defaultValue={""}
+                        disabled={formDisabled}
+                        error={formError.budget ? true : false}
+                        helperText={formError.budget ? "Please select an option." : ""}
+                        onChange={(e) => handleInputChange(e, "budget")}
+                    >
+                        <MenuItem value={""} sx={{ display: 'none' }}></MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={4}>Any</MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={1}>$</MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={2}>$$</MenuItem>
+                        <MenuItem sx={{ color: "black" }} value={3}>$$$</MenuItem>
+                    </TextField>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        type="submit"
+                        disabled={formDisabled}
+                    >
+                        Create
+                        {loading && (
+                            <CircularProgress
+                                color="lime"
+                                size={24}
+                                sx={{
+                                    position: 'absolute',
+                                }}
+                            />
+                        )}
+                    </Button>
                 </form>
                 {postResponse.status === 200 &&
                     <>
-                        <Alert severity="success" sx={{mt: 4}}>New session generated</Alert>
-                        <IconButton onClick={handleNew} color="primary">
+                        <Alert severity="success" sx={{ mt: 3 }}>New session generated</Alert>
+                        <IconButton onClick={refreshData} color="primary">
                             <ArrowBackRoundedIcon />
                         </IconButton>
                     </>
                 }
                 {postResponse.status === 500 &&
-                    <>
-                        <Alert severity="error" sx={{mt: 4}}>Server error, please try again.</Alert>
-                    </>
+                    <Alert severity="error" sx={{ mt: 3 }}>Server error, please try again.</Alert>
                 }
             </Box>
         </>
