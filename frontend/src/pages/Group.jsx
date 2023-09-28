@@ -67,7 +67,6 @@ const Group = () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`);
             const sessions = res.data;
-
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
             setArchivedSessions(sessions.filter((e) => e.status === "archive"));
         } catch (err) {
@@ -120,7 +119,7 @@ const Group = () => {
                     m: 3,
                 }}
             >
-                {group.groupName}
+                {group.name}
             </Typography>
 
             <Tabs
@@ -175,7 +174,7 @@ const Group = () => {
             {tabValue === 2 &&
                 <>
                     <TabHeader text="Members"></TabHeader>
-                    <GroupMembers members={group.memberIds} />
+                    <GroupMembers members={group.members} />
                 </>
             }
 

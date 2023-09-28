@@ -18,6 +18,12 @@ import MerchantHome from "./pages/MerchantHome";
 const theme = createTheme({
   typography: {
     fontFamily: "Lato",
+    appname: {
+      fontFamily: "Caveat Brush",
+      fontWeight: 700,
+      fontSize: 30,
+      color: "#242424",
+    },
     title1: {
       fontFamily: "Arvo",
       fontWeight: 700,

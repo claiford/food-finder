@@ -8,6 +8,7 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 const SessionNew = ({ handleNew }) => {
     const [loading, setLoading] = useState(false);
+    const [formDisabled, setFormDisabled] = useState(false);
     const [formError, setFormError] = useState({})
     const [form, setForm] = useState({
         location: null,
@@ -15,7 +16,6 @@ const SessionNew = ({ handleNew }) => {
         budget: null,
     })
     const [postResponse, setPostResponse] = useState({})
-    const navigate = useNavigate();
     const { group_id } = useParams();
 
     const handleInputChange = (e, key) => {
@@ -53,16 +53,19 @@ const SessionNew = ({ handleNew }) => {
         if (form.location && form.distance && form.budget) {
             try {
                 setLoading(true);
+                setFormDisabled(true);
                 const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/session/new`, form)
                 setPostResponse({
                     status: res.status,
                     data: res.data
                 })
+                setLoading(false);
             } catch (err) {
                 setPostResponse({
                     status: err.response.status
                 })
                 setLoading(false);
+                setFormDisabled(false);
             }
         } else {
             for (const field of Object.keys(form)) {
@@ -111,7 +114,7 @@ const SessionNew = ({ handleNew }) => {
                             placeholder=""
                             inputRef={autocompleteRef}
                             label="Location"
-                            disabled={loading}
+                            disabled={formDisabled}
                             error={formError.location ? true : false}
                             helperText={formError.location ? "Please select a valid location." : ""}
                             onChange={(e) => handleInputChange(e, "location")}
@@ -122,12 +125,12 @@ const SessionNew = ({ handleNew }) => {
                             fullWidth
                             label="Distance"
                             defaultValue={""}
-                            disabled={loading}
+                            disabled={formDisabled}
                             error={formError.distance ? true : false}
                             helperText={formError.distance ? "Please select an option." : ""}
                             onChange={(e) => handleInputChange(e, "distance")}
                         >
-                            <MenuItem value={""} disabled></MenuItem>
+                            <MenuItem value={""} sx={{display:'none'}}></MenuItem>
                             <MenuItem sx={{color: "black"}} value={1}>{"< 1km"}</MenuItem>
                             <MenuItem sx={{color: "black"}} value={2}>{"< 2km"}</MenuItem>
                             <MenuItem sx={{color: "black"}} value={3}>{"< 3km"}</MenuItem>
@@ -138,12 +141,12 @@ const SessionNew = ({ handleNew }) => {
                             fullWidth
                             label="Budget"
                             defaultValue={""}
-                            disabled={loading}
+                            disabled={formDisabled}
                             error={formError.budget ? true : false}
                             helperText={formError.budget ? "Please select an option." : ""}
                             onChange={(e) => handleInputChange(e, "budget")}
                         >
-                            <MenuItem sx={{color: "black"}} value={""} disabled></MenuItem>
+                            <MenuItem value={""} sx={{display:'none'}}></MenuItem>
                             <MenuItem sx={{color: "black"}} value={4}>Any</MenuItem>
                             <MenuItem sx={{color: "black"}} value={1}>$</MenuItem>
                             <MenuItem sx={{color: "black"}} value={2}>$$</MenuItem>
@@ -152,7 +155,7 @@ const SessionNew = ({ handleNew }) => {
                         <Button
                             variant="contained"
                             type="submit"
-                            disabled={loading}
+                            disabled={formDisabled}
                         >
                             Create
                             {loading && (
