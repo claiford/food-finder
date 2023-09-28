@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import _ from 'lodash';
+
 import {
     Box,
     TextField,
@@ -12,7 +14,7 @@ import {
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 
-const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelected }) => {
+const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, handleRemoveSelected }) => {
     const [customers, setCustomers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchInput, setSearchInput] = useState("");
@@ -62,11 +64,12 @@ const CustomerSelect = ({ selectedMembers, handleAddSelected, handleRemoveSelect
         )
     })
 
-    // Filter: not current user, not already added members, and based on search input
+    // Filter: not current user, not existing members, not already selected members, and based on search input
     const filteredCustomers = customers
         .filter((customer) =>
             customer._id !== localStorage.getItem("customerToken") &&
-            !selectedMembers.includes(customer) &&
+            !existingMembers.some((existing) => _.isEqual(existing, customer)) &&
+            !selectedMembers.some((selected) => _.isEqual(selected, customer)) &&
             customer.name.toLowerCase().includes(searchInput.toLowerCase()))
         .map((customer, idx) => {
             const [initialA, initialB] = nameToInitials(customer.name);

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from 'axios';
+
+import CustomerSelect from "./CustomerSelect";
+
 import {
 	Stack,
 	Alert,
 	TextField,
 	Button,
 } from "@mui/material";
-
-import CustomerSelect from "./CustomerSelect";
 
 const CreateNewGroup = ({ handleNewGroup }) => {
 	const [error, setError] = useState(null);
@@ -77,6 +78,7 @@ const CreateNewGroup = ({ handleNewGroup }) => {
 			/>
 
 			<CustomerSelect
+				existingMembers={[]}
 				selectedMembers={selectedMembers}
 				handleAddSelected={handleAddSelected}
 				handleRemoveSelected={handleRemoveSelected}

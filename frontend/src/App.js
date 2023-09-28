@@ -31,7 +31,7 @@ const theme = createTheme({
       fontSize: 40,
       color: "#C0EC6B",
     },
-    title2: {
+    header3: {
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 25,
@@ -74,6 +74,24 @@ const theme = createTheme({
       fontFamily: "Lato",
       fontSize: 15,
       color: "#C0EC6B",
+    },
+    caption1: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#000000",
+    },
+    caption2: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#FFFFFF",
+    },
+    caption3: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#242424",
     },
   },
   palette: {

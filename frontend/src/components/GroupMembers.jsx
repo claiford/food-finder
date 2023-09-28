@@ -1,16 +1,26 @@
-import { Avatar, Box, Typography, Button } from "@mui/material";
-import { useState } from "react";
-import AddMembersForm from "./AddMembersForm";
+import { useState, useContext } from "react";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+
+import GroupContext from '../pages/GroupContext';
 import CustomerSelect from "./CustomerSelect";
 
+import { Avatar, Box, Stack, Typography, Button, IconButton, Alert } from "@mui/material";
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+
+
 const GroupMembers = ({ members }) => {
-    const [isEdit, setIsEdit] = useState(false);
-    const [groupMembers, setGroupMembers] = useState([]);
+    const [error, setError] = useState(null);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [isAddMembers, setIsAddMembers] = useState(false);
     const [selectedMembers, setSelectedMembers] = useState([]);
 
     const { group_id } = useParams();
+    const { refreshData } = useContext(GroupContext)
+
+    const toggleAddMembers = () => {
+        setIsAddMembers((prev) => !prev);
+    };
 
     const handleAddSelected = (newMember) => {
         setSelectedMembers((prevMembers) => {
@@ -19,6 +29,7 @@ const GroupMembers = ({ members }) => {
                 newMember
             ]
         });
+        setShowErrorMessage(false);
     };
 
     const handleRemoveSelected = (idx) => {
@@ -27,33 +38,33 @@ const GroupMembers = ({ members }) => {
         });
     };
 
-
-    const toggleAddMembersForm = () => {
-        setIsEdit(!isEdit);
-    };
-
-    const handleRemoveMember = async (userId) => {
+    const handleRemoveMember = async (member) => {
         try {
-            const response = await axios.delete(
-                `${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/remove-member/${userId}`,
-                {
-                    data: { user: localStorage.getItem("customerToken") },
-                }
-            );
-
-            if (response.status === 200) {
-                const updatedMembers = groupMembers.filter((member) => member._id !== userId);
-                setGroupMembers(updatedMembers);
-            } else {
-                console.error("Failed to remove member from the group");
-            }
+            const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/remove-member`, { member: member });
+            refreshData();
         } catch (error) {
             console.error("Error removing member from the group:", error);
         }
     };
 
-    const handleAddMember = (newMember) => {
-        console.log('addmember')
+    const handleAddMembers = async () => {
+        if (selectedMembers.length === 0) {
+            setError("At least 1 user required.");
+            setShowErrorMessage(true);
+        } else {
+            try {
+                // Send a POST request to create the group
+                const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/add-members`, { members: selectedMembers });
+                // Clear the group name and group selectedMembers
+                setSelectedMembers([]);
+
+                setIsAddMembers(false);
+                refreshData();
+            } catch (error) {
+                setError("Error adding members.");
+                setShowErrorMessage(true);
+            }
+        }
     };
 
     const memberList = members.map((member, i) => {
@@ -65,9 +76,10 @@ const GroupMembers = ({ members }) => {
             <Box
                 key={i}
                 sx={{
+                    width: "100%",
                     display: "flex",
                     alignItems: "center",
-                    m: 2,
+                    justifyContent: "space-between"
                 }}
             >
                 <Avatar
@@ -85,33 +97,77 @@ const GroupMembers = ({ members }) => {
                 <Typography variant="body2" fontWeight={700}>
                     {member.name}
                 </Typography>
-                {isEdit ? <Button onClick={() => handleRemoveMember(member._id)}>Remove</Button> : null}
+
+                <IconButton onClick={() => handleRemoveMember(member)} sx={{ ml: 'auto', '&:hover': { color: 'error.main' } }}>
+                    <CancelRoundedIcon />
+                </IconButton>
             </Box>
         );
     });
 
     return (
-        <>
-            {memberList}
-            {isEdit ? (
-                <>
-                    {/* <AddMembersForm onAddMember={handleAddMember} /> */}
-                    <CustomerSelect
-                        selectedMembers={selectedMembers}
-                        handleAddSelected={handleAddSelected}
-                        handleRemoveSelected={handleRemoveSelected}
-                    />
-                </>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            m: 3,
+        }}>
+            {isAddMembers ? (
+                <Stack direction={"row"} spacing={2}>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="darkgray"
+                        onClick={toggleAddMembers}
+                        sx={{ backgroundColor: "darkgray.main", boxShadow: "none" }}
+                    >
+                        Cancel
+                    </Button>
+                    {/* <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={handleAddMembers}
+                    >
+                        Save
+                    </Button> */}
+                    {showErrorMessage ? (
+                        <Alert severity="error" sx={{width: "100%"}}>
+                            {/* {error} */}
+                        </Alert>
+                    ) : (
+                        <>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                onClick={handleAddMembers}
+                            >
+                                Save
+                            </Button>
+                        </>
+                    )}
+                </Stack>
+
             ) : (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={toggleAddMembersForm}
-                >
-                    Edit Members
-                </Button>
+                <>
+                    {memberList}
+                    <Button
+                        variant="contained"
+                        onClick={toggleAddMembers}
+                    >
+                        Add Members
+                    </Button>
+                </>
             )}
-        </>
+
+            {isAddMembers &&
+                <CustomerSelect
+                    existingMembers={members}
+                    selectedMembers={selectedMembers}
+                    handleAddSelected={handleAddSelected}
+                    handleRemoveSelected={handleRemoveSelected}
+                />
+            }
+        </Box>
     );
 };
 
