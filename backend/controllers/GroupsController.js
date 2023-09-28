@@ -9,11 +9,10 @@ module.exports = {
 	show,
 	addMember,
 	removeMember,
+	delete: deleteGroup,
 };
 
 async function index(req, res) {
-	console.log("groups controller index");
-
 	try {
 		const customer = await Customer
 			.findById(req.params.customer_id)
@@ -121,6 +120,25 @@ async function show(req, res) {
 	try {
 		const group = await Group.findById(req.params.group_id).populate("members");
 		res.json(group);
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function deleteGroup(req, res) {
+	try {
+		console.log("deleting group");
+		const group = await Group.findById(req.params.group_id).populate('members');
+		group.members.forEach(async (member) => {
+			member.groups = member.groups.filter((group) => 
+				group.toString() !== req.params.group_id
+			)
+			await member.save();
+		})
+
+		await Group.findByIdAndDelete(req.params.group_id);
+
+		res.send("Group deleted.")
 	} catch (err) {
 		console.log(err);
 	}

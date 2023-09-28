@@ -32,6 +32,15 @@ const CustomerHome = () => {
     }
   };
 
+  const handleDeleteGroup = async (group_id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/${group_id}/`);
+      getGroups();
+    } catch (error) {
+      console.error("Error deleting group:", error);
+    }
+  }
+
   const handleNewGroup = () => {
     setShowNewGroupForm(false);
     getGroups();
@@ -78,7 +87,7 @@ const CustomerHome = () => {
         {showNewGroupForm ? (
           <CreateNewGroup handleNewGroup={handleNewGroup} />
         ) : (
-          <GroupList groups={groups} inSession={inSession} />
+          <GroupList groups={groups} inSession={inSession} handleDeleteGroup={handleDeleteGroup} />
         )}
       </Box>
     </>
