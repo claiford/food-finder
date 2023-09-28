@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
-import { Box, Modal, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
 import axios from "axios";
-import AddIcon from '@mui/icons-material/Add';
+
+import Navbar from "../components/Navbar";
 import StoreNew from "../components/StoreNew";
 import StoreList from "../components/StoreList";
 
-const MerchantHome = () => {
-  const [stores, setStores] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+import { Box, Modal, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-  const handleForm = () => {
-    setShowForm((prev) => !prev);
-  };
+const MerchantHome = () => {
+	const [stores, setStores] = useState([]);
+	const [showForm, setShowForm] = useState(false);
+
+	const toggleForm = () => {
+		setShowForm((prev) => !prev);
+	};
 
 	const getStores = async () => {
 		try {
@@ -24,32 +28,46 @@ const MerchantHome = () => {
 		}
 	}
 
-  useEffect(() => {
-    getStores();
-  }, []);
+	useEffect(() => {
+		getStores();
+	}, []);
 
-  return (
-    <>
-      <Typography variant="title1">Hi, {"[merchant]"}</Typography>
+	return (
+		<>
+			<Navbar />
+			<Box
+				sx={{
+					width: "90%",
+					maxWidth: "350px",
+					height: "calc(100% - 56px - 24px)",
+					maxHeight: "800px",
+					mt: "56px",
+					mb: "24px",
+				}}
+			>
+				<Box sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+					my: 3,
+				}}>
+					<Typography variant="header2">{"Your restaurant(s)"}</Typography>
+					<IconButton size="small" onClick={toggleForm}>
+						{showForm ? (
+							<CloseRoundedIcon color="lime" fontSize="small" />
+						) : (
+							<AddIcon color="lime" fontSize="small" />
+						)}
+					</IconButton>
+				</Box>
 
-      {showForm && <StoreNew handleForm={handleForm} />}
+				{showForm ? (
+					<StoreNew toggleForm={toggleForm} />
+				) : (
+					<StoreList stores={stores} />
+				)}
 
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          my: 4,
-        }}
-      >
-        <Typography variant="header2">{"Your restaurant(s)"}</Typography>
-        <IconButton size="small" onClick={handleForm}>
-          <AddIcon color="lime" fontSize="small" />
-        </IconButton>
-      </Box>
-
-			<StoreList stores={stores} />
+			</Box>
 		</>
 	);
 }
