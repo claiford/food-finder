@@ -22,7 +22,7 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const AuthRouter = require('./routes/AuthRouter');
+const AuthRouter = require('./routes/authRouter2');
 const CustomerRouter = require('./routes/CustomerRouter');
 const MerchantRouter = require('./routes/MerchantRouter');
 
