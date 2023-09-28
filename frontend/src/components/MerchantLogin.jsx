@@ -1,3 +1,5 @@
+// MerchantLogin.jsx
+
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -77,12 +79,12 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
     <>
       <Container
         maxWidth="xs"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        // sx={{
+        //   display: "flex",
+        //   flexDirection: "column",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        // }}
       >
         <form onSubmit={handleSubmitForm}>
           <TextField
