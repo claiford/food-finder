@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from '../contexts/AuthContext';
+
 import {
   AppBar,
   Toolbar,
@@ -8,7 +11,7 @@ import {
   Typography,
   Menu,
   MenuItem,
-  CardMedia
+  CardMedia,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -17,8 +20,10 @@ import LogoNoText from "../assets/platepals-notext.png";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { customerInfo, handleLogout } = useContext(AuthContext);
 
   const handleMenuClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -28,30 +33,32 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    console.log("Logging out now.");
-    if (localStorage.getItem("customerToken")) {
-      localStorage.removeItem("customerToken");
-    }
-    if (localStorage.getItem("merchantToken")) {
-      localStorage.clear("merchantToken");
-    }
-    navigate("/");
-  };
   return (
     <>
       <div>
         <AppBar position="fixed">
           <Toolbar>
-            <CardMedia component="img" alt="logo-notext" image={LogoNoText} sx={{
-              backgroundColor: "transparent",
-              height: "50px",
-              width: "50px",
-              mr: 1,
-            }} />
+            <CardMedia
+              component="img"
+              alt="logo-notext"
+              image={LogoNoText}
+              sx={{
+                backgroundColor: "transparent",
+                height: "50px",
+                width: "50px",
+                mr: 1,
+              }}
+            />
             <Typography variant="appname" sx={{ flexGrow: 1 }}>
               PlatePals
             </Typography>
+            {!customerInfo ? (
+              <Typography>Hello!</Typography>
+            ) : (
+              <Typography variant="body3" fontWeight={700}>
+                Hello, {customerInfo.name}!
+              </Typography>
+            )}
             <IconButton
               color="inherit"
               aria-label="open menu"
@@ -69,19 +76,19 @@ const Navbar = () => {
               open={open}
               onClose={handleMenuClose}
               TransitionComponent={Fade}
-            // anchorOrigin={{
-            //   vertical: "top",
-            //   horizontal: "right",
-            // }}
-            // transformOrigin={{
-            //   vertical: "top",
-            //   horizontal: "right",
-            // }}
+              // anchorOrigin={{
+              //   vertical: "top",
+              //   horizontal: "right",
+              // }}
+              // transformOrigin={{
+              //   vertical: "top",
+              //   horizontal: "right",
+              // }}
             >
               <MenuItem
                 onClick={handleLogout}
                 sx={{
-                  color: "white"
+                  color: "white",
                 }}
               >
                 <LogoutIcon sx={{ color: "white" }} />

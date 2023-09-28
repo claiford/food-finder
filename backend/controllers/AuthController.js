@@ -19,7 +19,7 @@ async function CustomerSignUp(req, res) {
     // Check if the email already exists in db
     const existingUser = await Customer.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists." });
+      return res.status(400).json({ message: "Email already exists. Please log in to proceed." });
     }
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +48,7 @@ async function MerchantSignUp(req, res) {
     // Check if the email already exists in db
     const existingUser = await Merchant.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists." });
+      return res.status(400).json({ message: "Email already exists. Please log in to proceed." });
     }
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -97,7 +97,7 @@ async function CustomerLogin(req, res) {
     console.log("req.session.user => ", req.session.user);
 
     // After successful authentication
-    res.cookie("user", JSON.stringify(req.session.user)); // Set a "user" cookie with the session data
+    res.cookie("user", JSON.stringify(req.session.user)); 
     res.status(200).json({
       message: "Login successful",
       customer: {

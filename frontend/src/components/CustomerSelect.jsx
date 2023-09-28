@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from 'axios';
 import _ from 'lodash';
+
+import { AuthContext } from '../contexts/AuthContext';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 
 import {
     Box,
@@ -11,13 +15,15 @@ import {
     Avatar,
     IconButton,
 } from "@mui/material";
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+
+
 
 const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, handleRemoveSelected }) => {
     const [customers, setCustomers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchInput, setSearchInput] = useState("");
+
+    const { customerInfo } = useContext(AuthContext);
 
     const getCustomers = async () => {
         try {
@@ -67,7 +73,7 @@ const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, h
     // Filter: not current user, not existing members, not already selected members, and based on search input
     const filteredCustomers = customers
         .filter((customer) =>
-            customer._id !== localStorage.getItem("customerToken") &&
+            customer._id !== customerInfo._id &&
             !existingMembers.some((existing) => _.isEqual(existing, customer)) &&
             !selectedMembers.some((selected) => _.isEqual(selected, customer)) &&
             customer.name.toLowerCase().includes(searchInput.toLowerCase()))

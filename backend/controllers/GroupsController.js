@@ -1,20 +1,23 @@
 const Customer = require("../models/CustomerModel");
 const Group = require("../models/GroupModel");
-const Session = require("../models/SessionModel")
-const mongoose = require('mongoose');
-
+const Session = require("../models/SessionModel");
+const mongoose = require("mongoose");
 
 module.exports = {
 	index,
 	create,
 	show,
 	addMember,
-	removeMember
+	removeMember,
 };
 
 async function index(req, res) {
+	console.log("groups controller index");
+
 	try {
-		const customer = await Customer.findById(req.params.customer_id).populate("groups");
+		const customer = await Customer
+			.findById(req.params.customer_id)
+			.populate("groups");
 
 		// const inSession = customer.groups.filter(async (group) => {
 		// const session = await Session.findOne({ group: group._id, status: "incomplete" });
@@ -24,25 +27,28 @@ async function index(req, res) {
 
 		const inSession = [];
 		for (const group of customer.groups) {
-			const session = await Session.findOne({ group: group._id, status: "incomplete" });
+			const session = await Session.findOne({
+				group: group._id,
+				status: "incomplete",
+			});
 			if (session) inSession.push(group);
 		}
 
 		res.json({
 			groups: customer.groups,
-			inSession: inSession
+			inSession: inSession,
 		});
 	} catch (error) {
-		console.error('Error fetching groups', error);
-		res.status(500).json({ error: 'Internal server error' });
+		console.error("Error fetching groups", error);
+		res.status(500).json({ error: "Internal server error" });
 	}
 }
 
 // Create a new group
 async function create(req, res) {
 	try {
-		const user = await Customer.findById(req.body.user);
-		const newGroupData = req.body.data;
+		const user = await Customer.findById(req.body.user_id);
+		const newGroupData = req.body.new_group;
 		newGroupData.members.push(user);
 
 		const newGroup = await Group.create(newGroupData); //creates doc in mongodb
@@ -51,12 +57,12 @@ async function create(req, res) {
 			const member = await Customer.findById(m._id);
 			member.groups.push(newGroup._id);
 			await member.save();
-		})
-		res.send('Group created successfully');
+		});
+		res.send("Group created successfully");
 	} catch (error) {
-		console.log(error + 'An error occurred while creating the group');
+		console.log(error + "An error occurred while creating the group");
 	}
-};
+}
 
 async function addMember(req, res) {
 	try {
@@ -80,8 +86,8 @@ async function addMember(req, res) {
 
 		res.send("Members added.");
 	} catch (error) {
-		console.error('Error adding members to the group', error);
-		res.status(500).json({ error: 'Internal server error' });
+		console.error("Error adding members to the group", error);
+		res.status(500).json({ error: "Internal server error" });
 	}
 }
 
@@ -89,9 +95,8 @@ async function removeMember(req, res) {
 	try {
 		// Find the group
 		const group = await Group.findById(req.params.group_id);
-		console.log(req.body.member._id);
 		// Remove user from the group's members array
-		group.members = group.members.filter((member) => member.toString() !== req.body.member._id);
+		group.members = group.members.filter((memberId) => memberId.toString() !== req.body.member._id);
 		await group.save();
 
 		// Find the user
@@ -107,8 +112,8 @@ async function removeMember(req, res) {
 		console.log(`Member ${user.name} removed from group ${group.name}.`)
 		res.send("Member removed.");
 	} catch (error) {
-		console.error('Error removing member from the group', error);
-		res.status(500).json({ error: 'Internal server error' });
+		console.error("Error removing member from the group", error);
+		res.status(500).json({ error: "Internal server error" });
 	}
 }
 
@@ -117,6 +122,6 @@ async function show(req, res) {
 		const group = await Group.findById(req.params.group_id).populate("members");
 		res.json(group);
 	} catch (err) {
-		console.log(err)
+		console.log(err);
 	}
 }

@@ -1,3 +1,5 @@
+// Merchant Signup
+
 import React, { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button, Stack } from "@mui/material";
@@ -35,12 +37,19 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           password: "",
         });
       } else {
-        const data = response.data;
-        setError(data.message || "Sign up failed.");
+        const errorMessage = response.data.message;
+        setError(errorMessage || "Sign up failed.");
         setShowErrorMessage(true);
       }
     } catch (err) {
-      console.log(err);
+      // handling server side error
+      if (err.response && merchantInfo.email) {
+        const errorMessage = err.response.data.message;
+        setError(errorMessage || "Server error.");
+        setShowErrorMessage(true);
+      } else {
+        console.log(err)
+      }
     }
     setTimeout(() => {
       setError(null);
@@ -103,11 +112,9 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         )}
       </form>
       {showSuccessBar && (
-        <Stack sx={{ width: "80%" }}>
           <Alert severity="success">
             <span>{success}</span>
           </Alert>
-        </Stack>
       )}
     </Container>
   );
