@@ -30,8 +30,11 @@ router.patch('/api/group/:group_id/add-members', groupsController.addMember);
 router.patch('/api/group/:group_id/removemember', groupsController.removeMember);
 
 // PATCH Session
-router.patch("/api/session/:session_id/handle-voting", sessionsController.handleVoting);
-router.patch("/api/session/:session_id/handle-archive", sessionsController.handleArchive);
+router.patch('/api/session/:session_id/handle-voting', sessionsController.handleVoting);
+router.patch('/api/session/:session_id/handle-archive', sessionsController.handleArchive);
+
+// DELETE Group
+router.delete('/api/groups/:group_id', groupsController.delete)
 
 module.exports = router;
 
