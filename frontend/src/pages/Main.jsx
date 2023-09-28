@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
-import { Button, Grid, Card, CardMedia, CardActions } from "@mui/material";
+
 import styles from "./Main.module.css";
 import Logo from "../assets/platepals-logo.png";
+
+import {
+  Button,
+  Grid,
+  Card,
+  CardMedia,
+  CardActions
+} from "@mui/material";
 
 export const CURRENT_USER = {
   CUSTOMER: "Customer",
@@ -36,15 +44,16 @@ const Main = () => {
 
   return (
     <div className={styles.mainBody}>
-      <Card elevation={0} style={{ 
+      <Card elevation={0} style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "transparent", border: "none", boxShadow: "none" }}>
+        backgroundColor: "transparent", border: "none", boxShadow: "none"
+      }}>
         <Link to="/">
           <CardMedia component="img" alt="plate" image={Logo} sx={{
-            backgroundColor: "transparent", 
+            backgroundColor: "transparent",
             height: "350px",
             width: "350px"
           }} />
@@ -73,7 +82,7 @@ const Main = () => {
             Customer
           </Button>
           <Button
-            
+
             onClick={handleMerchantBtn}
             sx={{
               ...buttonStyles,
@@ -89,7 +98,7 @@ const Main = () => {
       </Card>
       <Grid>
         <Grid item xs={6}>
-          <Outlet activeButton={activeButton}/>
+          <Outlet activeButton={activeButton} />
         </Grid>
       </Grid>
     </div>

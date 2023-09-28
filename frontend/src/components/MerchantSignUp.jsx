@@ -1,8 +1,12 @@
-// Merchant Signup
-
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button } from "@mui/material";
+
+import {
+  Alert,
+  Container,
+  TextField,
+  Button
+} from "@mui/material";
 
 const MerchantSignUp = () => {
   const [error, setError] = useState(null);

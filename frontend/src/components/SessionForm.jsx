@@ -1,9 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Modal, TextField, Button, IconButton, CircularProgress, MenuItem, FormControl, Alert } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
+import {
+    Box,
+    TextField,
+    Button,
+    IconButton,
+    CircularProgress,
+    MenuItem,
+    FormControl,
+    Alert
+} from '@mui/material';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 const SessionForm = () => {

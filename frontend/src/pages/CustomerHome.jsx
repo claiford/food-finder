@@ -33,7 +33,6 @@ const CustomerHome = () => {
   };
 
   const handleNewGroup = () => {
-    console.log("handling new group");
     setShowNewGroupForm(false);
     getGroups();
   };

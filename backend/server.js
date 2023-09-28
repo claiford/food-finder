@@ -14,6 +14,7 @@ const socketsManager = require("./listeners/socketsManager");
 require("dotenv").config(); // process config vars => procces.env.VAR
 require("./config/database"); // connect to the database with AFTER the config vars are processed
 const app = express();
+const PORT = process.env.PORT || 3030;
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -53,30 +54,14 @@ app.use("/", AuthRouter);
 app.use("/customer", CustomerRouter);
 app.use("/merchant", MerchantRouter);
 
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//     next(createError(404));
-// });
-
-// error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-
-const sessionsController = require("./controllers/SessionsController");
-app.put("/session/:sessionid/handle-voting", sessionsController.handleVoting);
-app.put("/session/:sessionid/handle-archive", sessionsController.handleArchive);
+app.get('/serverstatus', function(req, res) {
+  res.send("Server is running.");
+})
 
 ///// SOCKET
 io.on("connection", socketsManager.onConnect);
 ///// SOCKET
 
-httpServer.listen(process.env.PORT, () => {
-  console.log(`Server is listening on port ${process.env.PORT}`);
+httpServer.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });

@@ -1,10 +1,18 @@
 import { useState, useEffect, useContext } from 'react'
 import { DateTime } from "luxon";
 import { socket } from '../socket';
+
 import { AuthContext } from '../contexts/AuthContext';
 import Swiper from './Swiper';
 
-import { Button, Box, Stack, Modal, Typography, LinearProgress } from '@mui/material';
+import {
+    Button,
+    Box,
+    Stack,
+    Modal,
+    Typography,
+    LinearProgress
+} from '@mui/material';
 
 const modalStyle = {
     position: 'absolute',
@@ -101,7 +109,7 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                     </Button>
                 )}
 
-                <Typography variant="header1" sx={{ textAlign: 'center'}}>
+                <Typography variant="header1" sx={{ textAlign: 'center' }}>
                     {ongoingSession.origin}
                 </Typography>
                 <Typography variant="header1" fontWeight={700}>
@@ -112,8 +120,8 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                     <Typography variant="caption1">
                         {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ hour: 'numeric', minute: '2-digit' })}
                     </Typography>
-                    <Typography variant="caption1" fontwei>
-                        {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit'})}
+                    <Typography variant="caption1">
+                        {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit' })}
                     </Typography>
                 </Stack>
             </Box>

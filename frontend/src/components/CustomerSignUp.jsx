@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button } from "@mui/material";
+
+import {
+  Alert,
+  Container,
+  TextField,
+  Button
+} from "@mui/material";
 
 const CustomerSignUp = () => {
   const [error, setError] = useState(null);

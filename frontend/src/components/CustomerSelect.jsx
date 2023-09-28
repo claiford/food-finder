@@ -16,8 +16,6 @@ import {
     IconButton,
 } from "@mui/material";
 
-
-
 const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, handleRemoveSelected }) => {
     const [customers, setCustomers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

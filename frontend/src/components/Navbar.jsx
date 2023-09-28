@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../contexts/AuthContext";
+import LogoNoText from "../assets/platepals-notext.png";
 
 import {
   AppBar,
@@ -11,11 +12,10 @@ import {
   Menu,
   MenuItem,
   CardMedia,
+  Fade,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Fade from "@mui/material/Fade";
-import LogoNoText from "../assets/platepals-notext.png";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);

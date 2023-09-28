@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-import { Box, Stack, Typography } from "@mui/material";
+import {
+    Box,
+    Stack,
+    Typography
+} from "@mui/material";
 import StoreRoundedIcon from '@mui/icons-material/StoreRounded';
 
 const StoreList = ({ stores }) => {

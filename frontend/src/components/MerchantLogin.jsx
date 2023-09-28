@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Alert, Container, TextField, Button } from "@mui/material";
+import axios from "axios";
 import Cookies from "js-cookie";
+
+import {
+  Alert,
+  Container,
+  TextField,
+  Button
+} from "@mui/material";
 
 const MerchantLogin = () => {
   const [error, setError] = useState(null);
