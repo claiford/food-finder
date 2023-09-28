@@ -1,27 +1,18 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom'
+import { Box, Modal, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
 import axios from "axios";
-
-import { Box, Typography, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import StoreNew from "../components/StoreNew";
 import StoreList from "../components/StoreList";
 
 const MerchantHome = () => {
-	const [stores, setStores] = useState([]);
-	const [showForm, setShowForm] = useState(false);
+  const [stores, setStores] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
-	/////////////////
-    // HANDLERS
-	const handleForm = () => {
-		setShowForm((prev) => !prev);
-	}
-
-	const handleNewStore = () => {
-		handleForm()
-		getStores();
-	}
-	/////////////////
-	/////////////////
+  const handleForm = () => {
+    setShowForm((prev) => !prev);
+  };
 
 	const getStores = async () => {
 		try {
@@ -33,35 +24,32 @@ const MerchantHome = () => {
 		}
 	}
 
-	useEffect(() => {
-		getStores();
-	}, [])
+  useEffect(() => {
+    getStores();
+  }, []);
 
-	return (
-		<>
-			{/* <Typography variant="title1">
-				Hi, {"[merchant]"}
-			</Typography> */}
-			<Box sx={{
-				width: '100%',
-				display: 'flex',
-				justifyContent: "space-between",
-				alignItems: 'center',
-				my: 4,
-			}}>
-				<Typography variant="header2">
-					Your restaurant(s)
-				</Typography>
-				<IconButton size="small" onClick={handleForm}>
-					<AddIcon color="lime" fontSize="small" />
-				</IconButton>
-			</Box>
+  return (
+    <>
+      <Typography variant="title1">Hi, {"[merchant]"}</Typography>
 
-			{showForm ? (
-				<StoreNew handleNewStore={handleNewStore}/>
-			) : (
-				<StoreList stores={stores} />
-			)}
+      {showForm && <StoreNew handleForm={handleForm} />}
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 4,
+        }}
+      >
+        <Typography variant="header2">{"Your restaurant(s)"}</Typography>
+        <IconButton size="small" onClick={handleForm}>
+          <AddIcon color="lime" fontSize="small" />
+        </IconButton>
+      </Box>
+
+			<StoreList stores={stores} />
 		</>
 	);
 }

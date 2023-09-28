@@ -35,12 +35,19 @@ const CustomerSignUp = ({ customerInfo, setCustomerInfo }) => {
           password: "",
         });
       } else {
-        const data = response.data;
-        setError(data.message || "Sign up failed.");
+        const errorMessage = response.data.message;
+        setError(errorMessage || "Sign up failed.");
         setShowErrorMessage(true);
       }
     } catch (err) {
-      console.log(err);
+      // handling server side error
+      if (err.response && customerInfo.email) {
+        const errorMessage = err.response.data.message;
+        setError(errorMessage || "Server error.");
+        setShowErrorMessage(true);
+      } else {
+        console.log(err);
+      }
     }
 
     setTimeout(() => {
