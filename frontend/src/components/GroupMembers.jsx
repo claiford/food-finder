@@ -3,17 +3,33 @@ import { useState } from "react";
 import AddMembersForm from "./AddMembersForm";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
-
+import CustomerSelect from "./CustomerSelect";
 
 const GroupMembers = ({ members }) => {
-    const [showAddMembersForm, setShowAddMembersForm] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [groupMembers, setGroupMembers] = useState([]);
+    const [selectedMembers, setSelectedMembers] = useState([]);
 
     const { group_id } = useParams();
 
+    const handleAddSelected = (newMember) => {
+        setSelectedMembers((prevMembers) => {
+            return [
+                ...prevMembers,
+                newMember
+            ]
+        });
+    };
+
+    const handleRemoveSelected = (idx) => {
+        setSelectedMembers((prevSelectedMembers) => {
+            return prevSelectedMembers.filter((_, i) => i !== idx);
+        });
+    };
+
+
     const toggleAddMembersForm = () => {
-        setShowAddMembersForm(!showAddMembersForm);
+        setIsEdit(!isEdit);
     };
 
     const handleRemoveMember = async (userId) => {
@@ -36,6 +52,9 @@ const GroupMembers = ({ members }) => {
         }
     };
 
+    const handleAddMember = (newMember) => {
+        console.log('addmember')
+    };
 
     const memberList = members.map((member, i) => {
         const nameparts = member.name.split(" ");
@@ -66,19 +85,23 @@ const GroupMembers = ({ members }) => {
                 <Typography variant="body2" fontWeight={700}>
                     {member.name}
                 </Typography>
-                {showAddMembersForm ? <Button onClick={() => handleRemoveMember(member._id)}>Remove</Button> : null}
+                {isEdit ? <Button onClick={() => handleRemoveMember(member._id)}>Remove</Button> : null}
             </Box>
         );
     });
 
-    const handleAddMember = (newMember) => {
-    };
-
     return (
         <>
             {memberList}
-            {showAddMembersForm ? (
-                <AddMembersForm onAddMember={handleAddMember} />
+            {isEdit ? (
+                <>
+                    {/* <AddMembersForm onAddMember={handleAddMember} /> */}
+                    <CustomerSelect
+                        selectedMembers={selectedMembers}
+                        handleAddSelected={handleAddSelected}
+                        handleRemoveSelected={handleRemoveSelected}
+                    />
+                </>
             ) : (
                 <Button
                     variant="contained"

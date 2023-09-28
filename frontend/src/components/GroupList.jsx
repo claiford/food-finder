@@ -7,6 +7,7 @@ const GroupList = ({ groups, inSession }) => {
     const navigate = useNavigate();
 
     const groupLinks = groups.map((group, i) => {
+        const isInSession = inSession.some((g) => g._id === group._id);
         return (
             <Box
                 key={i}
@@ -18,19 +19,19 @@ const GroupList = ({ groups, inSession }) => {
                     py: 2,
                     px: 3,
                     gap: 2,
-                    backgroundColor: "black",
+                    backgroundColor: isInSession ? "lime.main" : "black",
                     '&:hover': {
                         cursor: 'pointer',
                     }
                 }}
             >
-                <GroupWorkIcon color="lime" />
-                <Typography variant="body2" fontWeight={700}>
+                <GroupWorkIcon color={isInSession ? "success" : "lime"} />
+                <Typography variant="body2" fontWeight={700} sx={{ color: isInSession ? "black" : "white" }}>
                     {group.name}
                 </Typography>
-                {inSession.some((g) => g._id === group._id) &&
+                {isInSession &&
                     <Box sx={{ width: "10%", ml: 'auto' }}>
-                        <LinearProgress color="lime" sx={{ backgroundColor: "darkgray.main" }} />
+                        <LinearProgress color="success" sx={{ backgroundColor: "lime.dark" }} />
                     </Box>
                 }
             </Box>
