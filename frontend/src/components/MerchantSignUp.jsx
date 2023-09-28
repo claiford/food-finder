@@ -2,22 +2,27 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button, Stack } from "@mui/material";
+import { Alert, Container, TextField, Button } from "@mui/material";
 
-const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
+const MerchantSignUp = () => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [success, setSuccess] = useState(null);
+  const [form, setForm] = useState({
+    email: "",
+    name: "",
+    password: "",
+  });
 
   const handleInputChange = (e, key) => {
-    const updatedMerchantInfo = { ...merchantInfo, [key]: e.target.value };
-    setMerchantInfo(updatedMerchantInfo);
+    const updatedMerchantInfo = { ...form, [key]: e.target.value };
+    setForm(updatedMerchantInfo);
   };
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (!merchantInfo.name || !merchantInfo.email || !merchantInfo.password) {
+    if (!form.name || !form.email || !form.password) {
       setError("All fields are required");
       setShowErrorMessage(true);
     }
@@ -25,13 +30,13 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/merchant/signup`,
-        merchantInfo
+        form
       );
       if (response.status === 200) {
         setShowSuccessBar(true);
         setSuccess(response.data.message || "Sign up successful.");
         // Reset form fields
-        setMerchantInfo({
+        setForm({
           name: "",
           email: "",
           password: "",
@@ -43,12 +48,12 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
       }
     } catch (err) {
       // handling server side error
-      if (err.response && merchantInfo.email) {
+      if (err.response && form.email) {
         const errorMessage = err.response.data.message;
         setError(errorMessage || "Server error.");
         setShowErrorMessage(true);
       } else {
-        console.log(err)
+        console.log(err);
       }
     }
     setTimeout(() => {
@@ -68,7 +73,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           type="text"
           fullWidth
           margin="normal"
-          value={merchantInfo.name}
+          value={form.name}
           onChange={(e) => handleInputChange(e, "name")}
         />
         <TextField
@@ -77,7 +82,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           type="email"
           fullWidth
           margin="normal"
-          value={merchantInfo.email}
+          value={form.email}
           onChange={(e) => handleInputChange(e, "email")}
         />
         <TextField
@@ -86,7 +91,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
           type="password"
           fullWidth
           margin="normal"
-          value={merchantInfo.password}
+          value={form.password}
           onChange={(e) => handleInputChange(e, "password")}
         />
         <Button
@@ -112,9 +117,9 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
         )}
       </form>
       {showSuccessBar && (
-          <Alert severity="success">
-            <span>{success}</span>
-          </Alert>
+        <Alert severity="success">
+          <span>{success}</span>
+        </Alert>
       )}
     </Container>
   );

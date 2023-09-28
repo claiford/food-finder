@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 
-import { AuthContext } from './contexts/AuthContext';
+import { AuthContext } from "./contexts/AuthContext";
 import Main from "./pages/Main";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
@@ -121,6 +121,7 @@ const theme = createTheme({
             textAlign: "left",
             "& fieldset": {
               borderColor: "white",
+              borderRadius: 10,
             },
             "&:hover fieldset": {
               borderColor: "#C0EC6B",
@@ -158,55 +159,21 @@ const theme = createTheme({
   },
 });
 
-// Protected route component
-function ProtectedRoute({ path, element }) {
-  // Define your authentication logic here (e.g., based on your isCustomerAuthenticated state)
-  const isCustomerAuthenticated = true; // Replace with your actual authentication logic
-
-  return isCustomerAuthenticated ? (
-    <Route path={path} element={element} />
-  ) : (
-    <Navigate to="/" />
-  );
-}
 function App() {
-  const [isCustomerAuthenticated, setIsCustomerAuthenticated] = useState(false);
-  const [isMerchantAuthenticated, setIsMerchantAuthenticated] = useState(null);
   const [customerInfo, setCustomerInfo] = useState(null);
-  const [merchantInfo, setMerchantInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [merchantInfo, setMerchantInfo] = useState(null);
   const navigate = useNavigate();
-  // const checkCustomerAuth = async () => {
-  //   const token = localStorage.getItem("customerToken");
-  //   if (token !== null) {
-  //     setIsCustomerAuthenticated(true);
-  //   } else {
-  //     setIsCustomerAuthenticated(false);
-  //   }
-  // };
-
-  // const checkMerchantAuth = async () => {
-  //   const token = localStorage.getItem("merchantToken");
-  //   if (token !== null) {
-  //     setIsMerchantAuthenticated(true);
-  //   } else {
-  //     setIsMerchantAuthenticated(false);
-  //   }
-  // };
 
   // Function to check if the user is authenticated (you can define this according to your logic)
   const authenticateCustomer = () => {
     const rawCookie = document.cookie
       .split("; ")
       .find((cookie) => cookie.startsWith("userData="));
-    console.log("checking authentication");
+    // console.log("checking authentication");
     if (rawCookie) {
       const userDataCookie = Cookies.get("userData");
       const userDataObject = JSON.parse(userDataCookie);
-      console.log("In App.js", userDataObject.data.userData);
+      console.log("Customer in App.js", userDataObject.data.userData);
       if (customerInfo === null) {
         setCustomerInfo(userDataObject.data.userData);
       }
@@ -215,14 +182,30 @@ function App() {
   };
 
   const authenticateMerchant = () => {
-    console.log("true");
+    console.log("authenticate merchant");
+    const rawCookie = document.cookie
+      .split("; ")
+      .find((cookie) => cookie.startsWith("merchantData="));
+    //console.log("checking authentication");
+    if (rawCookie) {
+      const merchantDataCookie = Cookies.get("merchantData");
+      const merchantDataObject = JSON.parse(merchantDataCookie);
+      console.log("Merchant in App.js", merchantDataObject.data.merchantData);
+      if (merchantInfo === null) {
+        setMerchantInfo(merchantDataObject.data.merchantData);
+      }
+    }
+    return !!rawCookie;
   };
 
   const handleLogout = () => {
     console.log("Logging out now.");
     document.cookie =
       "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "merchantData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setCustomerInfo(null);
+    setMerchantInfo(null);
     navigate("/");
   };
 
@@ -238,71 +221,39 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthContext.Provider value={{ customerInfo, handleLogout }}>
+      <AuthContext.Provider
+        value={{ merchantInfo, customerInfo, handleLogout }}
+      >
         <div className={styles.body}>
           <Routes>
             <Route path="/" element={showMain()}>
               <Route path="customer/login" element={<CustomerLogin />} />
-              <Route
-                path="customer/signup"
-                element={
-                  <CustomerSignUp
-                    customerInfo={customerInfo}
-                    setCustomerInfo={setCustomerInfo}
-                  />
-                }
-              />
-              <Route
-                path="merchant/login"
-                element={
-                  <MerchantLogin
-                    merchantInfo={merchantInfo}
-                    setMerchantInfo={setMerchantInfo}
-                    isMerchantAuthenticated={isMerchantAuthenticated}
-                    setIsMerchantAuthenticated={setIsMerchantAuthenticated}
-                  />
-                }
-              />
-              <Route
-                path="merchant/signup"
-                element={
-                  <MerchantSignUp
-                    merchantInfo={merchantInfo}
-                    setMerchantInfo={setMerchantInfo}
-                  />
-                }
-              />
+              <Route path="customer/signup" element={<CustomerSignUp />} />
+              <Route path="merchant/login" element={<MerchantLogin />} />
+              <Route path="merchant/signup" element={<MerchantSignUp />} />
             </Route>
             <Route
               path="/customer/home"
               element={
-                authenticateCustomer() ? (
-                  <CustomerHome />
-                ) : (
-                  <Navigate to="/" />
-                )
+                authenticateCustomer() ? <CustomerHome /> : <Navigate to="/" />
               }
             />
             <Route
               path="/customer/group/:group_id"
+              element={authenticateCustomer() ? <Group /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/merchant/home"
               element={
-                authenticateCustomer() ? (
-                  <Group />
+                authenticateMerchant() ? (
+                  <MerchantHome
+                    merchantInfo={merchantInfo}
+                    handleLogout={handleLogout}
+                  />
                 ) : (
                   <Navigate to="/" />
                 )
               }
-            />
-            <Route
-              path="/merchant/home/"
-              element={<MerchantHome />}
-              // element={
-              //   authenticateCustomer() ? (
-              //     <Group />
-              //   ) : (
-              //     <Navigate to="/" />
-              //   )
-              // }
             />
             <Route
               path="/merchant/store/:store_id"

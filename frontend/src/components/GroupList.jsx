@@ -39,7 +39,13 @@ const GroupList = ({ groups, inSession }) => {
     })
 
     return (
-        <Stack direction='column' spacing={2} sx={{ maxHeight: "calc(100% - 78px)", overflowY: 'scroll'}}>
+        <Stack
+            direction='column'
+            spacing={2}
+            sx={{
+                maxHeight: "calc(100% - 78px)", overflowY: 'scroll'
+            }}
+        >
             {groupLinks}
         </Stack>
     )

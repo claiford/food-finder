@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from "../contexts/AuthContext";
 
 import {
   AppBar,
   Toolbar,
   IconButton,
-  Box,
   Typography,
   Menu,
   MenuItem,
@@ -22,8 +21,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
-  const { customerInfo, handleLogout } = useContext(AuthContext);
+  const { merchantInfo, customerInfo, handleLogout } = useContext(AuthContext);
 
   const handleMenuClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -52,11 +50,14 @@ const Navbar = () => {
             <Typography variant="appname" sx={{ flexGrow: 1 }}>
               PlatePals
             </Typography>
-            {!customerInfo ? (
-              <Typography>Hello!</Typography>
-            ) : (
+            {customerInfo && (
               <Typography variant="body3" fontWeight={700}>
                 Hello, {customerInfo.name}!
+              </Typography>
+            )}
+            {merchantInfo && (
+              <Typography sx={{ fontWeight: "bold" }}>
+                Hello, {merchantInfo.name}!
               </Typography>
             )}
             <IconButton
@@ -76,14 +77,6 @@ const Navbar = () => {
               open={open}
               onClose={handleMenuClose}
               TransitionComponent={Fade}
-              // anchorOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
-              // transformOrigin={{
-              //   vertical: "top",
-              //   horizontal: "right",
-              // }}
             >
               <MenuItem
                 onClick={handleLogout}
