@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
-import { Button, Box, Modal, Typography, LinearProgress } from '@mui/material';
+import { useState, useEffect, useContext } from 'react'
 import { socket } from '../socket';
-
+import { AuthContext } from '../contexts/AuthContext';
 import Swiper from './Swiper';
+
+import { Button, Box, Modal, Typography, LinearProgress } from '@mui/material';
 
 const modalStyle = {
     position: 'absolute',
@@ -23,8 +24,10 @@ const modalStyle = {
 
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
-    // const [isConnected, setIsConnected] = useState(socket.connected);
-    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("customerToken"))?.status === 999;
+    // const [isConnected, setIsConnected] = useState(socket.connected);\
+
+    const { customerInfo } = useContext(AuthContext);
+    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === customerInfo._id)?.status === 999;
     const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 
     const handleJoinOngoing = () => {

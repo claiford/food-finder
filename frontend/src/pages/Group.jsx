@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
+
+import { AuthContext } from '../contexts/AuthContext';
 import SessionNew from '../components/SessionNew';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
@@ -36,6 +38,8 @@ const Group = () => {
     const [ongoingSession, setOngoingSession] = useState(null);
     const [archivedSessions, setArchivedSessions] = useState([]);
     const [tabValue, setTabValue] = useState(0);
+
+    const { customerInfo } = useContext(AuthContext)
 
     /////////////////
     // PARAMS
@@ -86,7 +90,7 @@ const Group = () => {
 
     const handleVoting = async (votes) => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { voter: localStorage.getItem("customerToken"), votes: votes })
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/session/${ongoingSession._id}/handle-voting`, { voter: customerInfo._id, votes: votes })
             console.log("handling complete");
             getSessions();
         } catch (err) {
