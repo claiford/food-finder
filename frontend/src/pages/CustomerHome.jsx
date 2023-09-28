@@ -1,26 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+
+import { AuthContext } from "../contexts/AuthContext";
+import CreateNewGroup from "../components/CreateNewGroup";
+import GroupList from "../components/GroupList";
+import Navbar from "../components/Navbar";
 
 import { Box, Typography, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-import CreateNewGroup from "../components/CreateNewGroup";
-import GroupList from "../components/GroupList";
-import Navbar from "../components/Navbar";
-
-const CustomerHome = ({ customerInfo, handleLogout }) => {
+const CustomerHome = () => {
   const [showNewGroupForm, setShowNewGroupForm] = useState(false);
   const [groups, setGroups] = useState([]);
   const [inSession, setInSession] = useState([]);
 
+  const { customerInfo } = useContext(AuthContext);
+
   const getGroups = async () => {
+    console.log(customerInfo);
     try {
       // Make a GET request to your backend API endpoint for fetching groups
       const response = await axios.get(
-        `${
-          process.env.REACT_APP_BACKEND_URL
-        }/customer/api/groups/${localStorage.getItem("customerToken")}`
+        `${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/${customerInfo._id}`
       );
       setGroups(response.data.groups);
       setInSession(response.data.inSession);
@@ -46,7 +48,7 @@ const CustomerHome = ({ customerInfo, handleLogout }) => {
 
   return (
     <>
-      <Navbar customerInfo={customerInfo} handleLogout={handleLogout}/>
+      <Navbar />
       <Box
         sx={{
           width: "90%",

@@ -1,20 +1,23 @@
 import styles from "./App.module.css";
-import Main from "./pages/Main";
-import Group from "./pages/Group";
-import Store from "./pages/Store";
-import Demo from "./pages/Demo";
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+
+import { AuthContext } from "./contexts/AuthContext";
+import Main from "./pages/Main";
 import CustomerSignUp from "./components/CustomerSignUp";
 import CustomerLogin from "./components/CustomerLogin";
 import MerchantSignUp from "./components/MerchantSignUp";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import CustomerHome from "./pages/CustomerHome";
 import MerchantLogin from "./components/MerchantLogin";
+import CustomerHome from "./pages/CustomerHome";
 import MerchantHome from "./pages/MerchantHome";
-import Cookies from "js-cookie";
+import Group from "./pages/Group";
+import Store from "./pages/Store";
+import Demo from "./pages/Demo";
 
 const theme = createTheme({
   typography: {
@@ -31,7 +34,7 @@ const theme = createTheme({
       fontSize: 40,
       color: "#C0EC6B",
     },
-    title2: {
+    header3: {
       fontFamily: "Arvo",
       fontWeight: 700,
       fontSize: 25,
@@ -75,6 +78,24 @@ const theme = createTheme({
       fontSize: 15,
       color: "#C0EC6B",
     },
+    caption1: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#000000",
+    },
+    caption2: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#FFFFFF",
+    },
+    caption3: {
+      // caption darkgray
+      fontFamily: "Lato",
+      fontSize: 12,
+      color: "#242424",
+    },
   },
   palette: {
     primary: {
@@ -100,6 +121,7 @@ const theme = createTheme({
             textAlign: "left",
             "& fieldset": {
               borderColor: "white",
+              borderRadius: 10,
             },
             "&:hover fieldset": {
               borderColor: "#C0EC6B",
@@ -199,43 +221,54 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={styles.body}>
-        <Routes>
-          <Route path="/" element={showMain()}>
-            <Route path="customer/login" element={<CustomerLogin />} />
-            <Route path="customer/signup" element={<CustomerSignUp />} />
-            <Route path="merchant/login" element={<MerchantLogin />} />
-            <Route path="merchant/signup" element={<MerchantSignUp />} />
-          </Route>
-          <Route
-            path="/customer/home"
-            element={
-              authenticateCustomer() ? (
-                <CustomerHome
-                  customerInfo={customerInfo}
-                  handleLogout={handleLogout}
-                />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-
-          <Route
-            path="/merchant/home"
-            element={
-              authenticateMerchant() ? (
-                <MerchantHome
-                  merchantInfo={merchantInfo}
-                  handleLogout={handleLogout}
-                />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-        </Routes>
-      </div>
+      <AuthContext.Provider
+        value={{ merchantInfo, customerInfo, handleLogout }}
+      >
+        <div className={styles.body}>
+          <Routes>
+            <Route path="/" element={showMain()}>
+              <Route path="customer/login" element={<CustomerLogin />} />
+              <Route path="customer/signup" element={<CustomerSignUp />} />
+              <Route path="merchant/login" element={<MerchantLogin />} />
+              <Route path="merchant/signup" element={<MerchantSignUp />} />
+            </Route>
+            <Route
+              path="/customer/home"
+              element={
+                authenticateCustomer() ? <CustomerHome /> : <Navigate to="/" />
+              }
+            />
+            <Route
+              path="/customer/group/:group_id"
+              element={authenticateCustomer() ? <Group /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/merchant/home"
+              element={
+                authenticateMerchant() ? (
+                  <MerchantHome
+                    merchantInfo={merchantInfo}
+                    handleLogout={handleLogout}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/merchant/store/:store_id"
+              element={<Store />}
+              // element={
+              //   authenticateCustomer() ? (
+              //     <Group />
+              //   ) : (
+              //     <Navigate to="/" />
+              //   )
+              // }
+            />
+          </Routes>
+        </div>
+      </AuthContext.Provider>
     </ThemeProvider>
   );
 }

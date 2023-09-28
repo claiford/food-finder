@@ -142,7 +142,7 @@ async function handleVoting(req, res) {
         }
         session.num_voted += 1;
 
-        session.voters.find((voter) => voter.voter.toString() === req.body.voter).status = 999;
+        session.voters.find((voterStatus) => voterStatus.voter.toString() === req.body.voter).status = 999;
 
         if (session.voters.every((voter) => voter.status === 999)) {
             session.status = "complete";

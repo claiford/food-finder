@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from 'axios';
+
+import { AuthContext } from '../contexts/AuthContext';
+import CustomerSelect from "./CustomerSelect";
+
 import {
 	Stack,
 	Alert,
@@ -7,13 +11,13 @@ import {
 	Button,
 } from "@mui/material";
 
-import CustomerSelect from "./CustomerSelect";
-
 const CreateNewGroup = ({ handleNewGroup }) => {
 	const [error, setError] = useState(null);
 	const [showErrorMessage, setShowErrorMessage] = useState(false);
 	const [groupName, setGroupName] = useState("");
 	const [selectedMembers, setSelectedMembers] = useState([]);
+
+	const { customerInfo } = useContext(AuthContext);
 
 	const handleAddSelected = (newMember) => {
 		setSelectedMembers((prevMembers) => {
@@ -53,7 +57,7 @@ const CreateNewGroup = ({ handleNewGroup }) => {
 					members: selectedMembers,
 				};
 				// Send a POST request to create the group
-				const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/new`, { user: localStorage.getItem("customerToken"), data: data });
+				const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/new`, { user_id: customerInfo._id, new_group: data });
 				// Clear the group name and group selectedMembers
 				setGroupName("");
 				setSelectedMembers([]);
@@ -77,6 +81,7 @@ const CreateNewGroup = ({ handleNewGroup }) => {
 			/>
 
 			<CustomerSelect
+				existingMembers={[]}
 				selectedMembers={selectedMembers}
 				handleAddSelected={handleAddSelected}
 				handleRemoveSelected={handleRemoveSelected}

@@ -6,14 +6,13 @@ const sessionsController = require('../controllers/SessionsController');
 const storesController = require('../controllers/StoresController');
 const customersController = require('../controllers/CustomersController')
 
-router.get('/new', groupsController.new);
 router.post('/api/groups/new', groupsController.create);
 router.get('/api/groups/:customer_id', groupsController.index);
 router.get('/api/customers', customersController.getAllCustomers);
 router.post('/', groupsController.create);
 
-router.put('/api/group/:group_id/add-members', groupsController.addMember);
-router.delete('/api/group/:group_id/remove-member/:user_id', groupsController.removeMember);
+router.patch('/api/group/:group_id/add-members', groupsController.addMember);
+router.patch('/api/group/:group_id/remove-member', groupsController.removeMember);
 
 
 // GET /customer/group/:group_id
