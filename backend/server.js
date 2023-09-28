@@ -73,6 +73,10 @@ const sessionsController = require('./controllers/SessionsController');
 app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
 app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 
+app.get('/serverstatus', function(req, res) {
+  res.send("Server is running.");
+})
+
 ///// SOCKET
 io.on('connection', socketsManager.onConnect)
 ///// SOCKET
