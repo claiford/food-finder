@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-import GroupContext from '../pages/GroupContext';
+import GroupContext from '../contexts/GroupContext';
 import CustomerSelect from "./CustomerSelect";
 
 import { Avatar, Box, Stack, Typography, Button, IconButton, Alert } from "@mui/material";

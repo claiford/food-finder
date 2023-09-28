@@ -1,18 +1,18 @@
+// Importing and destructuring passport module from strategy/local and renaming it to myPassport. PassportJS has localStrategy but we want to customize the node_modules of "passport-local" strategy, to our customise strategy. The 'local-customer' and 'local-merchant' are build on top of the node_modules' PassportJS' local strategy.
+const { myPassport } = require("./strategy/local");
 const express = require("express");
 const cors = require("cors");
-const passport = require("passport");
-const session = require('express-session');
-const local = require("./strategy/local")
+const session = require("express-session");
 
 const http = require("http");
 const { Server } = require("socket.io");
 
 // const path = require('path');
-const cookieParser = require('cookie-parser');
-const socketsManager = require('./listeners/socketsManager');
+const cookieParser = require("cookie-parser");
+const socketsManager = require("./listeners/socketsManager");
 
-require('dotenv').config(); // process config vars => procces.env.VAR
-require('./config/database'); // connect to the database with AFTER the config vars are processed
+require("dotenv").config(); // process config vars => procces.env.VAR
+require("./config/database"); // connect to the database with AFTER the config vars are processed
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
@@ -22,9 +22,9 @@ const io = new Server(httpServer, {
 });
 
 // Router import
-const AuthRouter = require('./routes/AuthRouter');
-const CustomerRouter = require('./routes/CustomerRouter');
-const MerchantRouter = require('./routes/MerchantRouter');
+const AuthRouter = require("./routes/AuthRouter");
+const CustomerRouter = require("./routes/CustomerRouter");
+const MerchantRouter = require("./routes/MerchantRouter");
 
 app.use(express.json());
 app.use(
@@ -34,22 +34,24 @@ app.use(
   })
 );
 // Configure express-session middleware
-app.use(session({
-  secret: process.env.SECRET_KEY, 
-  cookie: {maxAge: 30 * 60 * 1000},
-  resave: false,
-  saveUninitialized: false,
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    cookie: { maxAge: 30 * 60 * 1000 },
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(myPassport.initialize());
+app.use(myPassport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
 app.use("/", AuthRouter);
-app.use('/customer', CustomerRouter);
-app.use('/merchant', MerchantRouter);
+app.use("/customer", CustomerRouter);
+app.use("/merchant", MerchantRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
@@ -67,13 +69,12 @@ app.use('/merchant', MerchantRouter);
 //   res.render('error');
 // });
 
-
-const sessionsController = require('./controllers/SessionsController');
-app.put('/session/:sessionid/handle-voting', sessionsController.handleVoting)
-app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
+const sessionsController = require("./controllers/SessionsController");
+app.put("/session/:sessionid/handle-voting", sessionsController.handleVoting);
+app.put("/session/:sessionid/handle-archive", sessionsController.handleArchive);
 
 ///// SOCKET
-io.on('connection', socketsManager.onConnect)
+io.on("connection", socketsManager.onConnect);
 ///// SOCKET
 
 httpServer.listen(process.env.PORT, () => {

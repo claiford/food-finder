@@ -1,11 +1,17 @@
-import { useState } from 'react';
-import { Stack, TextField, Button, CircularProgress, MenuItem, Alert } from '@mui/material';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
+
+import { AuthContext } from '../contexts/AuthContext';
+
+import { Stack, TextField, Button} from '@mui/material';
+
 
 const StoreNew = ({ handleNewStore }) => {
     const [form, setForm] = useState({})
     const [formError, setFormError] = useState({})
+
+    const { merchantInfo } = useContext(AuthContext);
 
     const handleInputChange = (e, key) => {
         if (key === "location") {
@@ -41,7 +47,7 @@ const StoreNew = ({ handleNewStore }) => {
         e.preventDefault()
         if (form.location) {
             try {
-                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/new`, { merchant: localStorage.getItem("merchantToken"), place_id: form.location })
+                const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/new`, { merchant: merchantInfo._id, place_id: form.location })
                 e.target.reset();
                 handleNewStore();
             } catch (err) {

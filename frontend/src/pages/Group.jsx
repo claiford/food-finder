@@ -4,7 +4,7 @@ import { Box, IconButton, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { AuthContext } from '../contexts/AuthContext';
-import GroupContext from './GroupContext';
+import GroupContext from '../contexts/GroupContext';
 import SessionNew from '../components/SessionNew';
 import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';

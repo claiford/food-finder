@@ -4,7 +4,7 @@ import { Alert, Container, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
+const CustomerLogin = () => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
@@ -36,36 +36,26 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
           });
           setSuccess(response.data.message || "Sign in successful.");
           setShowSuccessBar(true);
-        }
-        // Retrieve the cookie and parse it back to an object
-        const userDataCookie = Cookies.get("userData");
-        if (userDataCookie) {
-          const userDataObject = JSON.parse(userDataCookie);
-          console.log(userDataObject);
-          // localStorage.setItem('customerToken', userDataObject.data.userData._id)
-          navigate("/customer/home")
-        }
-        // console.log("customerID:", response.data.customer.id);
-        // if (response.status === 200) {
-        //   setSuccess(response.data.message || "Sign in successful.");
-        //   setShowSuccessBar(true);
-        // Store customer ID in localstorage
-        //localStorage.setItem("customerToken", response.data.customer.id);
-        //setIsCustomerAuthenticated(true);
-        //navigate("/customer/home");
 
+          // Retrieve the cookie and parse it back to an object
+          const userDataCookie = Cookies.get("userData");
+          if (userDataCookie) {
+            const userDataObject = JSON.parse(userDataCookie);
+            console.log(userDataObject);
+            navigate("/customer/home");
+          }
+        } else {
+          const data = response.data;
+          setError(
+            data.message || "Incorrect email or password. Please try again."
+          );
+          setShowErrorMessage(true);
+        }
         // Reset form fields
-        //   setLoginInfo({
-        //     email: "",
-        //     password: "",
-        //   });
-        // } else {
-        //   const data = response.data;
-        //   setError(
-        //     data.message || "Incorrect email or password. Please try again."
-        //   );
-        //   setShowErrorMessage(true);
-        // }
+        setLoginInfo({
+          email: "",
+          password: "",
+        });
       } catch (err) {
         console.log(err);
         setError("Incorrect email or password. Please try again.");

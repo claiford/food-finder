@@ -1,11 +1,10 @@
-// MerchantLogin.jsx
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Alert, Container, TextField, Button } from "@mui/material";
+import Cookies from "js-cookie";
 
-const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
+const MerchantLogin = () => {
   const [error, setError] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showSuccessBar, setShowSuccessBar] = useState(false);
@@ -27,26 +26,25 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
       setError("All fields are required");
       setShowErrorMessage(true);
     } else {
-      // API call
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/merchant/login`,
+          `${process.env.REACT_APP_BACKEND_URL}/auth/merchant/login`,
           merchantInfo
         );
-        if (response.status === 200) {
+        if (response) {
+          Cookies.set("merchantData", JSON.stringify(response), {
+            expires: 0.0208, // 30 minutes
+          });
           setSuccess(response.data.message || "Sign in successful.");
           setShowSuccessBar(true);
 
-          // Store merchant ID in localstorage
-          localStorage.setItem("merchantToken", response.data.merchant.id);
-          setIsMerchantAuthenticated(true);
-          navigate("/merchant/home");
-
-          // Reset form fields
-          setMerchantInfo({
-            email: "",
-            password: "",
-          });
+          // Retrieve the cookie and parse it back to an object
+          const userDataCookie = Cookies.get("merchantData");
+          if (userDataCookie) {
+            const userDataObject = JSON.parse(userDataCookie);
+            console.log(userDataObject);
+            navigate("/merchant/home");
+          }
         } else {
           const data = response.data;
           console.log("error data: ", data);
@@ -55,6 +53,12 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
           );
           setShowErrorMessage(true);
         }
+
+        // Reset form fields
+        setMerchantInfo({
+          email: "",
+          password: "",
+        });
       } catch (err) {
         console.log(err);
         setError("Incorrect email or password. Please try again.");
