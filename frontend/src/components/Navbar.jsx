@@ -13,7 +13,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Fade from "@mui/material/Fade";
 import LogoNoText from "../assets/platepals-notext.png";
 
-const Navbar = ({ customerInfo, handleLogout }) => {
+const Navbar = ({ merchantInfo, customerInfo, handleLogout }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -44,13 +44,17 @@ const Navbar = ({ customerInfo, handleLogout }) => {
             <Typography variant="appname" sx={{ flexGrow: 1 }}>
               PlatePals
             </Typography>
-            {!customerInfo ? (
-              <Typography>Hello!</Typography>
-            ) : (
+            {customerInfo && (
               <Typography sx={{ fontWeight: "bold" }}>
                 Hello, {customerInfo.name}!
               </Typography>
             )}
+            {merchantInfo && (
+              <Typography sx={{ fontWeight: "bold" }}>
+                Hello, {merchantInfo.name}!
+              </Typography>
+            )}
+
             <IconButton
               color="inherit"
               aria-label="open menu"
