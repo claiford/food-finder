@@ -293,19 +293,28 @@ function App() {
                 )
               }
             />
-            {/* <Route
-            path="/customer/group/:group_id"
-            element={
-              authenticateCustomer() ? (
-                <Group
-                  customerInfo={customerInfo}
-                  handleLogout={handleLogout}
-                />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          /> */}
+            <Route
+              path="/merchant/home/"
+              element={<MerchantHome />}
+              // element={
+              //   authenticateCustomer() ? (
+              //     <Group />
+              //   ) : (
+              //     <Navigate to="/" />
+              //   )
+              // }
+            />
+            <Route
+              path="/merchant/store/:store_id"
+              element={<Store />}
+              // element={
+              //   authenticateCustomer() ? (
+              //     <Group />
+              //   ) : (
+              //     <Navigate to="/" />
+              //   )
+              // }
+            />
           </Routes>
         </div>
       </AuthContext.Provider>
