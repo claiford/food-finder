@@ -36,6 +36,7 @@ app.use(
 // Configure express-session middleware
 app.use(session({
   secret: process.env.SECRET_KEY, 
+  cookie: {maxAge: 30 * 60 * 1000},
   resave: false,
   saveUninitialized: false,
 }));

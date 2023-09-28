@@ -9,7 +9,7 @@ import CreateNewGroup from "../components/CreateNewGroup";
 import GroupList from "../components/GroupList";
 import Navbar from "../components/Navbar";
 
-const CustomerHome = () => {
+const CustomerHome = ({ customerInfo, handleLogout }) => {
   const [showNewGroupForm, setShowNewGroupForm] = useState(false);
   const [groups, setGroups] = useState([]);
   const [inSession, setInSession] = useState([]);
@@ -46,7 +46,7 @@ const CustomerHome = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar customerInfo={customerInfo} handleLogout={handleLogout}/>
       <Box
         sx={{
           width: "90%",

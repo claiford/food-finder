@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Alert, Container, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
   const [error, setError] = useState(null);
@@ -26,31 +27,45 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
     } else {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/customer/login`,
+          `${process.env.REACT_APP_BACKEND_URL}/auth/customer/login`,
           loginInfo
         );
-        console.log("response", response);
-        console.log("customerID:", response.data.customer.id);
-        if (response.status === 200) {
+        if (response) {
+          Cookies.set("userData", JSON.stringify(response), {
+            expires: 0.0208, // 30 minutes
+          });
           setSuccess(response.data.message || "Sign in successful.");
           setShowSuccessBar(true);
-          // Store customer ID in localstorage
-          localStorage.setItem("customerToken", response.data.customer.id);
-          setIsCustomerAuthenticated(true);
-          navigate("/customer/home");
-
-          // Reset form fields
-          setLoginInfo({
-            email: "",
-            password: "",
-          });
-        } else {
-          const data = response.data;
-          setError(
-            data.message || "Incorrect email or password. Please try again."
-          );
-          setShowErrorMessage(true);
         }
+        // Retrieve the cookie and parse it back to an object
+        const userDataCookie = Cookies.get("userData");
+        if (userDataCookie) {
+          const userDataObject = JSON.parse(userDataCookie);
+          console.log(userDataObject);
+          // localStorage.setItem('customerToken', userDataObject.data.userData._id)
+          navigate("/customer/home")
+        }
+        // console.log("customerID:", response.data.customer.id);
+        // if (response.status === 200) {
+        //   setSuccess(response.data.message || "Sign in successful.");
+        //   setShowSuccessBar(true);
+        // Store customer ID in localstorage
+        //localStorage.setItem("customerToken", response.data.customer.id);
+        //setIsCustomerAuthenticated(true);
+        //navigate("/customer/home");
+
+        // Reset form fields
+        //   setLoginInfo({
+        //     email: "",
+        //     password: "",
+        //   });
+        // } else {
+        //   const data = response.data;
+        //   setError(
+        //     data.message || "Incorrect email or password. Please try again."
+        //   );
+        //   setShowErrorMessage(true);
+        // }
       } catch (err) {
         console.log(err);
         setError("Incorrect email or password. Please try again.");
