@@ -14,6 +14,7 @@ const socketsManager = require('./listeners/socketsManager');
 require('dotenv').config(); // process config vars => procces.env.VAR
 require('./config/database'); // connect to the database with AFTER the config vars are processed
 const app = express();
+const PORT = process.env.PORT || 3030;
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -76,6 +77,6 @@ app.put('/session/:sessionid/handle-archive', sessionsController.handleArchive)
 io.on('connection', socketsManager.onConnect)
 ///// SOCKET
 
-httpServer.listen(process.env.PORT, () => {
-  console.log(`Server is listening on port ${process.env.PORT}`);
+httpServer.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
