@@ -1,11 +1,19 @@
 import { useState, useContext } from "react";
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import GroupContext from '../contexts/GroupContext';
 import CustomerSelect from "./CustomerSelect";
 
-import { Avatar, Box, Stack, Typography, Button, IconButton, Alert } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Stack,
+    Typography,
+    Button,
+    IconButton,
+    Alert
+} from "@mui/material";
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 
@@ -40,7 +48,7 @@ const GroupMembers = ({ members }) => {
 
     const handleRemoveMember = async (member) => {
         try {
-            const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/remove-member`, { member: member });
+            const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/removemember`, { member: member });
             refreshData();
         } catch (error) {
             console.error("Error removing member from the group:", error);
@@ -54,7 +62,7 @@ const GroupMembers = ({ members }) => {
         } else {
             try {
                 // Send a POST request to create the group
-                const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/add-members`, { members: selectedMembers });
+                const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/addmembers`, { members: selectedMembers });
                 // Clear the group name and group selectedMembers
                 setSelectedMembers([]);
 
@@ -131,7 +139,7 @@ const GroupMembers = ({ members }) => {
                         Save
                     </Button> */}
                     {showErrorMessage ? (
-                        <Alert severity="error" sx={{width: "100%"}}>
+                        <Alert severity="error" sx={{ width: "100%" }}>
                             {/* {error} */}
                         </Alert>
                     ) : (

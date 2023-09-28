@@ -1,6 +1,7 @@
 const router = require("express").Router();
-const AuthController = require("../controllers/AuthController"); //
 const passport = require("passport");
+
+const AuthController = require("../controllers/AuthController");
 
 router.post("/customer/signup", AuthController.createCustomer);
 router.post("/merchant/signup", AuthController.createMerchant);

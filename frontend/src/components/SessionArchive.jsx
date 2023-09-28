@@ -1,5 +1,9 @@
 import { DateTime } from "luxon";
-import { Box, Typography } from "@mui/material";
+
+import {
+    Box,
+    Typography
+} from "@mui/material";
 
 const SessionArchive = ({ archivedSessions }) => {
     archivedSessions.sort((a, b) => {

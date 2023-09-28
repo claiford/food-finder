@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, ImageList, ImageListItem, TextField, Button, IconButton, Typography, Card, CardMedia, Stack } from '@mui/material';
 import axios from 'axios';
 import _ from 'lodash';
 
+import {
+    Box,
+    ImageList,
+    ImageListItem,
+    TextField,
+    Button,
+    IconButton,
+    Typography,
+    Card,
+    CardMedia,
+    Stack
+} from '@mui/material';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
-import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 
 const images = require.context('../assets', true);
 
@@ -20,7 +30,6 @@ const Store = () => {
     // => complete   : ongoing session reached decision
     const [store, setStore] = useState({});
     const [isEdit, setIsEdit] = useState(false);
-    const [isAddPhoto, setIsAddPhoto] = useState(false);
     const [storeForm, setStoreForm] = useState({});
 
     /////////////////
@@ -28,7 +37,6 @@ const Store = () => {
     const { store_id } = useParams();
     /////////////////
     /////////////////
-
 
     /////////////////
     // HANDLERS
@@ -83,7 +91,7 @@ const Store = () => {
                 promotion: storeForm.promotion,
                 photos: storeForm.photos,
             }
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/${store_id}/edit`, { storeInfo: storeInfo });
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/merchant/api/store/${store_id}/edit`, { storeInfo: storeInfo });
             setIsEdit(false);
             getStore();
         } catch (err) {
@@ -98,7 +106,7 @@ const Store = () => {
     const getStore = async () => {
         console.log("getting store")
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/${store_id}`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/api/store/${store_id}`);
             setStore(res.data);
             setStoreForm(res.data);
         } catch (err) {
@@ -158,7 +166,7 @@ const Store = () => {
             }}>
                 {/* NAME */}
                 <Stack spacing={1}>
-                    <Typography variant="header2" sx={{pl: 1}}>
+                    <Typography variant="header2" sx={{ pl: 1 }}>
                         Name
                     </Typography>
                     {!isEdit ? (
@@ -185,7 +193,7 @@ const Store = () => {
 
                 {/* PROMOTION */}
                 <Stack spacing={1}>
-                    <Typography variant="header2" sx={{pl: 1}}>
+                    <Typography variant="header2" sx={{ pl: 1 }}>
                         Promotion
                     </Typography>
                     {!isEdit ? (
@@ -216,7 +224,7 @@ const Store = () => {
                     alignItems: 'center',
                     minHeight: '40px',
                 }}>
-                    <Typography variant="header2" sx={{pl: 1, mr: 3 }}>
+                    <Typography variant="header2" sx={{ pl: 1, mr: 3 }}>
                         Photos
                     </Typography>
                     {isEdit &&

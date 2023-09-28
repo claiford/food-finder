@@ -17,7 +17,6 @@ import CustomerHome from "./pages/CustomerHome";
 import MerchantHome from "./pages/MerchantHome";
 import Group from "./pages/Group";
 import Store from "./pages/Store";
-import Demo from "./pages/Demo";
 
 const theme = createTheme({
   typography: {
