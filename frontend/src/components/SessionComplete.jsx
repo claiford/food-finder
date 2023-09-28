@@ -1,34 +1,53 @@
-import { Button, Box, Typography } from '@mui/material'
+import { Button, Box, Stack, Typography, LinearProgress, Rating } from '@mui/material'
+
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
 const CompletedSession = ({ ongoingSession, handleArchive }) => {
     return (
         <>
             <Box sx={{
-                // width: '100%',
-                // height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                alignItems: 'center',
                 borderRadius: 3,
                 m: 3,
-                p: 5,
-                backgroundColor: "lightgray.main"
+                p: 3,
+                backgroundColor: "lightgray.main",
             }}>
-                <Typography gutterBottom variant="title2" component="div">
+                <Box sx={{ width: "30%" }}>
+                    <LinearProgress
+                        variant="determinate"
+                        value={100}
+                        color="success"
+                        sx={{ backgroundColor: "lime.dark", mb: 1 }}
+                    />
+                </Box>
+                <Typography gutterBottom variant="title2">
                     {ongoingSession.chosen.name}
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                    <Typography variant="body3">
-                        Rating: {ongoingSession.chosen.rating ? ongoingSession.chosen.rating + "⭐" : "-"}
+                <Stack direction="row" spacing={1}>
+                    <Typography variant="body1" fontWeight={700}>
+                        {ongoingSession.chosen.rating ? ongoingSession.chosen.rating : "-"}
                     </Typography>
-                    <Typography variant="body3">
-                        Reviews: {ongoingSession.chosen.user_ratings_total ?? "-"}
+                    <Typography variant="body1" fontWeight={700}>
+                        ({ongoingSession.chosen.user_ratings_total ?? "-"})
                     </Typography>
-                    <Typography variant="body3">
-                        Open now: {ongoingSession.chosen.is_open === null ? "-" : ongoingSession.chosen.is_open ? "Yes" : "No"}
-                    </Typography>
-                </Box>
+                </Stack>
+                <Rating
+                    readOnly
+                    precision={0.5}
+                    value={ongoingSession.chosen.rating}
+                    icon={<StarRoundedIcon fontSize="inherit" color="lime" />}
+                    emptyIcon={<StarOutlineRoundedIcon fontSize="inherit" color="lime" />}
+                    sx={{ p: 1, borderRadius: 5, backgroundColor: 'darkgray.main' }}
+                />
+
                 <Button
                     variant="contained"
                     onClick={handleArchive}
-                    sx={{ mt: 4 }}
+                    // sx={{ mt: 4 }}
                 >
                     Archive
                 </Button>

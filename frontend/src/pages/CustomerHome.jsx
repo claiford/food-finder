@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-import { 
+import {
 	Box,
 	Typography,
-	IconButton 
+	IconButton
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 import CreateNewGroup from "../components/CreateNewGroup";
 import GroupList from "../components/GroupList";
@@ -23,10 +24,10 @@ const CustomerHome = () => {
 			const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/api/groups/${localStorage.getItem("customerToken")}`);
 			setGroups(response.data.groups);
 			setInSession(response.data.inSession)
-		  } catch (error) {
+		} catch (error) {
 			// Handle network errors or other exceptions
 			console.error('Error fetching groups data:', error);
-		  }
+		}
 	}
 
 	const handleNewGroup = () => {
@@ -34,11 +35,11 @@ const CustomerHome = () => {
 		setShowNewGroupForm(false);
 		getGroups()
 	}
-	
+
 	const handleNewGroupBtn = () => {
 		setShowNewGroupForm((prev) => !prev);
 	}
-	
+
 	useEffect(() => {
 		getGroups()
 	}, []);
@@ -64,11 +65,16 @@ const CustomerHome = () => {
 						Your group(s)
 					</Typography>
 					<IconButton size="small" onClick={handleNewGroupBtn}>
-						<AddIcon color="lime" fontSize="small" />
+						{showNewGroupForm ? (
+							<CloseRoundedIcon color="lime" fontSize="small" />
+						) : (
+							<AddIcon color="lime" fontSize="small" />
+
+						)}
 					</IconButton>
 				</Box>
 				{showNewGroupForm ? (
-					<CreateNewGroup handleNewGroup={handleNewGroup}/>
+					<CreateNewGroup handleNewGroup={handleNewGroup} />
 				) : (
 					<GroupList groups={groups} inSession={inSession} />
 				)}
