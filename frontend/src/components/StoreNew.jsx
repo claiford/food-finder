@@ -1,15 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Box, TextField, Button, CircularProgress, MenuItem, Alert } from '@mui/material';
+import { Stack, TextField, Button, CircularProgress, MenuItem, Alert } from '@mui/material';
 import axios from 'axios';
 import { usePlacesWidget } from "react-google-autocomplete";
 
 const StoreNew = ({ handleNewStore }) => {
-    const [loading, setLoading] = useState(false);
-    const [formError, setFormError] = useState({})
     const [form, setForm] = useState({})
-    const [postResponse, setPostResponse] = useState({})
-    const navigate = useNavigate();
+    const [formError, setFormError] = useState({})
 
     const handleInputChange = (e, key) => {
         if (key === "location") {
@@ -45,20 +41,11 @@ const StoreNew = ({ handleNewStore }) => {
         e.preventDefault()
         if (form.location) {
             try {
-                setLoading(true);
                 const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/merchant/store/new`, { merchant: localStorage.getItem("merchantToken"), place_id: form.location })
-                setPostResponse({
-                    status: res.status,
-                    data: res.data
-                })
-                setLoading(false);
                 e.target.reset();
                 handleNewStore();
             } catch (err) {
-                setPostResponse({
-                    status: err.response.status
-                })
-                setLoading(false);
+                console.log(err);
             }
         }
     }
@@ -88,7 +75,9 @@ const StoreNew = ({ handleNewStore }) => {
 
     return (
         <>
-            <Box sx={{ mx: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Stack direction='column' sx={{
+                mx: 1,
+            }}>
                 <form onSubmit={handleSubmitForm}>
                     <TextField
                         sx={{ my: 2 }}
@@ -97,7 +86,6 @@ const StoreNew = ({ handleNewStore }) => {
                         InputLabelProps={{ shrink: true }}
                         placeholder="Locate Your Store"
                         inputRef={autocompleteRef}
-                        disabled={loading}
                         error={formError.location ? true : false}
                         helperText={formError.location ? "Please select a valid location." : ""}
                         onChange={(e) => handleInputChange(e, "location")}
@@ -105,21 +93,13 @@ const StoreNew = ({ handleNewStore }) => {
                     <Button
                         variant="contained"
                         type="submit"
-                        disabled={loading}
+                        fullWidth
+                        sx={{ mt: 2 }}
                     >
-                        Add
-                        {loading && (
-                            <CircularProgress
-                                color="lime"
-                                size={24}
-                                sx={{
-                                    position: 'absolute',
-                                }}
-                            />
-                        )}
+                        Add Store
                     </Button>
                 </form>
-            </Box>
+            </Stack>
         </>
     )
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
+import { Box, IconButton, Tabs, Tab, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { AuthContext } from '../contexts/AuthContext';
@@ -10,6 +10,7 @@ import SessionIncomplete from '../components/SessionIncomplete';
 import SessionComplete from '../components/SessionComplete';
 import SessionArchive from '../components/SessionArchive';
 
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
@@ -54,6 +55,10 @@ const Group = () => {
         setTabValue(newValue);
         refreshData()
     };
+
+    const handlePageBack = () => {
+        navigate("/customer/home");
+    }
     /////////////////
     /////////////////
 
@@ -125,19 +130,31 @@ const Group = () => {
                 maxWidth: '350px',
                 height: "100%",
                 maxHeight: '800px',
-                // mt: '56px',
-                mb: '24px',
             }}>
-                <Typography
-                    variant="title1"
-                    component="div"
-                    sx={{
-                        m: 3,
-                        textAlign: 'center'
-                    }}
-                >
-                    {group.name}
-                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}>
+                    <IconButton onClick={handlePageBack}>
+                        <ArrowBackRoundedIcon color="lime" fontSize="large" />
+                    </IconButton>
+                    <Typography
+                        variant="title1"
+                        component="div"
+                        sx={{
+                            m: 3,
+                            textAlign: 'center'
+                        }}
+                    >
+                        {group.name}
+                    </Typography>
+                    <IconButton disabled>
+                        {/* placeholder icon to occupy space */}
+                        <ArrowBackRoundedIcon color="darkgray" fontSize="large" />
+                    </IconButton>
+                </Box>
+
 
                 <Tabs
                     value={tabValue}

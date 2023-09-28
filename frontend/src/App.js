@@ -121,6 +121,7 @@ const theme = createTheme({
             textAlign: "left",
             "& fieldset": {
               borderColor: "white",
+              borderRadius: 10,
             },
             "&:hover fieldset": {
               borderColor: "#C0EC6B",
@@ -296,24 +297,24 @@ function App() {
             <Route
               path="/merchant/home/"
               element={<MerchantHome />}
-              // element={
-              //   authenticateCustomer() ? (
-              //     <Group />
-              //   ) : (
-              //     <Navigate to="/" />
-              //   )
-              // }
+            // element={
+            //   authenticateCustomer() ? (
+            //     <Group />
+            //   ) : (
+            //     <Navigate to="/" />
+            //   )
+            // }
             />
             <Route
               path="/merchant/store/:store_id"
               element={<Store />}
-              // element={
-              //   authenticateCustomer() ? (
-              //     <Group />
-              //   ) : (
-              //     <Navigate to="/" />
-              //   )
-              // }
+            // element={
+            //   authenticateCustomer() ? (
+            //     <Group />
+            //   ) : (
+            //     <Navigate to="/" />
+            //   )
+            // }
             />
           </Routes>
         </div>

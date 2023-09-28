@@ -59,14 +59,12 @@ const CustomerHome = () => {
 					mb: "24px",
 				}}
 			>
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-						my: 3,
-					}}
-				>
+				<Box sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+					my: 3,
+				}}>
 					<Typography variant="header2">Your group(s)</Typography>
 					<IconButton size="small" onClick={handleNewGroupBtn}>
 						{showNewGroupForm ? (
