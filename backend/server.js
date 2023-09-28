@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
 const session = require('express-session');
-// const LocalStrategy = require('passport-local');
+const local = require("./strategy/local")
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -35,13 +35,13 @@ app.use(
 );
 // Configure express-session middleware
 app.use(session({
-  secret: process.env.SECRET_KEY, // Replace with a secret key for session encryption
+  secret: process.env.SECRET_KEY, 
   resave: false,
   saveUninitialized: false,
 }));
-app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
