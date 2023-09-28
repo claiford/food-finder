@@ -14,7 +14,7 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your password is required"],
   },
-  groups_id: [
+  groups: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",

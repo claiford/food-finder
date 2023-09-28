@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { Alert, Container, TextField, Button, Stack } from "@mui/material";
+import { Alert, Container, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import styles from "../App.module.css";
 
 const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
   const [error, setError] = useState(null);
@@ -72,19 +71,10 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
 
   return (
     <>
-      <Container
-        maxWidth="xs"
-        // sx={{
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        // }}
-      >
+      <Container maxWidth="xs">
         <form onSubmit={handleSubmitForm}>
           <TextField
             sx={{
-              //backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}
@@ -97,7 +87,6 @@ const CustomerLogin = ({ setIsCustomerAuthenticated }) => {
           />
           <TextField
             sx={{
-              //backgroundColor: "white",
               borderRadius: "8px",
               marginTop: "0px",
             }}

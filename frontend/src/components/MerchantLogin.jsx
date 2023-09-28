@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Alert, Container, TextField, Button } from "@mui/material";
-import styles from "../App.module.css";
 
 const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
   const [error, setError] = useState(null);
@@ -58,7 +57,6 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
         }
       } catch (err) {
         console.log(err);
-        console.log(err);
         setError("Incorrect email or password. Please try again.");
         setShowErrorMessage(true);
       }
@@ -77,15 +75,7 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
   };
   return (
     <>
-      <Container
-        maxWidth="xs"
-        // sx={{
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        // }}
-      >
+      <Container maxWidth="xs">
         <form onSubmit={handleSubmitForm}>
           <TextField
             sx={{
@@ -138,8 +128,6 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
         >
           Not registered? Sign up here
         </Button>
-      </Container>
-      <div>
         {showErrorMessage && (
           <Alert severity="error">
             <span>{error}</span>
@@ -150,7 +138,7 @@ const MerchantLogin = ({ setIsMerchantAuthenticated }) => {
             <span>{success}</span>
           </Alert>
         )}
-      </div>
+      </Container>
     </>
   );
 };

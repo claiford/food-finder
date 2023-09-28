@@ -19,6 +19,7 @@ const TabHeader = ({text}) => {
             component="div"
             sx={{
                 m: 3,
+                textAlign: 'center',
             }}
         >   
             {text}
@@ -67,7 +68,6 @@ const Group = () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/group/${group_id}/sessions`);
             const sessions = res.data;
-
             setOngoingSession(sessions.find((s) => s.status !== "archive"));
             setArchivedSessions(sessions.filter((e) => e.status === "archive"));
         } catch (err) {
@@ -112,15 +112,23 @@ const Group = () => {
     }, [])
 
     return (
-        <Box className="group-page" sx={{ width: '400px', textAlign: 'center' }}>
+        <Box className="group-page" sx={{
+            width: "90%",
+            maxWidth: '350px',
+            height: "100%",
+            maxHeight: '800px',
+            // mt: '56px',
+            mb: '24px',
+        }}>
             <Typography
                 variant="title1"
                 component="div"
                 sx={{
                     m: 3,
+                    textAlign: 'center'
                 }}
             >
-                {group.groupName}
+                {group.name}
             </Typography>
 
             <Tabs
@@ -175,7 +183,7 @@ const Group = () => {
             {tabValue === 2 &&
                 <>
                     <TabHeader text="Members"></TabHeader>
-                    <GroupMembers members={group.memberIds} />
+                    <GroupMembers members={group.members} />
                 </>
             }
 

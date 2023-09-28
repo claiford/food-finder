@@ -1,61 +1,87 @@
-import React, { useState , useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
-import { Box, Button, Grid, Typography, List, ListItem, ListItemText } from "@mui/material";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+import { Box, Typography, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+
 import CreateNewGroup from "../components/CreateNewGroup";
-import FetchGroups from "../components/FetchGroups";
+import GroupList from "../components/GroupList";
 import Navbar from "../components/Navbar";
-import styles from './CustomerHome.module.css'
 
-const Home = () => {
-    const [showNewGroupForm, setShowNewGroupForm] = useState(false);
-    const [showGroupsList, setShowGroupsList] = useState(true);
-    const [groups, setGroups] = useState([]);
-    // const [activeButton, setActiveButton] = useState(null);
+const CustomerHome = () => {
+  const [showNewGroupForm, setShowNewGroupForm] = useState(false);
+  const [groups, setGroups] = useState([]);
+  const [inSession, setInSession] = useState([]);
 
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-      FetchGroups()
-        .then((data) => {
-          if (data) {
-            setGroups(data);
-          } else {
-            console.error("Failed to fetch groups data.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching groups data:", error);
-        });
-    }, []);
-
-    const handleNewGroupBtn =  () => {
-        setShowNewGroupForm(true);
-        setShowGroupsList(false);
+  const getGroups = async () => {
+    try {
+      // Make a GET request to your backend API endpoint for fetching groups
+      const response = await axios.get(
+        `${
+          process.env.REACT_APP_BACKEND_URL
+        }/customer/api/groups/${localStorage.getItem("customerToken")}`
+      );
+      setGroups(response.data.groups);
+      setInSession(response.data.inSession);
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error("Error fetching groups data:", error);
     }
+  };
 
-    return ( 
-        <>
-        <Navbar/>
-        <div>Groups</div>
-        <Button onClick={handleNewGroupBtn}>+</Button>
-        {showNewGroupForm && (
-        <CreateNewGroup />
-      )}
-      {showGroupsList && (
-        <div className={styles.container}>
-          <Typography variant="h6" sx={{ mt: 2 }}>Your Groups:</Typography>
-          <List>
-            {groups.map((group) => (
-              <ListItem key={group._id}>
-                {/* <ListItemText primary={group.groupName} /> */}
-                <Button onClick={() => navigate(`/customer/group/${group._id}`)}>{group.groupName}</Button>
-              </ListItem>
-            ))}
-          </List>
-        </div>
-      )}
+  const handleNewGroup = () => {
+    console.log("handling new group");
+    setShowNewGroupForm(false);
+    getGroups();
+  };
+
+  const handleNewGroupBtn = () => {
+    setShowNewGroupForm((prev) => !prev);
+  };
+
+  useEffect(() => {
+    getGroups();
+  }, []);
+
+  return (
+    <>
+      <Navbar />
+      <Box
+        sx={{
+          width: "90%",
+          maxWidth: "350px",
+          height: "calc(100% - 56px - 24px)",
+          maxHeight: "800px",
+          mt: "56px",
+          mb: "24px",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            my: 3,
+          }}
+        >
+          <Typography variant="header2">Your group(s)</Typography>
+          <IconButton size="small" onClick={handleNewGroupBtn}>
+            {showNewGroupForm ? (
+              <CloseRoundedIcon color="lime" fontSize="small" />
+            ) : (
+              <AddIcon color="lime" fontSize="small" />
+            )}
+          </IconButton>
+        </Box>
+        {showNewGroupForm ? (
+          <CreateNewGroup handleNewGroup={handleNewGroup} />
+        ) : (
+          <GroupList groups={groups} inSession={inSession} />
+        )}
+      </Box>
     </>
   );
-}
+};
 
-export default Home;
+export default CustomerHome;

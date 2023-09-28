@@ -1,20 +1,8 @@
-// MerchantHome.js
-
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Modal,
-  Button,
-  Grid,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-} from "@mui/material";
+import { useNavigate } from 'react-router-dom'
+import { Box, Modal, Button, Grid, Typography, List, ListItem, ListItemText, IconButton } from "@mui/material";
 import axios from "axios";
-import AddIcon from "@mui/icons-material/Add";
+import AddIcon from '@mui/icons-material/Add';
 import StoreNew from "../components/StoreNew";
 import StoreList from "../components/StoreList";
 
@@ -22,25 +10,19 @@ const MerchantHome = () => {
   const [stores, setStores] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
-  const navigate = useNavigate();
-
   const handleForm = () => {
     setShowForm((prev) => !prev);
   };
 
-  const getStores = async () => {
-    try {
-      console.log("getting stores");
-      const res = await axios.get(
-        `${
-          process.env.REACT_APP_BACKEND_URL
-        }/merchant/home/${localStorage.getItem("merchantToken")}`
-      );
-      setStores(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+	const getStores = async () => {
+		try {
+			console.log("getting stores")
+			const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/merchant/home/${localStorage.getItem("merchantToken")}`);
+			setStores(res.data);
+		} catch (err) {
+			console.log(err);
+		}
+	}
 
   useEffect(() => {
     getStores();
@@ -67,9 +49,9 @@ const MerchantHome = () => {
         </IconButton>
       </Box>
 
-      <StoreList stores={stores} />
-    </>
-  );
-};
+			<StoreList stores={stores} />
+		</>
+	);
+}
 
 export default MerchantHome;

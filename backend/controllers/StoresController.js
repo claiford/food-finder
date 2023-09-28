@@ -21,11 +21,18 @@ async function create(req, res) {
     const resPlaceDetails = await axios.get(queryPlaceDetails);
     const placeDetails = resPlaceDetails.data.result;
     try {
+        // create new Store
         const newStore = await Store.create({
             place_id: placeDetails.place_id,
             name: placeDetails.name,
             promotion: "None",
         })
+
+        // add new Store ._id to merchant 
+        const merchant = await Merchant.findById(req.body.merchant);
+        merchant.stores.push(newStore._id);
+        merchant.save();
+
         res.json(newStore);
     } catch (err) {
         console.log(err);

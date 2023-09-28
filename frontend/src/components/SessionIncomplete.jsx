@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Box, Modal, Typography } from '@mui/material';
+import { Button, Box, Modal, Typography, LinearProgress } from '@mui/material';
 import { socket } from '../socket';
 
 import Swiper from './Swiper';
@@ -24,7 +24,7 @@ const modalStyle = {
 const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     const [showSwiper, setShowSwiper] = useState(false)
     // const [isConnected, setIsConnected] = useState(socket.connected);
-    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("token"))?.status === 999;
+    const isUserComplete = ongoingSession.voters.find((voter) => voter.voter.toString() === localStorage.getItem("customerToken"))?.status === 999;
     const voterStatus = ongoingSession.voters.filter((voter) => voter.status === 999);
 
     const handleJoinOngoing = () => {
@@ -65,16 +65,28 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
     return (
         <>
             <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+                alignItems: 'center',
                 borderRadius: 3,
                 m: 3,
                 p: 3,
                 backgroundColor: "lightgray.main",
             }}>
+                <Box sx={{ width: "70%" }}>
+                    <LinearProgress
+                        variant="determinate"
+                        value={(voterStatus.length / ongoingSession.voters.length) * 100}
+                        color="success"
+                        sx={{ backgroundColor: "lime.dark", mb: 1 }}
+                    />
+                </Box>
                 {isUserComplete ? (
                     <Button
                         variant="contained"
                     >
-                        Waiting
+                        Waiting . . .
                     </Button>
                 ) : (
                     <Button
@@ -85,19 +97,12 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                     </Button>
                 )}
 
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 1,
-                    mt: 2,
-                }}>
-                    <Typography variant="header1">
-                        {ongoingSession.origin}
-                    </Typography>
-                    <Typography variant="header1">
-                        {voterStatus.length} / {ongoingSession.voters.length}
-                    </Typography>
-                </Box>
+                <Typography variant="header1">
+                    {ongoingSession.origin}
+                </Typography>
+                <Typography variant="header1" fontWeight={700}>
+                    {voterStatus.length} / {ongoingSession.voters.length}
+                </Typography>
             </Box>
 
             {/* SWIPER MODAL */}

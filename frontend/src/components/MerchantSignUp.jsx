@@ -43,7 +43,7 @@ const MerchantSignUp = ({ merchantInfo, setMerchantInfo }) => {
       }
     } catch (err) {
       // handling server side error
-      if (err.response) {
+      if (err.response && merchantInfo.email) {
         const errorMessage = err.response.data.message;
         setError(errorMessage || "Server error.");
         setShowErrorMessage(true);
