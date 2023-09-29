@@ -52,11 +52,13 @@ async function create(req, res) {
 
 		const newGroup = await Group.create(newGroupData); //creates doc in mongodb
 
-		newGroupData.members.forEach(async (m) => {
+		await Promise.all(newGroup.members.map(async (m) => {
 			const member = await Customer.findById(m._id);
 			member.groups.push(newGroup._id);
+			console.log("inside")
 			await member.save();
-		});
+		}));
+		console.log("outside")
 		res.send("Group created successfully");
 	} catch (error) {
 		console.log(error + "An error occurred while creating the group");
@@ -70,7 +72,7 @@ async function addMember(req, res) {
 		group.members = group.members.concat(newMemberIds);
 		await group.save();
 
-		newMemberIds.forEach(async (member_id) => {
+		await Promise.all(newMemberIds.map(async (member_id) => {
 			const member = await Customer.findById(member_id);
 			member.groups.push(req.params.group_id)
 			await member.save();
@@ -83,7 +85,7 @@ async function addMember(req, res) {
 				});
 				await incompleteSession.save()
 			}
-		})
+		}))
 
 		res.send("Members added.");
 	} catch (error) {
@@ -132,12 +134,12 @@ async function show(req, res) {
 async function deleteGroup(req, res) {
 	try {
 		const group = await Group.findById(req.params.group_id).populate('members');
-		group.members.forEach(async (member) => {
+		await Promise.all(group.members.map(async (member) => {
 			member.groups = member.groups.filter((group) =>
 				group.toString() !== req.params.group_id
 			)
 			await member.save();
-		})
+		}));
 
 		await Session.deleteMany({ group: req.params.group_id });
 

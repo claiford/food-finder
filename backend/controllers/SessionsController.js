@@ -13,6 +13,7 @@ module.exports = {
     create,
     handleVoting,
     handleArchive,
+    delete: deleteSession,
 }
 
 async function index(req, res) {
@@ -62,7 +63,7 @@ async function create(req, res) {
             const queryPlaceDetails = PLACE_DETAILS_URL + `?place_id=${place.place_id}&key=${key}`;
             const resPlaceDetails = await axios.get(queryPlaceDetails);
             const placeDetails = resPlaceDetails.data.result;
-            console.log(`candidate ${i} place details ok`)
+            console.log(`candidate ${i + 1} place details ok`)
 
             // PERFORM ROUTE QUERY
             const fields = "routes.duration,routes.distanceMeters"
@@ -81,7 +82,7 @@ async function create(req, res) {
                 }
             })
             const computeRoutes = resComputeRoutes.data.routes[0]
-            console.log(`candidate ${i} routes ok`)
+            console.log(`candidate ${i + 1} routes ok`)
 
             // PERFORM PHOTO QUERY
             const placePhotos = []
@@ -93,7 +94,7 @@ async function create(req, res) {
                     placePhotos.push(photoUrl);
                 }
             }
-            console.log(`candidate ${i} photos ok`)
+            console.log(`candidate ${i + 1} photos ok`)
 
             // construct candidate object
             const candidate = {
@@ -179,6 +180,16 @@ async function handleArchive(req, res) {
         await Session.findOneAndUpdate({ _id: req.params.session_id }, { status: "archive" })
         console.log("session updated");
         res.send('session archived');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+async function deleteSession(req, res) {
+    try {
+        await Session.findByIdAndDelete(req.params.session_id);
+        res.send('session deleted')
     } catch (err) {
         console.log(err);
     }
