@@ -76,11 +76,13 @@ async function addMember(req, res) {
 			await member.save();
 
 			const incompleteSession = await Session.findOne({ group: req.params.group_id, status: "incomplete" });
-			incompleteSession.voters.push({
-				voter: member._id,
-				status: 0
-			});
-			await incompleteSession.save()
+			if (incompleteSession) {
+				incompleteSession.voters.push({
+					voter: member._id,
+					status: 0
+				});
+				await incompleteSession.save()
+			}
 		})
 
 		res.send("Members added.");
@@ -105,8 +107,10 @@ async function removeMember(req, res) {
 		await user.save();
 
 		const incompleteSession = await Session.findOne({ group: req.params.group_id, status: "incomplete" });
-		incompleteSession.voters = incompleteSession.voters.filter((voterStatus) => voterStatus.voter.toString() !== req.body.member._id);
-		await incompleteSession.save()
+		if (incompleteSession) {
+			incompleteSession.voters = incompleteSession.voters.filter((voterStatus) => voterStatus.voter.toString() !== req.body.member._id);
+			await incompleteSession.save()
+		}
 
 		console.log(`Member ${user.name} removed from group ${group.name}.`)
 		res.send("Member removed.");
@@ -129,7 +133,7 @@ async function deleteGroup(req, res) {
 	try {
 		const group = await Group.findById(req.params.group_id).populate('members');
 		group.members.forEach(async (member) => {
-			member.groups = member.groups.filter((group) => 
+			member.groups = member.groups.filter((group) =>
 				group.toString() !== req.params.group_id
 			)
 			await member.save();

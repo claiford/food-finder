@@ -1,11 +1,9 @@
-import styles from "./App.module.css";
-
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import { createTheme, ThemeProvider } from "@mui/material";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
 
 import { AuthContext } from "./contexts/AuthContext";
 import Main from "./pages/Main";
@@ -30,7 +28,7 @@ const theme = createTheme({
     title1: {
       fontFamily: "Arvo",
       fontWeight: 700,
-      fontSize: 40,
+      fontSize: 25,
       color: "#C0EC6B",
     },
     header3: {
@@ -223,40 +221,52 @@ function App() {
       <AuthContext.Provider
         value={{ merchantInfo, customerInfo, handleLogout }}
       >
-        <div className={styles.body}>
-          <Routes>
-            <Route path="/" element={showMain()}>
-              <Route path="customer/login" element={<CustomerLogin />} />
-              <Route path="customer/signup" element={<CustomerSignUp />} />
-              <Route path="merchant/login" element={<MerchantLogin />} />
-              <Route path="merchant/signup" element={<MerchantSignUp />} />
-            </Route>
-            <Route
-              path="/customer/home"
-              element={
-                authenticateCustomer() ? <CustomerHome /> : <Navigate to="/" />
-              }
-            />
-            <Route
-              path="/customer/group/:group_id"
-              element={authenticateCustomer() ? <Group /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/merchant/home"
-              element={
-                authenticateMerchant() ? (
-                  <MerchantHome
-                    merchantInfo={merchantInfo}
-                    handleLogout={handleLogout}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
-            />
-            <Route
-              path="/merchant/store/:store_id"
-              element={<Store />}
+        <Box className="App-background" sx={{
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "darkgray.main",
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
+          <Box className="App-container" sx={{
+            width: "100%",
+            maxWidth: '340px',
+            maxHeight: '580px',
+            backgroundColor: "darkgray.main",
+          }}>
+            <Routes>
+              <Route path="/" element={showMain()}>
+                <Route path="customer/login" element={<CustomerLogin />} />
+                <Route path="customer/signup" element={<CustomerSignUp />} />
+                <Route path="merchant/login" element={<MerchantLogin />} />
+                <Route path="merchant/signup" element={<MerchantSignUp />} />
+              </Route>
+              <Route
+                path="/customer/home"
+                element={
+                  authenticateCustomer() ? <CustomerHome /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/customer/group/:group_id"
+                element={authenticateCustomer() ? <Group /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/merchant/home"
+                element={
+                  authenticateMerchant() ? (
+                    <MerchantHome
+                      merchantInfo={merchantInfo}
+                      handleLogout={handleLogout}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/merchant/store/:store_id"
+                element={<Store />}
               // element={
               //   authenticateCustomer() ? (
               //     <Group />
@@ -264,9 +274,10 @@ function App() {
               //     <Navigate to="/" />
               //   )
               // }
-            />
-          </Routes>
-        </div>
+              />
+            </Routes>
+          </Box>
+        </Box>
       </AuthContext.Provider>
     </ThemeProvider>
   );

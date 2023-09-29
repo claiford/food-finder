@@ -18,7 +18,6 @@ const CustomerHome = () => {
   const { customerInfo } = useContext(AuthContext);
 
   const getGroups = async () => {
-    console.log(customerInfo);
     try {
       // Make a GET request to your backend API endpoint for fetching groups
       const response = await axios.get(
@@ -51,6 +50,7 @@ const CustomerHome = () => {
   };
 
   useEffect(() => {
+    console.log('refresh groups');
     getGroups();
   }, []);
 
