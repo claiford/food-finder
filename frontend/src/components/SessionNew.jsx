@@ -57,6 +57,7 @@ const SessionNew = ({ refreshData }) => {
     }
 
     const handleSubmitForm = async (e) => {
+        setPostResponse({});
         e.preventDefault()
         if (form.location && form.distance && form.budget) {
             try {
@@ -69,6 +70,7 @@ const SessionNew = ({ refreshData }) => {
                 })
                 setLoading(false);
             } catch (err) {
+                console.log("Error:", err.response.data)
                 setPostResponse({
                     status: err.response.status
                 })

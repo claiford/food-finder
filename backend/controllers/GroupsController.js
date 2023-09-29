@@ -135,6 +135,8 @@ async function deleteGroup(req, res) {
 			await member.save();
 		})
 
+		await Session.deleteMany({ group: req.params.group_id });
+
 		await Group.findByIdAndDelete(req.params.group_id);
 
 		res.send("Group deleted.")
