@@ -24,9 +24,22 @@ const CompletedSession = ({ ongoingSession, handleArchive }) => {
         }}>
             <Rating
                 readOnly
-                precision={1}
-                value={ongoingSession.chosen.votes}
-                max={ongoingSession.voters.length}
+                precision={0.1}
+                value={
+                    ongoingSession.voters.length > 10 ? (
+                        ((ongoingSession.chosen.votes / ongoingSession.voters.length) * 10)
+                    ) : (
+                        ongoingSession.chosen.votes
+                    )
+                }
+                max={
+                    ongoingSession.voters.length > 10 ? (
+                        10
+                    ) : (
+                        ongoingSession.voters.length
+                    )
+                }
+                // max={ongoingSession.voters.length}
                 icon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "success.main" }}></Box>}
                 emptyIcon={<Box sx={{ width: "10px", height: "4px", borderRadius: 2, mx: 0.25, backgroundColor: "error.main" }}></Box>}
             />

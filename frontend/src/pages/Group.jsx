@@ -114,11 +114,20 @@ const Group = () => {
 
     const handleArchive = async () => {
         try {
-            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/session/${ongoingSession._id}/handle-archive`)
+            await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/session/${ongoingSession._id}/handle-archive`);
             console.log("handling archive");
             getSessions();
         } catch (err) {
             console.log(err)
+        }
+    }
+
+    const handleDelete = async (session_id) => {
+        try {
+            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/customer/api/session/${session_id}`);
+            getSessions();
+        } catch (err) {
+            console.log(err);
         }
     }
     /////////////////
@@ -127,6 +136,16 @@ const Group = () => {
     useEffect(() => {
         getGroup()
         getSessions();
+
+        // Set up an interval and store its ID
+        const intervalId = setInterval(() => {
+            // Code to run every 2 seconds
+            console.log('This code runs every 2 seconds');
+            getSessions();
+        }, 2000); // 2000 milliseconds = 2 seconds
+
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(intervalId);
     }, [])
 
     return (
@@ -187,6 +206,7 @@ const Group = () => {
                                     <SessionIncomplete
                                         ongoingSession={ongoingSession}
                                         handleVoting={handleVoting}
+                                        handleDelete={handleDelete}
                                     />
                                 }
                                 {ongoingSession.status === "complete" &&

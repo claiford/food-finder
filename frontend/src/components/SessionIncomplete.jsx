@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
+import axios from 'axios';
 import { DateTime } from "luxon";
 import { socket } from '../socket';
 
@@ -31,7 +32,7 @@ const modalStyle = {
     alignItems: 'center',
 };
 
-const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
+const SessionIncomplete = ({ ongoingSession, handleVoting, handleDelete }) => {
     const [showSwiper, setShowSwiper] = useState(false)
     // const [isConnected, setIsConnected] = useState(socket.connected);\
 
@@ -116,14 +117,31 @@ const SessionIncomplete = ({ ongoingSession, handleVoting }) => {
                     {voterStatus.length} / {ongoingSession.voters.length}
                 </Typography>
 
-                <Stack direction="column" sx={{ mr: 'auto', textAlign: 'left' }}>
-                    <Typography variant="caption1">
-                        {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ hour: 'numeric', minute: '2-digit' })}
-                    </Typography>
-                    <Typography variant="caption1">
-                        {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit' })}
-                    </Typography>
-                </Stack>
+                <Box sx={{
+                    width: "100%",
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                    mt: 2,
+                }}>
+                    <Stack direction="column" sx={{ textAlign: 'left' }}>
+                        <Typography variant="caption1">
+                            {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ hour: 'numeric', minute: '2-digit' })}
+                        </Typography>
+                        <Typography variant="caption1">
+                            {DateTime.fromISO(ongoingSession.createdAt).toLocaleString({ weekday: 'short', month: 'short', day: '2-digit' })}
+                        </Typography>
+                    </Stack>
+                    <Button
+                        variant="contained"
+                        color='error'
+                        size="small"
+                        onClick={() => handleDelete(ongoingSession._id)}
+                        sx={{backgroundColor: "darkgray.main", color: "lightgray.main"}}
+                    >
+                        Abort
+                    </Button>
+                </Box>
             </Box>
 
             {/* SWIPER MODAL */}
