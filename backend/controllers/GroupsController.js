@@ -127,7 +127,6 @@ async function show(req, res) {
 
 async function deleteGroup(req, res) {
 	try {
-		console.log("deleting group");
 		const group = await Group.findById(req.params.group_id).populate('members');
 		group.members.forEach(async (member) => {
 			member.groups = member.groups.filter((group) => 

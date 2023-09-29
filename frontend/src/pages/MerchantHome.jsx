@@ -24,6 +24,15 @@ const MerchantHome = () => {
 		getStores();
 	};
 
+	const handleDeleteStore = async (store_id) => {
+		try {
+			const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/merchant/api/stores/${store_id}/${merchantInfo._id}`);
+			getStores();
+		} catch (error) {
+			console.error("Error deleting group:", error);
+		}
+	}
+
 	const toggleForm = () => {
 		setShowForm((prev) => !prev);
 	};
@@ -78,7 +87,7 @@ const MerchantHome = () => {
 				{showForm ? (
 					<StoreNew handleNewStore={handleNewStore} />
 				) : (
-					<StoreList stores={stores} />
+					<StoreList stores={stores} handleDeleteStore={handleDeleteStore} />
 				)}
 			</Box>
 		</>
