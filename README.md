@@ -23,3 +23,6 @@ Restaurant finder app
 * <u>delete</u> group
   * "leave" group - use update instead to remove self from group
   * "close" group - remove group from DB, group will no longer be accessible for other users too
+
+*wireframe
+https://docs.google.com/presentation/d/1Y9RsNlIcv0F0aYZ_XaB5mnJGmpywuNJFqqSR40y9XIg/edit?usp=sharing
