@@ -17,9 +17,8 @@ const GroupList = ({ groups, inSession, handleDeleteGroup }) => {
     const groupLinks = groups.map((group, i) => {
         const isInSession = inSession.some((g) => g._id === group._id);
         return (
-            <Stack direction={"row"} spacing={0}>
+            <Stack key={i} direction={"row"} spacing={0}>
                 <Box
-                    key={i}
                     onClick={() => navigate(`/customer/group/${group._id}`)}
                     sx={{
                         width: "90%",
