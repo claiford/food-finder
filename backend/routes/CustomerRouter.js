@@ -36,5 +36,8 @@ router.patch('/api/session/:session_id/handle-archive', sessionsController.handl
 // DELETE Group
 router.delete('/api/groups/:group_id', groupsController.delete)
 
+// DELETE Session
+router.delete('/api/session/:session_id', sessionsController.delete)
+
 module.exports = router;
 
