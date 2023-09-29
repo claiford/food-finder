@@ -61,7 +61,6 @@ const CreateNewGroup = ({ handleNewGroup }) => {
 				// Clear the group name and group selectedMembers
 				setGroupName("");
 				setSelectedMembers([]);
-				
 				handleNewGroup();
 			} catch (error) {
 				setError("Error creating group");

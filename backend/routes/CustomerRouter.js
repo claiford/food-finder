@@ -26,7 +26,7 @@ router.post('/api/groups/new', groupsController.create);
 router.post('/api/sessions/new', sessionsController.create)
 
 // PATCH Group
-router.patch('/api/group/:group_id/add-members', groupsController.addMember);
+router.patch('/api/group/:group_id/addmember', groupsController.addMember);
 router.patch('/api/group/:group_id/removemember', groupsController.removeMember);
 
 // PATCH Session
