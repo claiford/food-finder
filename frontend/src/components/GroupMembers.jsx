@@ -62,7 +62,7 @@ const GroupMembers = ({ members }) => {
         } else {
             try {
                 // Send a POST request to create the group
-                const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/addmembers`, { members: selectedMembers });
+                const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/customer/api/group/${group_id}/addmember`, { members: selectedMembers });
                 // Clear the group name and group selectedMembers
                 setSelectedMembers([]);
 
@@ -131,33 +131,29 @@ const GroupMembers = ({ members }) => {
                     >
                         Cancel
                     </Button>
-                    {/* <Button
+
+                    <Button
                         fullWidth
+                        disabled={selectedMembers.length === 0}
                         variant="contained"
                         onClick={handleAddMembers}
                     >
                         Save
-                    </Button> */}
-                    {showErrorMessage ? (
-                        <Alert severity="error" sx={{ width: "100%" }}>
-                            {/* {error} */}
-                        </Alert>
-                    ) : (
-                        <>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                onClick={handleAddMembers}
-                            >
-                                Save
-                            </Button>
-                        </>
-                    )}
+                    </Button>
                 </Stack>
 
             ) : (
                 <>
-                    {memberList}
+                    <Stack
+                        direction={"column"}
+                        spacing={2}
+                        sx={{
+                            maxHeight: '300px',
+                            overflowY: 'scroll',
+                        }}
+                    >
+                        {memberList}
+                    </Stack>
                     <Button
                         variant="contained"
                         onClick={toggleAddMembers}
