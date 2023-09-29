@@ -54,6 +54,7 @@ async function create(req, res) {
         const resNearbySearch = await axios.get(queryNearbySearch);
         const nearbySearch = resNearbySearch.data.results
         console.log(">> nearby searched")
+        if (nearbySearch.length < 1) throw new Error('No candidates found');
 
         const candidates = []
         for (const [i, place] of nearbySearch.entries()) {
@@ -136,7 +137,7 @@ async function create(req, res) {
         res.json(newSession);
     } catch (err) {
         console.log(err);
-        res.status(500).send(err)
+        res.status(500).send(err.message)
     }
 }
 
