@@ -11,7 +11,8 @@ module.exports = {
     create,
     show,
     update,
-    partnerQuery
+    partnerQuery,
+    delete: deleteStore,
 }
 
 async function index(req, res) {
@@ -72,6 +73,19 @@ async function partnerQuery(req, res) {
     try {
         const partner = await Store.find({ place_id: req.params.place_id });
         res.json(partner[0]);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function deleteStore(req, res) {
+    try {
+        const merchant = await Merchant.findById(req.params.merchant_id);
+        merchant.stores = merchant.stores.filter((store) =>
+            store.toString() !== req.params.store_id
+        )
+        await Store.findByIdAndDelete(req.params.store_id);
+        res.send("Store deleted.")
     } catch (err) {
         console.log(err);
     }
