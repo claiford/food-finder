@@ -80,15 +80,11 @@ async function partnerQuery(req, res) {
 
 async function deleteStore(req, res) {
     try {
-        console.log("merchant id", req.params.merchant_id)
-
         const merchant = await Merchant.findById(req.params.merchant_id);
         merchant.stores = merchant.stores.filter((store) =>
             store.toString() !== req.params.store_id
         )
-
         await Store.findByIdAndDelete(req.params.store_id);
-
         res.send("Store deleted.")
     } catch (err) {
         console.log(err);
