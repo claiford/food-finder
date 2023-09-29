@@ -55,10 +55,8 @@ async function create(req, res) {
 		await Promise.all(newGroup.members.map(async (m) => {
 			const member = await Customer.findById(m._id);
 			member.groups.push(newGroup._id);
-			console.log("inside")
 			await member.save();
 		}));
-		console.log("outside")
 		res.send("Group created successfully");
 	} catch (error) {
 		console.log(error + "An error occurred while creating the group");
