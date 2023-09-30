@@ -113,7 +113,7 @@ const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, h
 
     return (
         <>
-            <Stack direction="row" spacing={2} sx={{ mt: 3, minHeight: '60px', overflowX: 'scroll' }}>
+            <Stack direction="row" spacing={2} sx={{ minHeight: '50px', overflowX: 'scroll', overflowY: 'hidden' }}>
                 {selectedCustomers}
             </Stack>
 
@@ -124,7 +124,7 @@ const CustomerSelect = ({ existingMembers, selectedMembers, handleAddSelected, h
             />
 
             <Stack direction="column" spacing={0} sx={{
-                height: "300px",
+                height: "150px",
                 my: 2,
                 overflowY: 'scroll',
             }}>
