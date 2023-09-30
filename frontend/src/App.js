@@ -229,10 +229,13 @@ function App() {
           justifyContent: 'center',
         }}>
           <Box className="App-container" sx={{
+            display: 'flex',
+            justifyContent: 'center',
             width: "100%",
             maxWidth: '340px',
             maxHeight: '580px',
             backgroundColor: "darkgray.main",
+            border: '2px solid red'
           }}>
             <Routes>
               <Route path="/" element={showMain()}>
