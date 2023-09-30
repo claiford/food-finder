@@ -235,7 +235,7 @@ function App() {
             maxWidth: '340px',
             maxHeight: '580px',
             backgroundColor: "darkgray.main",
-            border: '2px solid red'
+            // border: '2px solid red'
           }}>
             <Routes>
               <Route path="/" element={showMain()}>
