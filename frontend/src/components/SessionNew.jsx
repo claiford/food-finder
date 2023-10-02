@@ -92,7 +92,7 @@ const SessionNew = ({ refreshData }) => {
     }
 
     const { ref: autocompleteRef } = usePlacesWidget({
-        apiKey: "AIzaSyBLJXCbjB7HjCUmosPIocJkCpGjno-WJLg",
+        apiKey: process.env.REACT_APP_GMAPS_API_KEY,
         options: {
             types: ['establishment'],
             componentRestrictions: { country: 'sg' },
